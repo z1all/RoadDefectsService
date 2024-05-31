@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadDefectsService.Presentation.Web", "RoadDefectsService.Presentation.Web\RoadDefectsService.Presentation.Web.csproj", "{5F140F36-E71A-4BC4-ABB4-9CBA61179732}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadDefectsService.Presentation.Web", "RoadDefectsService.Presentation.Web\RoadDefectsService.Presentation.Web.csproj", "{5F140F36-E71A-4BC4-ABB4-9CBA61179732}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadDefectsService.Core.Application", "RoadDefectsService.Core.Application\RoadDefectsService.Core.Application.csproj", "{24CC9743-4D1F-4D89-B43C-C1F4657EA705}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadDefectsService.Core.Application", "RoadDefectsService.Core.Application\RoadDefectsService.Core.Application.csproj", "{24CC9743-4D1F-4D89-B43C-C1F4657EA705}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

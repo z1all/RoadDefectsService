@@ -15,11 +15,11 @@ var app = builder.Build();
 // Exceptions handler
 app.UseExceptionsHandler();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 
