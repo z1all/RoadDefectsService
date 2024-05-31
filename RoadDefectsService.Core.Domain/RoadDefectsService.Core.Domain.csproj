@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\RoadDefectsService.Core.Domain\RoadDefectsService.Core.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -11,6 +11,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["RoadDefectsService.Presentation.Web/RoadDefectsService.Presentation.Web.csproj", "RoadDefectsService.Presentation.Web/"]
 COPY ["RoadDefectsService.Core.Application/RoadDefectsService.Core.Application.csproj", "RoadDefectsService.Core.Application/"]
+COPY ["RoadDefectsService.Core.Domain/RoadDefectsService.Core.Domain.csproj", "RoadDefectsService.Core.Domain/"]
 RUN dotnet restore "./RoadDefectsService.Presentation.Web/RoadDefectsService.Presentation.Web.csproj"
 COPY . .
 WORKDIR "/src/RoadDefectsService.Presentation.Web"

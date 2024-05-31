@@ -12,6 +12,10 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class AuthController : BaseController
     {
+        /// <summary>
+        /// (Не реализовано)
+        /// </summary>
+        /// <remarks> Доступ: Все </remarks>
         [HttpPost("login")]
         [ProducesResponseType(typeof(TokenResponseDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<TokenResponseDTO>> Login([FromBody] LoginDTO login)
@@ -19,6 +23,10 @@ namespace RoadDefectsService.Presentation.Web.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// (Не реализовано)
+        /// </summary>
+        /// <remarks> Доступ: Все </remarks>
         [HttpPost("logout")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [Authorize]
