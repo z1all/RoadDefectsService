@@ -10,7 +10,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     public class UserController : BaseController
     {
         /// <summary>
-        /// Все пользователи системы (Не реализовано)
+        /// Все пользователи системы (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -26,7 +26,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Конкретный пользователь (Не реализовано)
+        /// Конкретный пользователь (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -42,7 +42,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать дорожного инспектора (Не реализовано)
+        /// Создать дорожного инспектора (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPost("road_inspector")]
@@ -53,7 +53,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Изменить профиль дорожного инспектора (Не реализовано)
+        /// Изменить профиль дорожного инспектора (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPut("road_inspector")]
@@ -64,7 +64,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать оператора (Не реализовано)
+        /// Создать оператора (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> Доступ: Админ </remarks>
         [HttpPost("operator")]
@@ -75,7 +75,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Изменить профиль оператора (Не реализовано)
+        /// Изменить профиль оператора (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> Доступ: Админ </remarks>
         [HttpPut("operator")]

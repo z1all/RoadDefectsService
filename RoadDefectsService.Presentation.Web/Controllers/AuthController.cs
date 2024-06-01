@@ -27,8 +27,10 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// (Не реализовано)
         /// </summary>
         /// <remarks> Доступ: Все </remarks>
+        /// <response code="204">NoContent</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
         [HttpPost("logout")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [Authorize]
         public async Task<ActionResult> Logout()
         {

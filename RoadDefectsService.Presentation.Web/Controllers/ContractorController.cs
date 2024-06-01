@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RoadDefectsService.Core.Application.DTOs;
 using RoadDefectsService.Core.Domain.Enums;
+using RoadDefectsService.Presentation.Web.DTOs;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
     [Route("api/contractor")]
     [ApiController]
     [Authorize(Roles = Role.Operator)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class ContractorController : ControllerBase
     {
         /// <summary>
@@ -14,7 +19,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("contractors")]
-        public async Task<ActionResult> GetСontractors()
+        [ProducesResponseType(typeof(List<ContractorDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<ContractorDTO>>> GetСontractors()
         {
             return Ok();
         }
@@ -24,7 +30,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("{contractorId}")]
-        public async Task<ActionResult> GetСontractor([FromRoute] Guid contractorId)
+        [ProducesResponseType(typeof(ContractorDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ContractorDTO>> GetСontractor([FromRoute] Guid contractorId)
         {
             return Ok();
         }
@@ -33,20 +41,25 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// Создать подрядчика (Не реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <response code="204">NoContent</response> 
         [HttpPost]
-        public async Task<ActionResult> CreateСontractor()
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CreateСontractor([FromBody] CreateContractorDTO contractor)
         {
-            return Ok();
+            return NoContent();
         }
 
         /// <summary>
         /// Редактировать информацию подрядчика (Не реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <response code="204">NoContent</response> 
         [HttpPut("{contractorId}")]
-        public async Task<ActionResult> ChangeСontractor([FromRoute] Guid contractorId)
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ChangeСontractor([FromRoute] Guid contractorId, [FromBody] CreateContractorDTO contractor)
         {
-            return Ok();
+            return NoContent();
         }
     }
 }

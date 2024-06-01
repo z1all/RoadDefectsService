@@ -11,7 +11,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     public class MetricsController : BaseController
     {
         /// <summary>
-        /// Получить отчет о проведенных работах по устранению дефекта (Не реализовано)
+        /// Получить отчет о проведенных работах по устранению дефекта (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("report")]
@@ -21,7 +21,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Собрать статистику по проведенным работам (Не реализовано)
+        /// Собрать статистику по проведенным работам (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("statistic")]

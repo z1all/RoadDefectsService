@@ -2,12 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Core.Domain.Enums;
+using RoadDefectsService.Core.Application.DTOs;
+using RoadDefectsService.Presentation.Web.DTOs;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
     [Route("api/task")]
     [ApiController]
-    [Authorize(Roles = Role.Operator)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class TasksController : BaseController
     {
         /// <summary>
@@ -15,7 +19,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("tasks")]
-        public async Task<ActionResult> GetTasks()
+        [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
+        [Authorize(Roles = Role.Operator)]
+        public async Task<ActionResult<List<TaskDTO>>> GetTasks()
         {
             return Ok();
         }
@@ -23,39 +29,79 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <summary>
         /// Посмотреть задачу (Не реализовано)
         /// </summary>
-        /// <remarks> Доступ: Оператор и админ </remarks>
-        [HttpGet("{taskId}")]
-        public async Task<ActionResult> GetTask([FromRoute] Guid taskId)
+        /// <remarks> Доступ: Все </remarks>
+        [HttpGet("fixation_defect/{taskId}")]
+        [ProducesResponseType(typeof(FixationDefectTaskDTO), StatusCodes.Status200OK)]
+        [Authorize]
+        public async Task<ActionResult<FixationDefectTaskDTO>> GetFixationDefectTask([FromRoute] Guid taskId)
         {
             return Ok();
         }
 
         /// <summary>
-        /// Редактировать задачу (Не реализовано)
+        /// Редактировать задачу (Не реализовано) (Не все модели указаны)
         /// </summary> 
         /// <remarks> Доступ: Оператор и админ </remarks>
-        [HttpPut("{taskId}")]
-        public async Task<ActionResult> ChangeTask([FromRoute] Guid taskId)
+        [HttpPut("fixation_defect/{taskId}")]
+        [Authorize(Roles = Role.Operator)]
+        public async Task<ActionResult> ChangeFixationDefectTask([FromRoute] Guid taskId, [FromBody] CreateFixationDefectTaskDTO fixationTask)
+        {
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Создать задачу (Не реализовано) (Не все модели указаны)
+        /// </summary>
+        /// <remarks> Доступ: Оператор и админ </remarks>
+        [HttpPost("fixation_defect")]
+        [Authorize(Roles = Role.Operator)]
+        public async Task<ActionResult> CreateFixationDefectTask([FromBody] CreateFixationDefectTaskDTO fixationTask)
+        {
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Посмотреть задачу по фиксации выполненных работ (Не все модели указаны)
+        /// </summary>
+        /// <remarks> Доступ: Все </remarks>
+        [HttpGet("fixation_work/{taskId}")]
+        [Authorize]
+        public async Task<ActionResult> GetFixationWorkTask([FromRoute] Guid taskId)
         {
             return Ok();
         }
 
         /// <summary>
-        /// Создать задачу (Не реализовано)
+        /// Редактировать задачу по фиксации выполненных работ (Не реализовано) (Не все модели указаны)
+        /// </summary> 
+        /// <remarks> Доступ: Оператор и админ </remarks>
+        [HttpPut("fixation_work/{taskId}")]
+        [Authorize(Roles = Role.Operator)]
+        public async Task<ActionResult> ChangeFixationWorkTask([FromRoute] Guid taskId)
+        {
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Создать задачу по фиксации выполненных работ (Не реализовано) (Не все модели указаны)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
-        [HttpPost]
-        public async Task<ActionResult> CreateTask()
+        [HttpPost("fixation_work")]
+        [Authorize(Roles = Role.Operator)]
+        public async Task<ActionResult> CreateFixationWorkTask()
         {
-            return Ok();
+            return NoContent();
         }
+
 
         /// <summary>
         /// Задачи дорожного инспектора (Не реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("inspector/{inspectorId}")]
-        public async Task<ActionResult> GetInspectorTasks([FromRoute] Guid inspectorId)
+        [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
+        [Authorize(Roles = Role.Operator)]
+        public async Task<ActionResult<List<TaskDTO>>> GetInspectorTasks([FromRoute] Guid inspectorId)
         {
             return Ok();
         }
@@ -64,10 +110,24 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// Назначить задачу дорожному инспектору (Не реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <response code="204">No Content</response> 
         [HttpPost("inspector/{inspectorId}")]
-        public async Task<ActionResult> AppointTask([FromRoute] Guid inspectorId)
+        [Authorize(Roles = Role.Operator)]
+        public async Task<ActionResult> AppointTask([FromRoute] Guid inspectorId, [FromBody] AppointTaskDTO appointTask)
         {
-            return Ok();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Личные задачи (Не реализовано)
+        /// </summary>
+        /// <remarks> Доступ: Дорожный инспектор </remarks>
+        [HttpGet("own")]
+        [Authorize(Roles = Role.RoadInspector)]
+        [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<TaskDTO>>> GetOwnTask()
+        {
+            return NoContent();
         }
     }
 }
