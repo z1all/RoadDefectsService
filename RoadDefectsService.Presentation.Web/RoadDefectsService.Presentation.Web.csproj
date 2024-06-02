@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RoadDefectsService.Core.Application\RoadDefectsService.Core.Application.csproj" />
+    <ProjectReference Include="..\RoadDefectsService.Infrastructure.Identity\RoadDefectsService.Infrastructure.Identity.csproj" />
   </ItemGroup>
 
 </Project>
