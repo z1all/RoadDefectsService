@@ -1,5 +1,11 @@
+using RoadDefectsService.Presentation.Web;
+using RoadDefectsService.Presentation.Web.Middlewares.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors();
+
+builder.Services.AddPresentationServices();
 
 builder.Services.AddControllers();
 
@@ -8,11 +14,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+// Exceptions handler
+app.UseExceptionsHandler();
+
+app.UseCors();
+
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 
