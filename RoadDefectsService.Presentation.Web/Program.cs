@@ -3,6 +3,8 @@ using RoadDefectsService.Presentation.Web.Middlewares.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors();
+
 builder.Services.AddPresentationServices();
 
 builder.Services.AddControllers();
@@ -14,6 +16,8 @@ var app = builder.Build();
 
 // Exceptions handler
 app.UseExceptionsHandler();
+
+app.UseCors();
 
 //if (app.Environment.IsDevelopment())
 //{

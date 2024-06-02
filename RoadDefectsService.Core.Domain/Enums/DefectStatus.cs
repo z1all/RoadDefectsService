@@ -5,8 +5,8 @@ namespace RoadDefectsService.Core.Domain.Enums
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum DefectStatus
     {
-        ThereIsDefect = 0,
-        ThereIsNotDefect = 1,
-        NotVerified = 2,
+        NotVerified = 0,
+        ThereIsDefect = 1,
+        ThereIsNotDefect = 2,
     }
 }

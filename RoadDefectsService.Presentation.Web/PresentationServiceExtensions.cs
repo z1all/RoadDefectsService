@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using RoadDefectsService.Presentation.Web.Configurations.Authorization;
+using RoadDefectsService.Presentation.Web.Configurations.CORS;
 using RoadDefectsService.Presentation.Web.Configurations.Other;
 using RoadDefectsService.Presentation.Web.Configurations.Swagger;
 
@@ -10,6 +11,7 @@ namespace RoadDefectsService.Presentation.Web
         public static IServiceCollection AddPresentationServices(this IServiceCollection services)
         {
             // Configurations
+            services.AddCorsConfigure();
             services.AddModalStateConfigure();
             services.AddSwaggerConfigure();
             services.AddJwtAuthentication();
@@ -17,14 +19,17 @@ namespace RoadDefectsService.Presentation.Web
             return services;
         }
 
-        public static IServiceProvider UsePresentationServices(this IServiceProvider services)
+        public static IServiceCollection AddCorsConfigure(this IServiceCollection services)
         {
+            services.ConfigureOptions<ModalStateOptionsConfigure>();
+            services.ConfigureOptions<CustomCorsOptionsConfigure>();
+
             return services;
         }
 
         public static IServiceCollection AddModalStateConfigure(this IServiceCollection services)
         {
-            services.ConfigureOptions<ModalStateOptionsConfigure>();
+            services.ConfigureOptions<CorsOptionsConfigure>();
 
             return services;
         }
