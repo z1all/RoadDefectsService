@@ -7,8 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
 
+// Services
 builder.Services.AddPresentationServices();
-builder.Services.AddIdentityServices();
+builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
@@ -20,6 +21,10 @@ var app = builder.Build();
 
 // Exceptions handler
 app.UseExceptionsHandler();
+
+// DataBase
+app.Services.AddAutoMigration();
+app.Services.AddDatabaseSeed();
 
 app.UseCors();
 

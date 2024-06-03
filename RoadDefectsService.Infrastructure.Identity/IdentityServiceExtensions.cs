@@ -1,16 +1,79 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using RoadDefectsService.Core.Application.Interfaces.Services;
+using RoadDefectsService.Infrastructure.Identity.Configurations;
+using RoadDefectsService.Infrastructure.Identity.Configurations.DbSeed;
+using RoadDefectsService.Infrastructure.Identity.Contexts;
+using RoadDefectsService.Infrastructure.Identity.Models;
 using RoadDefectsService.Infrastructure.Identity.Services;
 
 namespace RoadDefectsService.Infrastructure.Identity
 {
     public static class IdentityServiceExtensions
     {
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // Services
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
+
+            // DataBase
+            services.AddEntityFrameworkDbContext(configuration);
+
+            // Configuration
+            services.AddIdentityConfigurations();
+            services.AddDatabaseSeedConfigurations();
 
             return services;
         }
+
+        private static IServiceCollection AddIdentityConfigurations(this IServiceCollection services)
+        {
+            services.ConfigureOptions<IdentityOptionsConfigure>();
+
+            return services;
+        }
+
+        private static void AddEntityFrameworkDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            string? postgreConnectionString = configuration.GetConnectionString("PostgreConnection");
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(postgreConnectionString!));
+
+            services.AddIdentity<CustomUser, CustomRole>()
+                    .AddEntityFrameworkStores<AppDbContext>();
+        }
+
+        public static void AddAutoMigration(this IServiceProvider services)
+        {
+            using var dbContext = services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>();
+            dbContext.Database.Migrate();
+        }
+
+        private static IServiceCollection AddDatabaseSeedConfigurations(this IServiceCollection services)
+        {
+            services.ConfigureOptions<AdminsOptionsConfigure>();
+
+            return services;
+        }
+
+        public static void AddDatabaseSeed(this IServiceProvider services)
+        {
+            using (var scope = services.CreateScope())
+            {
+                // Roles
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<CustomRole>>();
+                AppDbSeed.AddRoles(roleManager);
+
+                // Admins
+                var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<CustomUser>>();
+                var _userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+                var _adminsOptions = scope.ServiceProvider.GetRequiredService<IOptions<AdminsOptions>>();
+                AppDbSeed.AddAdmins(_userService, _userManager, _adminsOptions.Value.CreateAdmins);
+            }
+        }
+
     }
 }
