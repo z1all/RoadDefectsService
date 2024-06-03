@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RoadDefectsService.Core.Application.Configurations.JwtToken;
 using System.Text;
 
 namespace RoadDefectsService.Presentation.Web.Configurations.Authorization

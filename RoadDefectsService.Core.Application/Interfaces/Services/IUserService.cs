@@ -1,9 +1,10 @@
 ﻿using RoadDefectsService.Core.Application.DTOs;
+using RoadDefectsService.Core.Application.Models;
 
 namespace RoadDefectsService.Core.Application.Interfaces.Services
 {
     public interface IUserService
     {
-        Task CreateAdminAsync(CreateUserDTO user);
+        Task<ExecutionResult> CreateAdminAsync(CreateUserDTO user);
     }
 }

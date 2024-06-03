@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using RoadDefectsService.Core.Application.Configurations.JwtToken;
 using RoadDefectsService.Presentation.Web.Configurations.Authorization;
 using RoadDefectsService.Presentation.Web.Configurations.CORS;
 using RoadDefectsService.Presentation.Web.Configurations.Other;
@@ -43,6 +44,7 @@ namespace RoadDefectsService.Presentation.Web
 
         public static AuthenticationBuilder AddJwtAuthentication(this IServiceCollection services)
         {
+            services.ConfigureOptions<AuthenticationOptionsConfigure>();
             services.ConfigureOptions<AuthorizationOptionsConfigure>();
             services.ConfigureOptions<JwtBearerOptionsConfigure>();
             services.ConfigureOptions<JwtOptionsConfigure>();

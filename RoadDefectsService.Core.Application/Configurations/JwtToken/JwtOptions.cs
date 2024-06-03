@@ -1,4 +1,4 @@
-﻿namespace RoadDefectsService.Presentation.Web.Configurations.Authorization
+﻿namespace RoadDefectsService.Core.Application.Configurations.JwtToken
 {
     public class JwtOptions
     {

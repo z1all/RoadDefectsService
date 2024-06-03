@@ -3,12 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
+using RoadDefectsService.Core.Application.Services;
 using RoadDefectsService.Infrastructure.Identity.Configurations;
 using RoadDefectsService.Infrastructure.Identity.Configurations.DbSeed;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
 using RoadDefectsService.Infrastructure.Identity.Models;
+using RoadDefectsService.Infrastructure.Identity.Repositories;
 using RoadDefectsService.Infrastructure.Identity.Services;
+using StackExchange.Redis;
 
 namespace RoadDefectsService.Infrastructure.Identity
 {
@@ -16,18 +20,29 @@ namespace RoadDefectsService.Infrastructure.Identity
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // Repositories
+            services.AddScoped<ITokenRepository, TokenRedisRepository>();
+
             // Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
-
-            // DataBase
-            services.AddEntityFrameworkDbContext(configuration);
+            services.AddScoped<IAccessTokenService, JWTTokenService>();
 
             // Configuration
             services.AddIdentityConfigurations();
             services.AddDatabaseSeedConfigurations();
 
+            // DataBase
+            services.AddEntityFrameworkDbContext(configuration);
+            services.AddRedisDbAddRedisDb(configuration);
+
             return services;
+        }
+
+        private static void AddRedisDbAddRedisDb(this IServiceCollection services, IConfiguration configuration)
+        {
+            string? redisConnectionString = configuration.GetConnectionString("RedisConnection");
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString!));
         }
 
         private static IServiceCollection AddIdentityConfigurations(this IServiceCollection services)

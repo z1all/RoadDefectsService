@@ -8,9 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
 
 // Services
-builder.Services.AddPresentationServices();
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddPresentationServices();
 
 builder.Services.AddControllers();
 
@@ -33,6 +33,7 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

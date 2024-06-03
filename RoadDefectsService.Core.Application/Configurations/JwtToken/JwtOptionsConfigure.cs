@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
-namespace RoadDefectsService.Presentation.Web.Configurations.Authorization
+namespace RoadDefectsService.Core.Application.Configurations.JwtToken
 {
     public class JwtOptionsConfigure(IConfiguration configuration) : IConfigureOptions<JwtOptions>
     {
