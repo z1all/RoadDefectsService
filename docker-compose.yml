@@ -11,6 +11,7 @@ services:
     networks:
       - my-net
     depends_on:
+      - redis
       - postgres
       
   postgres:
