@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Core.Application.DTOs;
 using RoadDefectsService.Core.Domain.Enums;
+using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.DTOs;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
@@ -10,7 +10,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     /// <response code="403">Forbidden</response>
     [Route("api/contractor")]
     [ApiController]
-    [Authorize(Roles = Role.Operator)]
+    [CustomeAuthorize(Roles = Role.Operator)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class ContractorController : ControllerBase
     {
