@@ -4,6 +4,7 @@ using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Core.Application.DTOs;
 using RoadDefectsService.Presentation.Web.DTOs;
+using RoadDefectsService.Presentation.Web.Attributes;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -20,7 +21,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("tasks")]
         [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
-        [Authorize(Roles = Role.Operator)]
+        [CustomeAuthorize(Roles = Role.Operator)]
         public async Task<ActionResult<List<TaskDTO>>> GetTasks()
         {
             return Ok();
@@ -32,7 +33,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Все </remarks>
         [HttpGet("fixation_defect/{taskId}")]
         [ProducesResponseType(typeof(FixationDefectTaskDTO), StatusCodes.Status200OK)]
-        [Authorize]
+        [CustomeAuthorize]
         public async Task<ActionResult<FixationDefectTaskDTO>> GetFixationDefectTask([FromRoute] Guid taskId)
         {
             return Ok();
@@ -43,7 +44,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary> 
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPut("fixation_defect/{taskId}")]
-        [Authorize(Roles = Role.Operator)]
+        [CustomeAuthorize(Roles = Role.Operator)]
         public async Task<ActionResult> ChangeFixationDefectTask([FromRoute] Guid taskId, [FromBody] CreateFixationDefectTaskDTO fixationTask)
         {
             return NoContent();
@@ -54,7 +55,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPost("fixation_defect")]
-        [Authorize(Roles = Role.Operator)]
+        [CustomeAuthorize(Roles = Role.Operator)]
         public async Task<ActionResult> CreateFixationDefectTask([FromBody] CreateFixationDefectTaskDTO fixationTask)
         {
             return NoContent();
@@ -65,7 +66,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Все </remarks>
         [HttpGet("fixation_work/{taskId}")]
-        [Authorize]
+        [CustomeAuthorize]
         public async Task<ActionResult> GetFixationWorkTask([FromRoute] Guid taskId)
         {
             return Ok();
@@ -76,7 +77,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary> 
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPut("fixation_work/{taskId}")]
-        [Authorize(Roles = Role.Operator)]
+        [CustomeAuthorize(Roles = Role.Operator)]
         public async Task<ActionResult> ChangeFixationWorkTask([FromRoute] Guid taskId)
         {
             return NoContent();
@@ -87,7 +88,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPost("fixation_work")]
-        [Authorize(Roles = Role.Operator)]
+        [CustomeAuthorize(Roles = Role.Operator)]
         public async Task<ActionResult> CreateFixationWorkTask()
         {
             return NoContent();
@@ -100,7 +101,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("inspector/{inspectorId}")]
         [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
-        [Authorize(Roles = Role.Operator)]
+        [CustomeAuthorize(Roles = Role.Operator)]
         public async Task<ActionResult<List<TaskDTO>>> GetInspectorTasks([FromRoute] Guid inspectorId)
         {
             return Ok();
@@ -112,7 +113,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">No Content</response> 
         [HttpPost("inspector/{inspectorId}")]
-        [Authorize(Roles = Role.Operator)]
+        [CustomeAuthorize(Roles = Role.Operator)]
         public async Task<ActionResult> AppointTask([FromRoute] Guid inspectorId, [FromBody] AppointTaskDTO appointTask)
         {
             return NoContent();
@@ -123,7 +124,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Дорожный инспектор </remarks>
         [HttpGet("own")]
-        [Authorize(Roles = Role.RoadInspector)]
+        [CustomeAuthorize(Roles = Role.RoadInspector)]
         [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<TaskDTO>>> GetOwnTask()
         {

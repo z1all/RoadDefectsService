@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Core.Application.DTOs;
+using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.DTOs;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
@@ -8,7 +9,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     /// <response code="401">Unauthorized</response>
     [Route("api/profile")]
     [ApiController]
-    [Authorize]
+    [CustomeAuthorize]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class ProfileController : ControllerBase
     {
