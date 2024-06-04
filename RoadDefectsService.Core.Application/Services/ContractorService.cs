@@ -94,5 +94,18 @@ namespace RoadDefectsService.Core.Application.Services
 
             return new(isSuccess: true);
         }
+
+        public async Task<ExecutionResult> DeleteContractorAsync(Guid contractorId)
+        {
+            Contractor? contractor = await _contractorRepository.GetByIdAsync(contractorId);
+            if (contractor is null)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "ContractorNotFound", $"Contractor with id {contractorId} not found!");
+            }
+
+            await _contractorRepository.DeleteAsync(contractor);
+
+            return new(isSuccess: true);
+        }
     }
 }

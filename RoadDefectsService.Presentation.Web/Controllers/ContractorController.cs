@@ -72,5 +72,17 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         {
             return await ExecutionResultHandlerAsync(() => _contractorService.EditContractorAsync(contractor, contractorId));
         }
+
+        /// <summary>
+        /// Удалить подрядчика (Реализовано)
+        /// </summary>
+        /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <response code="204">NoContent</response> 
+        [HttpDelete("{contractorId}")]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteContractor([FromRoute] Guid contractorId)
+        {
+            return await ExecutionResultHandlerAsync(() => _contractorService.DeleteContractorAsync(contractorId));
+        }
     }
 }
