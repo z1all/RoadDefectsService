@@ -75,9 +75,13 @@ namespace RoadDefectsService.Core.Application.Models
 
         public ExecutionResult() { }
         public ExecutionResult(TSuccessResult result) { Result = result; }
-
         public ExecutionResult(StatusCodeExecutionResult statusCode, string keyError, params string[] error) : base(statusCode, keyError, error) { }
-
         public ExecutionResult(StatusCodeExecutionResult statusCode, ImmutableDictionary<string, List<string>> errors) : base(statusCode, errors) { }
+
+
+        public static implicit operator ExecutionResult<TSuccessResult>(TSuccessResult value)
+        {
+            return new ExecutionResult<TSuccessResult>(value);
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace RoadDefectsService.Presentation.Web.Configurations.CORS
             options.AddDefaultPolicy(policy =>
             {
                 policy
-                    .WithOrigins(_options.AllowedOrigins)
+                    .WithOrigins(_options.AllowedOrigins.Split())
                     .AllowAnyHeader()
                     .AllowAnyMethod();
             });
