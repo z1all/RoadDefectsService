@@ -1,11 +1,11 @@
-﻿using RoadDefectsService.Core.Application.DTOs;
-using RoadDefectsService.Infrastructure.Identity.Models;
+﻿using RoadDefectsService.Core.Application.DTOs.AccessTokenService;
+using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Infrastructure.Identity.Mappers
 {
     public static class UserMapper
     {
-        public static UserDTO ToUserDTO(this CustomUser user)
+        public static TokenUserInfoDTO ToUserDTO(this CustomUser user)
         {
             return new()
             {

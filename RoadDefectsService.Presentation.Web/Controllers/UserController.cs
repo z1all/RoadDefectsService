@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using RoadDefectsService.Core.Application.DTOs.UserService;
+using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
@@ -10,80 +11,90 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [ApiController]
     public class UserController : BaseController
     {
+        private IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         /// <summary>
-        /// Все пользователи системы (Не реализовано) (Не все модели указаны)
+        /// Все пользователи системы (Реализовано) 
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
         /// 
         /// Оператор видит только дорожных инспекторов
+        /// 
         /// Админ всех пользователей
         /// </remarks>
         [HttpGet("users")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> GetUsers()
+        public async Task<ActionResult<UserPagedDTO>> GetUsers([FromQuery] UserFilterDTO userFilter)
         {
-            return Ok();
+            bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
+
+            return await ExecutionResultHandlerAsync(() => _userService.GetUsersAsync(userFilter, showOperators: isAdmin));
         }
 
         /// <summary>
-        /// Конкретный пользователь (Не реализовано) (Не все модели указаны)
+        /// Изменить профиль пользователя (Реализовано)  
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
         /// 
-        /// Оператор может смотреть только дорожных инспекторов
-        /// Админ всех пользователей
+        /// Оператор может изменять только дорожных инспекторов
+        /// 
+        /// Админ всех пользователей, кроме других админов
         /// </remarks>
-        [HttpGet("{userId}")]
+        [HttpPut("{userId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> GetUser([FromRoute] Guid userId)
+        public async Task<ActionResult> ChangeUser([FromRoute] Guid userId, [FromBody] EditUserDTO editUser)
         {
-            return Ok();
+            bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
+
+            return await ExecutionResultHandlerAsync(() => _userService.EditUserAsync(editUser, userId, editOperator: isAdmin));
         }
 
         /// <summary>
-        /// Создать дорожного инспектора (Не реализовано) (Не все модели указаны)
+        /// Удалить пользователя (Реализовано) 
+        /// </summary>
+        /// <remarks> 
+        /// Доступ: Оператор и админ 
+        /// 
+        /// Оператор может удалить только дорожных инспекторов
+        /// 
+        /// Админ всех пользователей, кроме других админов
+        /// </remarks>
+        [HttpDelete("{userId}")]
+        [CustomeAuthorize(Roles = Role.Operator)]
+        public async Task<ActionResult> DeleteUser([FromRoute] Guid userId)
+        {
+            bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
+
+            return await ExecutionResultHandlerAsync(() => _userService.DeleteUserAsync(userId, deleteOperator: isAdmin));
+        }
+
+        /// <summary>
+        /// Создать дорожного инспектора (Реализовано) 
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPost("road_inspector")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> CreateRoadInspector()
+        public async Task<ActionResult> CreateRoadInspector([FromBody] CreateUserDTO createRoadInspector)
         {
-            return Ok();
+            return await ExecutionResultHandlerAsync(() => _userService.CreateRoadInspectorAsync(createRoadInspector));
         }
 
         /// <summary>
-        /// Изменить профиль дорожного инспектора (Не реализовано) (Не все модели указаны)
-        /// </summary>
-        /// <remarks> Доступ: Оператор и админ </remarks>
-        [HttpPut("road_inspector")]
-        [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> ChangeRoadInspector()
-        {
-            return Ok();
-        }
-
-        /// <summary>
-        /// Создать оператора (Не реализовано) (Не все модели указаны)
+        /// Создать оператора (Реализовано) 
         /// </summary>
         /// <remarks> Доступ: Админ </remarks>
         [HttpPost("operator")]
         [CustomeAuthorize(Roles = Role.Admin)]
-        public async Task<ActionResult> CreateOperator()
+        public async Task<ActionResult> CreateOperator([FromBody] CreateUserDTO createOperator)
         {
-            return Ok();
-        }
-
-        /// <summary>
-        /// Изменить профиль оператора (Не реализовано) (Не все модели указаны)
-        /// </summary>
-        /// <remarks> Доступ: Админ </remarks>
-        [HttpPut("operator")]
-        [CustomeAuthorize(Roles = Role.Admin)]
-        public async Task<ActionResult> ChangeOperator()
-        {
-            return Ok();
+            return await ExecutionResultHandlerAsync(() => _userService.CreateOperatorAsync(createOperator));
         }
     }
 }

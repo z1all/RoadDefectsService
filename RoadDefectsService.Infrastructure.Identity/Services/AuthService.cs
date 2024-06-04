@@ -4,8 +4,8 @@ using RoadDefectsService.Core.Application.DTOs.AuthService;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
+using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Infrastructure.Identity.Mappers;
-using RoadDefectsService.Infrastructure.Identity.Models;
 
 namespace RoadDefectsService.Infrastructure.Identity.Services
 {

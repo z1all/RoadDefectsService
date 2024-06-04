@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using RoadDefectsService.Core.Application.DTOs;
 using RoadDefectsService.Core.Application.DTOs.ContractorService;
+using RoadDefectsService.Core.Application.DTOs.UserService;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Domain.Enums;
-using RoadDefectsService.Infrastructure.Identity.Models;
+using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Infrastructure.Identity
 {

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240604154856_AddOperatorAndRoadInspector")]
+    partial class AddOperatorAndRoadInspector
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,10 +202,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("HighestRole")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -251,9 +250,16 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Operator", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Operators");
                 });
@@ -261,9 +267,16 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("RoadInspectors");
                 });
@@ -323,7 +336,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                 {
                     b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "User")
                         .WithOne()
-                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.Operator", "Id")
+                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.Operator", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -334,7 +347,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                 {
                     b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "User")
                         .WithOne()
-                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.RoadInspector", "Id")
+                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.RoadInspector", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

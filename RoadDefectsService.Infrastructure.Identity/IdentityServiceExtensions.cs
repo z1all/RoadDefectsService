@@ -6,10 +6,10 @@ using Microsoft.Extensions.Options;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Services;
+using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Infrastructure.Identity.Configurations;
 using RoadDefectsService.Infrastructure.Identity.Configurations.DbSeed;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
-using RoadDefectsService.Infrastructure.Identity.Models;
 using RoadDefectsService.Infrastructure.Identity.Repositories;
 using RoadDefectsService.Infrastructure.Identity.Services;
 using StackExchange.Redis;
@@ -23,6 +23,9 @@ namespace RoadDefectsService.Infrastructure.Identity
             // Repositories
             services.AddScoped<ITokenRepository, TokenRedisRepository>();
             services.AddScoped<IContractorRepository, ContractorRepository>();
+            services.AddScoped<IRoadInspectorRepository, RoadInspectorRepository>();
+            services.AddScoped<IOperatorRepository, OperatorRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();
