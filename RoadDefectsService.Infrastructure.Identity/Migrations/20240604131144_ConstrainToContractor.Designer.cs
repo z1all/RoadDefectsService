@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240604131144_ConstrainToContractor")]
+    partial class ConstrainToContractor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,6 +147,8 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Email");
 
                     b.ToTable("Contractors");
                 });

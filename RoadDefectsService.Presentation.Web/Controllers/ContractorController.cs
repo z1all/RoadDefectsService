@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RoadDefectsService.Core.Application.DTOs;
+using RoadDefectsService.Core.Application.DTOs.ContractorService;
+using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
+using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
@@ -12,54 +14,63 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [ApiController]
     [CustomeAuthorize(Roles = Role.Operator)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-    public class ContractorController : ControllerBase
+    public class ContractorController : BaseController
     {
+        private readonly IContractorService _contractorService;
+
+        /// <summary></summary>
+        /// <param name="contractorService"></param>
+        public ContractorController(IContractorService contractorService)
+        {
+            _contractorService = contractorService;
+        }
+
         /// <summary>
-        /// Все подрядчики (Не реализовано)
+        /// Все подрядчики (Реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("contractors")]
         [ProducesResponseType(typeof(List<ContractorDTO>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ContractorDTO>>> GetСontractors()
+        public async Task<ActionResult<ContractorPagedDTO>> GetContractors([FromQuery] ContractorFilterDTO contractorFilter)
         {
-            return Ok();
+            return await ExecutionResultHandlerAsync(() => _contractorService.GetContractorsAsync(contractorFilter));
         }
 
         /// <summary>
-        /// Конкретный подрядчик (Не реализовано)
+        /// Конкретный подрядчик (Реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("{contractorId}")]
         [ProducesResponseType(typeof(ContractorDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ContractorDTO>> GetСontractor([FromRoute] Guid contractorId)
+        public async Task<ActionResult<ContractorDTO>> GetContractor([FromRoute] Guid contractorId)
         {
-            return Ok();
+            return await ExecutionResultHandlerAsync(() => _contractorService.GetContractorAsync(contractorId));
         }
 
         /// <summary>
-        /// Создать подрядчика (Не реализовано)
+        /// Создать подрядчика (Реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
         [HttpPost]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> CreateСontractor([FromBody] CreateContractorDTO contractor)
+        public async Task<ActionResult> CreateContractor([FromBody] CreateContractorDTO contractor)
         {
-            return NoContent();
+            return await ExecutionResultHandlerAsync(() => _contractorService.CreateContractorAsync(contractor));
         }
 
         /// <summary>
-        /// Редактировать информацию подрядчика (Не реализовано)
+        /// Редактировать информацию подрядчика (Реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
         [HttpPut("{contractorId}")]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> ChangeСontractor([FromRoute] Guid contractorId, [FromBody] CreateContractorDTO contractor)
+        public async Task<ActionResult> ChangeContractor([FromRoute] Guid contractorId, [FromBody] EditContractorDTO contractor)
         {
-            return NoContent();
+            return await ExecutionResultHandlerAsync(() => _contractorService.EditContractorAsync(contractor, contractorId));
         }
     }
 }

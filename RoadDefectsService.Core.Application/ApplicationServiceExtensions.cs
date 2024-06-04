@@ -10,6 +10,7 @@ namespace RoadDefectsService.Core.Application
         {
             // Services
             services.AddScoped<IAccessTokenService, JWTTokenService>();
+            services.AddScoped<IContractorService, ContractorService>();
 
             return services;
         }

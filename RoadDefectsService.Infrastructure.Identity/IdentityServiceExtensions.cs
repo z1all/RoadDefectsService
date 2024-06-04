@@ -22,6 +22,7 @@ namespace RoadDefectsService.Infrastructure.Identity
         {
             // Repositories
             services.AddScoped<ITokenRepository, TokenRedisRepository>();
+            services.AddScoped<IContractorRepository, ContractorRepository>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();
@@ -87,6 +88,11 @@ namespace RoadDefectsService.Infrastructure.Identity
                 var _userService = scope.ServiceProvider.GetRequiredService<IUserService>();
                 var _adminsOptions = scope.ServiceProvider.GetRequiredService<IOptions<AdminsOptions>>();
                 AppDbSeed.AddAdmins(_userService, _userManager, _adminsOptions.Value.CreateAdmins);
+
+                // Contractors
+                var _contractorService = scope.ServiceProvider.GetRequiredService<IContractorService>();
+                var _contractorRepository = scope.ServiceProvider.GetRequiredService<IContractorRepository>();
+                AppDbSeed.AddContractors(_contractorService, _contractorRepository);
             }
         }
 

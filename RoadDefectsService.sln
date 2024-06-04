@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadDefectsService.Core.App
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadDefectsService.Core.Domain", "RoadDefectsService.Core.Domain\RoadDefectsService.Core.Domain.csproj", "{26120F6F-9845-459D-81E4-F4074C93EE33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadDefectsService.Infrastructure.Identity", "RoadDefectsService.Infrastructure.Identity\RoadDefectsService.Infrastructure.Identity.csproj", "{5465DFB4-F4BC-4F64-85FE-9825428C7CF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadDefectsService.Infrastructure.Identity", "RoadDefectsService.Infrastructure.Identity\RoadDefectsService.Infrastructure.Identity.csproj", "{5465DFB4-F4BC-4F64-85FE-9825428C7CF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
