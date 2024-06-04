@@ -18,7 +18,7 @@ namespace RoadDefectsService.Core.Application.Mappers
 
         public static List<ContractorDTO> ToContractorDTOList(this List<Contractor> contractors)
         {
-            return contractors.Select(contractor => contractor.ToContractorDTO()).ToList();
+            return contractors.Select(ToContractorDTO).ToList();
         }
 
         public static Contractor ToContractor(this CreateContractorDTO contractor)

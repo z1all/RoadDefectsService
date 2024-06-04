@@ -20,14 +20,14 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
             modelBuilder.Entity<Operator>()
                 .HasOne(_operator => _operator.User)
                 .WithOne()
-                .HasForeignKey<Operator>(_operator => _operator.UserId)
+                .HasForeignKey<Operator>(_operator => _operator.Id)
                 .IsRequired();
 
             // RoadInspector
             modelBuilder.Entity<RoadInspector>()
                 .HasOne(roadInspector => roadInspector.User)
                 .WithOne()
-                .HasForeignKey<RoadInspector>(roadInspector => roadInspector.UserId)
+                .HasForeignKey<RoadInspector>(roadInspector => roadInspector.Id)
                 .IsRequired();
 
             // Contractors

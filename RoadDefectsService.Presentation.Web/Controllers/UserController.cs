@@ -19,7 +19,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Все пользователи системы (Не реализовано) 
+        /// Все пользователи системы (Реализовано) 
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -30,7 +30,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </remarks>
         [HttpGet("users")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult<List<UserInfoDTO>>> GetUsers([FromQuery] UserFilterDTO userFilter)
+        public async Task<ActionResult<UserPagedDTO>> GetUsers([FromQuery] UserFilterDTO userFilter)
         {
             bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
 
@@ -38,7 +38,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Изменить профиль пользователя (Не реализовано) 
+        /// Изменить профиль пользователя (Реализовано)  
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -57,7 +57,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Удалить пользователя (Не реализовано) 
+        /// Удалить пользователя (Реализовано) 
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -76,7 +76,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать дорожного инспектора (Не реализовано) 
+        /// Создать дорожного инспектора (Реализовано) 
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPost("road_inspector")]
@@ -87,7 +87,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать оператора (Не реализовано)
+        /// Создать оператора (Реализовано) 
         /// </summary>
         /// <remarks> Доступ: Админ </remarks>
         [HttpPost("operator")]

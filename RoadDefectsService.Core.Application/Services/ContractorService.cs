@@ -23,14 +23,14 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.BadRequest, keyError: "InvalidPageError", error: "Number of page can't be less than 1.");
             }
 
-            int countContractors = await _contractorRepository.CountContractorsByFilterAsync(contractorFilter);
+            int countContractors = await _contractorRepository.CountByFilterAsync(contractorFilter);
             int countPage = countContractors == 0 ? 1 : (countContractors + contractorFilter.Size - 1) / contractorFilter.Size;
             if (contractorFilter.Page > countPage)
             {
                 return new(StatusCodeExecutionResult.BadRequest, keyError: "InvalidPageError", error: $"Number of page can be from 1 to {countPage}.");
             }
 
-            List<Contractor> contractors = await _contractorRepository.GetContractorsByFilterAsync(contractorFilter);
+            List<Contractor> contractors = await _contractorRepository.GetAllByFilterAsync(contractorFilter);
             return new ContractorPagedDTO()
             {
                 Contractors = contractors.ToContractorDTOList(),
