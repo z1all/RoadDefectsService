@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace RoadDefectsService.Presentation.Web.Helpers
 {
-    public static class JwtTokenHelper
+    public static class HttpContextHelper
     {
         public static bool TryGetUserId(this HttpContext httpContext, out Guid userId)
         {

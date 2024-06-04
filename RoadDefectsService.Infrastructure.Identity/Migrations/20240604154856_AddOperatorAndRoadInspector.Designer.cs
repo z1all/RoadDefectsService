@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240604154856_AddOperatorAndRoadInspector")]
+    partial class AddOperatorAndRoadInspector
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,10 +199,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("HighestRole")
                         .IsRequired()
                         .HasColumnType("text");
 

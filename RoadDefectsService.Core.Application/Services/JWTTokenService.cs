@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RoadDefectsService.Core.Application.Configurations.JwtToken;
-using RoadDefectsService.Core.Application.DTOs;
 using RoadDefectsService.Core.Application.DTOs.AccessTokenService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
@@ -16,7 +15,7 @@ namespace RoadDefectsService.Core.Application.Services
         private readonly JwtOptions jwtOptions = options.Value;
         private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
-        public ExecutionResult<AccessTokenDTO> GenerateToken(UserDTO user, List<Claim> additionClaims)
+        public ExecutionResult<AccessTokenDTO> GenerateToken(TokenUserInfoDTO user, List<Claim> additionClaims)
         {
             byte[] key = Encoding.ASCII.GetBytes(jwtOptions.SecretKey);
             (List<Claim> claims, Guid JTI) = GetClaims(user, additionClaims);
@@ -43,7 +42,7 @@ namespace RoadDefectsService.Core.Application.Services
             };
         }
 
-        private(List<Claim> claims, Guid JTI) GetClaims(UserDTO user, List<Claim> additionClaims)
+        private(List<Claim> claims, Guid JTI) GetClaims(TokenUserInfoDTO user, List<Claim> additionClaims)
         {
             Guid JTI = Guid.NewGuid();
 
