@@ -1,4 +1,4 @@
-﻿using RoadDefectsService.Core.Application.DTOs.UserService;
+﻿using RoadDefectsService.Core.Application.DTOs.Common;
 using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Mappers
