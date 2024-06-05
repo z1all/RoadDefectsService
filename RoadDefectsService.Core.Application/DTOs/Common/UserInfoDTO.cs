@@ -1,4 +1,4 @@
-﻿namespace RoadDefectsService.Core.Application.DTOs.UserService
+﻿namespace RoadDefectsService.Core.Application.DTOs.Common
 {
     public class UserInfoDTO
     {

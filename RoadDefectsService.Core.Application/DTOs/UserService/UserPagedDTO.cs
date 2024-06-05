@@ -1,4 +1,5 @@
-﻿using RoadDefectsService.Core.Application.DTOs.ContractorService;
+﻿using RoadDefectsService.Core.Application.DTOs.Common;
+using RoadDefectsService.Core.Application.DTOs.ContractorService;
 
 namespace RoadDefectsService.Core.Application.DTOs.UserService
 {

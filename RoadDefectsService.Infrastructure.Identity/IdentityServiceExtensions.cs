@@ -30,6 +30,7 @@ namespace RoadDefectsService.Infrastructure.Identity
             // Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IAccessTokenService, JWTTokenService>();
 
             // Configuration
