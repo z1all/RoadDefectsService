@@ -1,4 +1,6 @@
-﻿namespace RoadDefectsService.Core.Application.DTOs.ContractorService
+﻿using RoadDefectsService.Core.Application.DTOs.Common;
+
+namespace RoadDefectsService.Core.Application.DTOs.ContractorService
 {
     public class ContractorPagedDTO
     {

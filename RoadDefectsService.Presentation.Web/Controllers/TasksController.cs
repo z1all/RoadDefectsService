@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Core.Application.DTOs;
 using RoadDefectsService.Presentation.Web.DTOs;
 using RoadDefectsService.Presentation.Web.Attributes;
+using RoadDefectsService.Core.Application.DTOs.TaskService;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -20,9 +20,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("tasks")]
-        [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult<List<TaskDTO>>> GetTasks()
+        public async Task<ActionResult<TaskPagedDTO>> GetTasks([FromQuery] CommonTaskFiler taskFilter)
         {
             return Ok();
         }
@@ -32,42 +32,49 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Все </remarks>
         [HttpGet("fixation_defect/{taskId}")]
-        [ProducesResponseType(typeof(FixationDefectTaskDTO), StatusCodes.Status200OK)]
         [CustomeAuthorize]
+        [ProducesResponseType(typeof(FixationDefectTaskDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<FixationDefectTaskDTO>> GetFixationDefectTask([FromRoute] Guid taskId)
         {
             return Ok();
         }
 
         /// <summary>
-        /// Редактировать задачу (Не реализовано) (Не все модели указаны)
+        /// Редактировать задачу (Не реализовано)
         /// </summary> 
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPut("fixation_defect/{taskId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> ChangeFixationDefectTask([FromRoute] Guid taskId, [FromBody] CreateFixationDefectTaskDTO fixationTask)
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ChangeFixationDefectTask([FromRoute] Guid taskId, [FromBody] CreateEditFixationDefectTaskDTO editFixationDefect)
         {
             return NoContent();
         }
 
         /// <summary>
-        /// Создать задачу (Не реализовано) (Не все модели указаны)
+        /// Создать задачу (Не реализовано) 
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPost("fixation_defect")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> CreateFixationDefectTask([FromBody] CreateFixationDefectTaskDTO fixationTask)
+        [ProducesResponseType(typeof(CreateTaskResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CreateTaskResponseDTO>> CreateFixationDefectTask([FromBody] CreateEditFixationDefectTaskDTO createFixationDefect)
         {
-            return NoContent();
+            return Ok();
         }
 
         /// <summary>
-        /// Посмотреть задачу по фиксации выполненных работ (Не все модели указаны)
+        /// Посмотреть задачу по фиксации выполненных работ (Не реализовано) 
         /// </summary>
         /// <remarks> Доступ: Все </remarks>
         [HttpGet("fixation_work/{taskId}")]
         [CustomeAuthorize]
-        public async Task<ActionResult> GetFixationWorkTask([FromRoute] Guid taskId)
+        [ProducesResponseType(typeof(FixationWorkTaskDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<FixationWorkTaskDTO>> GetFixationWorkTask([FromRoute] Guid taskId)
         {
             return Ok();
         }
@@ -78,20 +85,24 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPut("fixation_work/{taskId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> ChangeFixationWorkTask([FromRoute] Guid taskId)
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ChangeFixationWorkTask([FromRoute] Guid taskId, [FromBody] EditFixationWorkTaskDTO editFixationWork)
         {
             return NoContent();
         }
 
         /// <summary>
-        /// Создать задачу по фиксации выполненных работ (Не реализовано) (Не все модели указаны)
+        /// Создать задачу по фиксации выполненных работ (Не реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPost("fixation_work")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> CreateFixationWorkTask()
+        [ProducesResponseType(typeof(CreateTaskResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CreateTaskResponseDTO>> CreateFixationWorkTask([FromBody] CreateFixationWorkTaskDTO createFixationWork)
         {
-            return NoContent();
+            return Ok();
         }
 
 
@@ -100,9 +111,10 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("inspector/{inspectorId}")]
-        [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult<List<TaskDTO>>> GetInspectorTasks([FromRoute] Guid inspectorId)
+        [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<TaskPagedDTO>> GetInspectorTasks([FromRoute] Guid inspectorId, [FromQuery] TaskFilterDTO taskFilter)
         {
             return Ok();
         }
@@ -114,6 +126,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <response code="204">No Content</response> 
         [HttpPost("inspector/{inspectorId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> AppointTask([FromRoute] Guid inspectorId, [FromBody] AppointTaskDTO appointTask)
         {
             return NoContent();
@@ -125,8 +138,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Дорожный инспектор </remarks>
         [HttpGet("own")]
         [CustomeAuthorize(Roles = Role.RoadInspector)]
-        [ProducesResponseType(typeof(List<TaskDTO>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<TaskDTO>>> GetOwnTask()
+        [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
+        public async Task<ActionResult<TaskPagedDTO>> GetOwnTask([FromQuery] TaskFilterDTO taskFilter)
         {
             return NoContent();
         }
