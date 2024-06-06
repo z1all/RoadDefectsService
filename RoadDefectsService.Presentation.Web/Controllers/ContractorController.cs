@@ -30,7 +30,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("contractors")]
-        [ProducesResponseType(typeof(List<ContractorDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ContractorPagedDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<ContractorPagedDTO>> GetContractors([FromQuery] ContractorFilterDTO contractorFilter)
         {
             return await ExecutionResultHandlerAsync(() => _contractorService.GetContractorsAsync(contractorFilter));

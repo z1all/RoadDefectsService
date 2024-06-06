@@ -2,7 +2,12 @@
 
 namespace RoadDefectsService.Core.Domain.Models.Base
 {
-    public class BaseEntity
+    public interface IBaseEntity
+    {
+        Guid Id { get; set; }
+    }
+
+    public class BaseEntity : IBaseEntity
     {
         [Key]
         public Guid Id { get; set; }

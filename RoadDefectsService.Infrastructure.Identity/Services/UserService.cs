@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using RoadDefectsService.Core.Application.DTOs.Common;
 using RoadDefectsService.Core.Application.DTOs.UserService;
+using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Mappers;
@@ -32,29 +34,13 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
 
         public async Task<ExecutionResult<UserPagedDTO>> GetUsersAsync(UserFilterDTO userFilter, bool showOperators)
         {
-            if (userFilter.Page < 1)
-            {
-                return new(StatusCodeExecutionResult.BadRequest, keyError: "InvalidPageError", error: "Number of page can't be less than 1.");
-            }
-
-            int countUsers = await _userRepository.CountByFilter(userFilter, showOperators);
-            int countPage = countUsers == 0 ? 1 : (countUsers + userFilter.Size - 1) / userFilter.Size;
-            if (userFilter.Page > countPage)
-            {
-                return new(StatusCodeExecutionResult.BadRequest, keyError: "InvalidPageError", error: $"Number of page can be from 1 to {countPage}.");
-            }
-
-            List<CustomUser> users = await _userRepository.GetAllByFilter(userFilter, showOperators);
-            return new UserPagedDTO()
-            {
-                Users = users.ToToUserInfoDTOList(),
-                Pagination = new()
-                {
-                    Count = countPage,
-                    Current = userFilter.Page,
-                    Size = userFilter.Size,
-                },
-            };
+            return await FiltrationHelper
+               .FilterAsync<UserFilterDTO, CustomUser, UserInfoDTO, UserPagedDTO>(
+                   userFilter,
+                   (filter) => _userRepository.CountByFilter(filter, showOperators), 
+                   (filter) => _userRepository.GetAllByFilter(filter, showOperators),
+                   (users) => users.ToToUserInfoDTOList()
+               );
         }
 
         public async Task<ExecutionResult> EditUserAsync(EditUserDTO editUser, Guid userId, bool editOperator)

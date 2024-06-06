@@ -4,10 +4,10 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
-    public interface IContractorRepository : IBaseWithBaseEntityRepository<Contractor>
+    public interface IContractorRepository : 
+        IBaseWithBaseEntityRepository<Contractor>, 
+        IFilterableRepository<ContractorFilterDTO, Contractor>
     {
-        Task<List<Contractor>> GetAllByFilterAsync(ContractorFilterDTO contractorFilter);
-        Task<int> CountByFilterAsync(ContractorFilterDTO contractorFilter);
         Task<bool> AnyByEmailAsync(string email);
     }
 }

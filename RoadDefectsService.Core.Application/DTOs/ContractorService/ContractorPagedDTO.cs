@@ -2,9 +2,8 @@
 
 namespace RoadDefectsService.Core.Application.DTOs.ContractorService
 {
-    public class ContractorPagedDTO
+    public class ContractorPagedDTO : BasePagedDTO<ContractorDTO>
     {
-        public required List<ContractorDTO> Contractors { get; set; }
-        public required PageInfoDTO Pagination { get; set; }
+        public List<ContractorDTO> Contractors { get => Models; set => Models = value; }
     }
 }
