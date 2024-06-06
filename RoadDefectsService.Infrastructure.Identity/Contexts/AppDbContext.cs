@@ -10,6 +10,10 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
         public DbSet<RoadInspector> RoadInspectors { get; set; }
         public DbSet<Operator> Operators { get; set; }
 
+        public DbSet<TaskEntity> Tasks { get; set; }
+        public DbSet<TaskFixationDefect> FixationDefectTasks { get; set; }
+        public DbSet<TaskFixationWork> FixationWorkTasks { get; set; }
+
         public AppDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,9 +34,15 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
                 .HasForeignKey<RoadInspector>(roadInspector => roadInspector.Id)
                 .IsRequired();
 
-            // Contractors
-            //modelBuilder.Entity<Contractor>()
-            //    .HasAlternateKey(contractor => contractor.Email);
+            // Tasks
+            modelBuilder.Entity<TaskEntity>()
+                .HasOne(task => task.RoadInspector)
+                .WithMany(roadInspector => roadInspector.AppointedTasks)
+                .HasForeignKey(task => task.RoadInspectorId)
+                .IsRequired();
+
+            modelBuilder.Entity<TaskEntity>()
+                .UseTphMappingStrategy();
         }
     }
 }

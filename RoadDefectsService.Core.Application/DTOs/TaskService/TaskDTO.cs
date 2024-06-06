@@ -8,6 +8,7 @@ namespace RoadDefectsService.Core.Application.DTOs.TaskService
         public required DateTime CreatedDateTime { get; set; }
         public required TaskType TaskType { get; set; }
         public required DefectStatus DefectStatus { get; set; }
+        public required StatusTask TaskStatus { get; set; }
         public required bool ExistRoadInspector { get; set; }
         public required bool ExistDefectInfo { get; set; }
     }

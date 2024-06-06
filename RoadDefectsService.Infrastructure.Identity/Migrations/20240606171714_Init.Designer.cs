@@ -12,8 +12,8 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240604134652_DeleteConstrainFromContractor")]
-    partial class DeleteConstrainFromContractor
+    [Migration("20240606171714_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,7 +151,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.ToTable("Contractors");
                 });
 
-            modelBuilder.Entity("RoadDefectsService.Infrastructure.Identity.Models.CustomRole", b =>
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.CustomRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,7 +178,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("RoadDefectsService.Infrastructure.Identity.Models.CustomUser", b =>
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.CustomUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,6 +199,10 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("HighestRole")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -247,9 +251,89 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Operator", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Operators");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoadInspectors");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DefectStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)");
+
+                    b.Property<Guid?>("RoadInspectorId")
+                        .IsRequired()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TaskStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TaskType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoadInspectorId");
+
+                    b.ToTable("Tasks");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("TaskEntity");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskFixationDefect", b =>
+                {
+                    b.HasBaseType("RoadDefectsService.Core.Domain.Models.TaskEntity");
+
+                    b.Property<string>("ApproximateAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("TaskFixationDefect");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskFixationWork", b =>
+                {
+                    b.HasBaseType("RoadDefectsService.Core.Domain.Models.TaskEntity");
+
+                    b.HasDiscriminator().HasValue("TaskFixationWork");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("RoadDefectsService.Infrastructure.Identity.Models.CustomRole", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -258,7 +342,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("RoadDefectsService.Infrastructure.Identity.Models.CustomUser", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -267,7 +351,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("RoadDefectsService.Infrastructure.Identity.Models.CustomUser", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -276,13 +360,13 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("RoadDefectsService.Infrastructure.Identity.Models.CustomRole", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoadDefectsService.Infrastructure.Identity.Models.CustomUser", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -291,11 +375,49 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("RoadDefectsService.Infrastructure.Identity.Models.CustomUser", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Operator", b =>
+                {
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "User")
+                        .WithOne()
+                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.Operator", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
+                {
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "User")
+                        .WithOne()
+                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.RoadInspector", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskEntity", b =>
+                {
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.RoadInspector", "RoadInspector")
+                        .WithMany("AppointedTasks")
+                        .HasForeignKey("RoadInspectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RoadInspector");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
+                {
+                    b.Navigation("AppointedTasks");
                 });
 #pragma warning restore 612, 618
         }
