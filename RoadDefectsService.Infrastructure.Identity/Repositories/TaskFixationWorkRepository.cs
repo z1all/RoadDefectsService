@@ -1,4 +1,5 @@
-﻿using RoadDefectsService.Core.Application.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
 using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
@@ -7,8 +8,22 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
     public class TaskFixationWorkRepository : BaseWithBaseEntityRepository<TaskFixationWork, AppDbContext>, ITaskFixationWorkRepository
     {
-        public TaskFixationWorkRepository(AppDbContext dbContext) : base(dbContext)
+        public TaskFixationWorkRepository(AppDbContext dbContext) : base(dbContext) { }
+
+        public Task<TaskFixationWork?> GetByIdWithInspectorAndPrevTaskAndDefectAsync(Guid id)
         {
+            return _dbContext.FixationWorkTasks
+                .Include(task => task.RoadInspector)
+                    .ThenInclude(inspector => inspector!.User)
+                .Include(task => task.PrevTask)
+                //.Include(task => task.Defect)
+                .FirstOrDefaultAsync(task => task.Id == id);
+        }
+
+        public Task<bool> AnyWithPrevTaskId(Guid prevTaskId)
+        {
+            return _dbContext.FixationWorkTasks
+                .AnyAsync(task => task.PrevTaskId == prevTaskId);
         }
     }
 }

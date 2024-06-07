@@ -5,5 +5,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
     public interface ITaskFixationDefectRepository : IBaseWithBaseEntityRepository<TaskFixationDefect>
     {
+        Task<TaskFixationDefect?> GetByIdWithInspectorAndDefectAsync(Guid id);
     }
 }

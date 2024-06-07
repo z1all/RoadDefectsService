@@ -12,6 +12,8 @@ namespace RoadDefectsService.Core.Application
             services.AddScoped<IAccessTokenService, JWTTokenService>();
             services.AddScoped<IContractorService, ContractorService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<ITaskFixationDefectService, TaskFixationDefectService>();
+            services.AddScoped<ITaskFixationWorkService, TaskFixationWorkService>();
 
             return services;
         }

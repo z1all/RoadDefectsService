@@ -23,7 +23,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Посмотреть список задач со статусами (Не реализовано)
+        /// Посмотреть список задач со статусами
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("tasks")]
@@ -35,7 +35,19 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Задачи дорожного инспектора (Не реализовано)
+        /// Удалить задачу
+        /// </summary>
+        /// <remarks> Доступ: Оператор и админ </remarks>
+        [HttpDelete("{taskId}")]
+        [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
+        [CustomeAuthorize(Roles = Role.Operator)]
+        public async Task<ActionResult<TaskPagedDTO>> DeleteTask(Guid taskId)
+        {
+            return await ExecutionResultHandlerAsync(() => _taskService.DeleteTaskAsync(taskId));
+        }
+
+        /// <summary>
+        /// Задачи дорожного инспектора
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("inspector/{inspectorId}")]
@@ -48,7 +60,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Назначить задачу дорожному инспектору (Не реализовано)
+        /// Назначить задачу дорожному инспектору
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">No Content</response> 
@@ -61,7 +73,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Личные задачи (Не реализовано)
+        /// Личные задачи
         /// </summary>
         /// <remarks> Доступ: Дорожный инспектор </remarks>
         [HttpGet("own")]

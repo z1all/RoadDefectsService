@@ -26,7 +26,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Все подрядчики (Реализовано)
+        /// Все подрядчики
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("contractors")]
@@ -37,7 +37,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Конкретный подрядчик (Реализовано)
+        /// Конкретный подрядчик
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("{contractorId}")]
@@ -49,7 +49,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать подрядчика (Реализовано)
+        /// Создать подрядчика
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
@@ -61,7 +61,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Редактировать информацию подрядчика (Реализовано)
+        /// Редактировать информацию подрядчика
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
@@ -74,7 +74,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Удалить подрядчика (Реализовано)
+        /// Удалить подрядчика
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 

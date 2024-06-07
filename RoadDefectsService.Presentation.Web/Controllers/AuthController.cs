@@ -23,7 +23,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// (Реализовано)
+        /// 
         /// </summary>
         /// <remarks> 
         /// Доступ: Все 
@@ -53,7 +53,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// (Реализовано)
+        /// 
         /// </summary>
         /// <remarks> Доступ: Все </remarks>
         /// <response code="204">NoContent</response>

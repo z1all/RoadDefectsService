@@ -1,5 +1,4 @@
-﻿using RoadDefectsService.Core.Application.DTOs.Common;
-using RoadDefectsService.Core.Domain.Enums;
+﻿using RoadDefectsService.Core.Domain.Enums;
 
 namespace RoadDefectsService.Core.Application.DTOs.TaskService
 {
@@ -11,6 +10,6 @@ namespace RoadDefectsService.Core.Application.DTOs.TaskService
         public required StatusTask TaskStatus { get; set; }
         public required DefectFixationDTO? DefectFixation { get; set; }
         public required TaskDTO PrevTask { get; set; }
-        public required UserInfoDTO? Executor { get; set; }
+        public required RoadInspectorDTO? Executor { get; set; }
     }
 }

@@ -1,17 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Core.Application.DTOs.TaskService;
+using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
+using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
     [Route("api/fixation_defect")]
     [ApiController]
-    public class TaskFixationDefectController : ControllerBase
+    public class TaskFixationDefectController : BaseController
     {
+        private readonly ITaskFixationDefectService _taskFixationDefectService;
+
+        public TaskFixationDefectController(ITaskFixationDefectService taskFixationDefectService)
+        {
+            _taskFixationDefectService = taskFixationDefectService;
+        }
+
         /// <summary>
-        /// Посмотреть задачу (Не реализовано)
+        /// Посмотреть задачу
         /// </summary>
         /// <remarks> Доступ: Все </remarks>
         [HttpGet("{taskId}")]
@@ -20,11 +29,15 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<FixationDefectTaskDTO>> GetFixationDefectTask([FromRoute] Guid taskId)
         {
-            return Ok();
+            if (HttpContext.User.IsInRole(Role.RoadInspector))
+            {
+                return await ExecutionResultHandlerAsync((userId) => _taskFixationDefectService.GetFixationDefectTaskAsync(taskId, userId));
+            }
+            return await ExecutionResultHandlerAsync(() => _taskFixationDefectService.GetFixationDefectTaskAsync(taskId));
         }
 
         /// <summary>
-        /// Редактировать задачу (Не реализовано)
+        /// Редактировать задачу
         /// </summary> 
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPut("{taskId}")]
@@ -33,11 +46,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> ChangeFixationDefectTask([FromRoute] Guid taskId, [FromBody] CreateEditFixationDefectTaskDTO editFixationDefect)
         {
-            return NoContent();
+            return await ExecutionResultHandlerAsync(() => _taskFixationDefectService.EditFixationDefectTaskAsync(editFixationDefect, taskId));
         }
 
         /// <summary>
-        /// Создать задачу (Не реализовано) 
+        /// Создать задачу
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpPost]
@@ -46,7 +59,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CreateTaskResponseDTO>> CreateFixationDefectTask([FromBody] CreateEditFixationDefectTaskDTO createFixationDefect)
         {
-            return Ok();
+            return await ExecutionResultHandlerAsync(() => _taskFixationDefectService.CreateFixationDefectTaskAsync(createFixationDefect));
         }
     }
 }

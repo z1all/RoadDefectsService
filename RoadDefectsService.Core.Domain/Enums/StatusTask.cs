@@ -6,7 +6,7 @@ namespace RoadDefectsService.Core.Domain.Enums
     public enum StatusTask
     {
         Created = 1,
-        Appointed = 2,
+        Processing = 2,
         Completed = 3,
     }
 }

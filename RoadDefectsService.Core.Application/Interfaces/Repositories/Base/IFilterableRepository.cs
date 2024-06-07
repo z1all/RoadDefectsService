@@ -7,7 +7,7 @@ namespace RoadDefectsService.Core.Application.Interfaces.Repositories.Base
         where TFilter : BaseFilterDTO 
         where TEntity : IBaseEntity
     {
-        Task<List<TEntity>> GetAllByFilterAsync(TFilter contractorFilter);
-        Task<int> CountByFilterAsync(TFilter contractorFilter);
+        Task<List<TEntity>> GetAllByFilterAsync(TFilter filter);
+        Task<int> CountByFilterAsync(TFilter filter);
     }
 }

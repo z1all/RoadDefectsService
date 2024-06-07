@@ -37,8 +37,8 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
             return await FiltrationHelper
                .FilterAsync<UserFilterDTO, CustomUser, UserInfoDTO, UserPagedDTO>(
                    userFilter,
-                   (filter) => _userRepository.CountByFilter(filter, showOperators), 
-                   (filter) => _userRepository.GetAllByFilter(filter, showOperators),
+                   (filter) => _userRepository.CountByFilterAsync(filter, showOperators), 
+                   (filter) => _userRepository.GetAllByFilterAsync(filter, showOperators),
                    (users) => users.ToToUserInfoDTOList()
                );
         }
@@ -65,7 +65,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
 
             await _userManager.UpdateAsync(user);
 
-            return new(isSuccess: true);
+            return ExecutionResult.Success;
         }
 
         public async Task<ExecutionResult> DeleteUserAsync(Guid userId, bool deleteOperator)
@@ -88,7 +88,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
 
             await _userManager.DeleteAsync(user);
 
-            return new(isSuccess: true);
+            return ExecutionResult.Success;
         }
 
         public Task<ExecutionResult> CreateAdminAsync(CreateUserDTO createAdmin)
@@ -104,7 +104,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         private async Task<ExecutionResult> CreateOperatorAsync(CreateUserDTO createOperator, List<string> roles)
         {
             ExecutionResult<CustomUser> creatingResult = await CreateUserAsync(createOperator, roles);
-            if (!creatingResult.IsSuccess)
+            if (creatingResult.IsNotSuccess)
             {
                 return creatingResult;
             }
@@ -117,13 +117,13 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
             };
             await _operatorRepository.AddAsync(@operator);
 
-            return new(isSuccess: true);
+            return ExecutionResult.Success;
         }
 
         public async Task<ExecutionResult> CreateRoadInspectorAsync(CreateUserDTO createRoadInspector)
         {
             ExecutionResult<CustomUser> creatingResult = await CreateUserAsync(createRoadInspector, [Role.RoadInspector]);
-            if (!creatingResult.IsSuccess)
+            if (creatingResult.IsNotSuccess)
             {
                 return creatingResult;
             }
@@ -136,7 +136,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
             };
             await _roadInspectorRepository.AddAsync(roadInspector);
 
-            return new(isSuccess: true);
+            return ExecutionResult.Success;
         }
 
         /// <summary>

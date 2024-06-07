@@ -5,7 +5,7 @@ namespace RoadDefectsService.Core.Domain.Models
 {
     public class TaskEntity : BaseEntity
     {
-        public required TaskType TaskType { get; set; }
+        public TaskType TaskType { get; set; }
         public required DateTime CreatedDateTime { get; set; }
         public required DefectStatus DefectStatus { get; set; }
         public required StatusTask TaskStatus { get; set; }

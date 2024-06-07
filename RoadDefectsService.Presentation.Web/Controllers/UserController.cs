@@ -22,7 +22,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Все пользователи системы (Реализовано) 
+        /// Все пользователи системы
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -42,7 +42,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Изменить профиль пользователя (Реализовано)  
+        /// Изменить профиль пользователя
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -65,7 +65,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Удалить пользователя (Реализовано) 
+        /// Удалить пользователя
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -87,7 +87,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать дорожного инспектора (Реализовано) 
+        /// Создать дорожного инспектора
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">No Content</response>
@@ -100,7 +100,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать оператора (Реализовано) 
+        /// Создать оператора
         /// </summary>
         /// <remarks> Доступ: Админ </remarks>
         /// <response code="204">No Content</response>

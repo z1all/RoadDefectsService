@@ -38,7 +38,12 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
             modelBuilder.Entity<TaskEntity>()
                 .HasOne(task => task.RoadInspector)
                 .WithMany(roadInspector => roadInspector.AppointedTasks)
-                .HasForeignKey(task => task.RoadInspectorId)
+                .HasForeignKey(task => task.RoadInspectorId);
+
+            modelBuilder.Entity<TaskFixationWork>()
+                .HasOne(task => task.PrevTask)
+                .WithOne()
+                .HasForeignKey<TaskFixationWork>(task => task.PrevTaskId)
                 .IsRequired();
 
             modelBuilder.Entity<TaskEntity>()

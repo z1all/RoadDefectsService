@@ -6,6 +6,6 @@ namespace RoadDefectsService.Core.Domain.Enums
     public enum TaskType
     {
         FixationDefectTask = 1,
-        FixationWorksTask = 2,
+        FixationWorkTask = 2,
     }
 }
