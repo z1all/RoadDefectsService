@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using RoadDefectsService.Core.Application.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using RoadDefectsService.Core.Application.DTOs.AuthService;
+using RoadDefectsService.Core.Application.Interfaces.Services;
+using RoadDefectsService.Core.Application.Models;
+using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
+using RoadDefectsService.Presentation.Web.Helpers;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -12,29 +15,60 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class AuthController : BaseController
     {
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
         /// <summary>
-        /// (Не реализовано)
+        /// 
         /// </summary>
-        /// <remarks> Доступ: Все </remarks>
+        /// <remarks> 
+        /// Доступ: Все 
+        ///
+        /// Данные админов
+        /// 
+        ///     {
+        ///         "email": "admin1@gmail.com",
+        ///         "password": "stringA1"
+        ///     }
+        ///     
+        ///     {
+        ///         "email": "admin2@gmail.com",
+        ///         "password": "stringA2"
+        ///     }
+        ///     
+        ///     {
+        ///         "email": "admin3@gmail.com",
+        ///         "password": "stringA3"
+        ///     }
+        /// </remarks>
         [HttpPost("login")]
         [ProducesResponseType(typeof(TokenResponseDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<TokenResponseDTO>> Login([FromBody] LoginDTO login)
         {
-            return Ok();
+            return await ExecutionResultHandlerAsync(() => _authService.LoginAsync(login));
         }
 
         /// <summary>
-        /// (Не реализовано)
+        /// 
         /// </summary>
         /// <remarks> Доступ: Все </remarks>
         /// <response code="204">NoContent</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
         [HttpPost("logout")]
-        [Authorize]
+        [CustomeAuthorize]
         public async Task<ActionResult> Logout()
         {
-            return NoContent();
+            if (!HttpContext.TryGetAccessTokenJTI(out Guid accessTokenJTI))
+            {
+                return ExecutionResultHandlerAsync(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
+            }
+
+            return await ExecutionResultHandlerAsync(() => _authService.LogoutAsync(accessTokenJTI));
         }
     }
 }

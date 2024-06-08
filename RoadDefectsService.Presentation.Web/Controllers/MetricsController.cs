@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Core.Domain.Enums;
+using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
     [Route("api/metrics")]
     [ApiController]
-    [Authorize(Roles = Role.Operator)]
+    [CustomeAuthorize(Roles = Role.Operator)]
     public class MetricsController : BaseController
     {
         /// <summary>

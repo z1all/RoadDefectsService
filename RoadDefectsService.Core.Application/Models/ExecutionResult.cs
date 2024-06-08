@@ -2,19 +2,38 @@
 
 namespace RoadDefectsService.Core.Application.Models
 {
+    /// <summary>Используется для возвращение результата выполнения метода.</summary>
+    /// <remarks>
+    /// Содержит словарь ошибок Errors, ключами которого являются краткие описания ошибок, а значениями их подробные описания.
+    /// Также содержит флаг IsSuccess, который указывает успешное/неуспешное завершение метода, 
+    /// и дополнительный статус код StatusCodeExecutionResult, который указывает на тип ошибки.
+    /// </remarks>
     public class ExecutionResult
     {
         private ImmutableDictionary<string, List<string>> _errors = ImmutableDictionary<string, List<string>>.Empty;
         public ImmutableDictionary<string, List<string>> Errors
         {
             get { return _errors; }
-            init
+            set
             {
                 _errors = value;
                 IsSuccess = false;
             }
         }
-        public bool IsSuccess { get; init; }
+
+        private bool _isSuccess = false;
+        public bool IsSuccess
+        {
+            get { return _isSuccess; }
+            set
+            {
+                _isSuccess = value;
+                if (IsSuccess) StatusCode = StatusCodeExecutionResult.Ok;
+            }
+        }
+        public bool IsNotSuccess { get => !_isSuccess; }
+
+        public StatusCodeExecutionResult StatusCode { get; set; }
 
         public ExecutionResult() { }
 
@@ -23,21 +42,34 @@ namespace RoadDefectsService.Core.Application.Models
             IsSuccess = isSuccess;
         }
 
-        public ExecutionResult(string keyError, params string[] error)
+        public ExecutionResult(StatusCodeExecutionResult statusCode, string keyError, params string[] error)
         {
             IsSuccess = false;
             _errors = _errors.Add(keyError, error.ToList());
+            StatusCode = statusCode;
         }
+
+        public ExecutionResult(StatusCodeExecutionResult statusCode, ImmutableDictionary<string, List<string>> errors)
+        {
+            IsSuccess = false;
+            _errors = errors;
+            StatusCode = statusCode;
+        }
+
+        public static ExecutionResult SuccessedResult { get; } = new(isSuccess: true);
     }
 
+    /// <summary> Наследуется от ExecutionResult и выполняет ту же задачу</summary>
+    /// <remarks>
+    /// Содержит дополнительное поле, в который записывается результат работы метода, если он завершился успешно
+    /// </remarks>
     public class ExecutionResult<TSuccessResult> : ExecutionResult
     {
         public TSuccessResult? _result;
-
         public TSuccessResult? Result
         {
             get { return _result; }
-            init
+            set
             {
                 _result = value;
                 IsSuccess = true;
@@ -46,7 +78,13 @@ namespace RoadDefectsService.Core.Application.Models
 
         public ExecutionResult() { }
         public ExecutionResult(TSuccessResult result) { Result = result; }
+        public ExecutionResult(StatusCodeExecutionResult statusCode, string keyError, params string[] error) : base(statusCode, keyError, error) { }
+        public ExecutionResult(StatusCodeExecutionResult statusCode, ImmutableDictionary<string, List<string>> errors) : base(statusCode, errors) { }
 
-        public ExecutionResult(string keyError, params string[] error) : base(keyError, error) { }
+
+        public static implicit operator ExecutionResult<TSuccessResult>(TSuccessResult value)
+        {
+            return new ExecutionResult<TSuccessResult>(value);
+        }
     }
 }
