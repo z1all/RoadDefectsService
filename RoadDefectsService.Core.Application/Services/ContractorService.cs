@@ -1,4 +1,5 @@
 ﻿using RoadDefectsService.Core.Application.DTOs.ContractorService;
+using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Mappers;
@@ -18,29 +19,9 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<ContractorPagedDTO>> GetContractorsAsync(ContractorFilterDTO contractorFilter)
         {
-            if (contractorFilter.Page < 1)
-            {
-                return new(StatusCodeExecutionResult.BadRequest, keyError: "InvalidPageError", error: "Number of page can't be less than 1.");
-            }
-
-            int countContractors = await _contractorRepository.CountByFilterAsync(contractorFilter);
-            int countPage = countContractors == 0 ? 1 : (countContractors + contractorFilter.Size - 1) / contractorFilter.Size;
-            if (contractorFilter.Page > countPage)
-            {
-                return new(StatusCodeExecutionResult.BadRequest, keyError: "InvalidPageError", error: $"Number of page can be from 1 to {countPage}.");
-            }
-
-            List<Contractor> contractors = await _contractorRepository.GetAllByFilterAsync(contractorFilter);
-            return new ContractorPagedDTO()
-            {
-                Contractors = contractors.ToContractorDTOList(),
-                Pagination = new()
-                {
-                    Count = countPage,
-                    Current = contractorFilter.Page,
-                    Size = contractorFilter.Size,
-                },
-            };
+            return await FiltrationHelper
+                .FilterAsync<ContractorFilterDTO, Contractor, ContractorDTO, ContractorPagedDTO>(
+                contractorFilter, _contractorRepository, (contractors) => contractors.ToContractorDTOList());
         }
 
         public async Task<ExecutionResult<ContractorDTO>> GetContractorAsync(Guid contractorId)
@@ -66,7 +47,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _contractorRepository.AddAsync(newContractor);
 
-            return new(isSuccess: true);
+            return ExecutionResult.SuccessedResult;
         }
 
         public async Task<ExecutionResult> EditContractorAsync(EditContractorDTO editContractor, Guid contractorId)
@@ -92,7 +73,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _contractorRepository.UpdateAsync(contractor);
 
-            return new(isSuccess: true);
+            return ExecutionResult.SuccessedResult;
         }
 
         public async Task<ExecutionResult> DeleteContractorAsync(Guid contractorId)
@@ -105,7 +86,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _contractorRepository.DeleteAsync(contractor);
 
-            return new(isSuccess: true);
+            return ExecutionResult.SuccessedResult;
         }
     }
 }

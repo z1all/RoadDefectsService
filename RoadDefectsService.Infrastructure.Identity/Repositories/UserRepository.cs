@@ -17,7 +17,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<CustomUser>> GetAllByFilter(UserFilterDTO userFilter, bool showOperators)
+        public async Task<List<CustomUser>> GetAllByFilterAsync(UserFilterDTO userFilter, bool showOperators)
         {
             return await ApplyFilter(userFilter, showOperators)
                 .Skip((userFilter.Page - 1) * userFilter.Size)
@@ -25,7 +25,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .ToListAsync();
         }
 
-        public async Task<int> CountByFilter(UserFilterDTO userFilter, bool showOperators)
+        public async Task<int> CountByFilterAsync(UserFilterDTO userFilter, bool showOperators)
         {
             return await ApplyFilter(userFilter, showOperators)
                 .CountAsync();

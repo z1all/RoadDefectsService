@@ -31,6 +31,7 @@ namespace RoadDefectsService.Core.Application.Models
                 if (IsSuccess) StatusCode = StatusCodeExecutionResult.Ok;
             }
         }
+        public bool IsNotSuccess { get => !_isSuccess; }
 
         public StatusCodeExecutionResult StatusCode { get; set; }
 
@@ -54,6 +55,8 @@ namespace RoadDefectsService.Core.Application.Models
             _errors = errors;
             StatusCode = statusCode;
         }
+
+        public static ExecutionResult SuccessedResult { get; } = new(isSuccess: true);
     }
 
     /// <summary> Наследуется от ExecutionResult и выполняет ту же задачу</summary>

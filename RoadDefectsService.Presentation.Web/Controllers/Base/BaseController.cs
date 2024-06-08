@@ -10,6 +10,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
     [ValidateModelState]
     public abstract class BaseController : ControllerBase
     {
+        /// <summary>
+        /// Преобразует ExecutionResult в ErrorResponse для ответа на запрос
+        /// </summary>
+        /// <param name="executionResult"></param>
+        /// <param name="otherMassage"></param>
+        /// <returns></returns>
         protected ObjectResult ExecutionResultHandlerAsync(ExecutionResult executionResult, string? otherMassage = null)
         {
             return StatusCode((int)executionResult.StatusCode, new ErrorResponse()
@@ -20,6 +26,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="operation"></param>
+        /// <returns></returns>
         protected async Task<ActionResult<TResult>> ExecutionResultHandlerAsync<TResult>(Func<Guid, Task<ExecutionResult<TResult>>> operation)
         {
             if (!HttpContext.TryGetUserId(out Guid userId))
@@ -29,10 +41,15 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
 
             ExecutionResult<TResult> response = await operation(userId);
 
-            if (!response.IsSuccess) return ExecutionResultHandlerAsync(response);
+            if (response.IsNotSuccess) return ExecutionResultHandlerAsync(response);
             return Ok(response.Result!);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <returns></returns>
         protected async Task<ActionResult> ExecutionResultHandlerAsync(Func<Guid, Task<ExecutionResult>> operation)
         {
             if (!HttpContext.TryGetUserId(out Guid userId))
@@ -42,18 +59,29 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
 
             ExecutionResult response = await operation(userId);
 
-            if (!response.IsSuccess) return ExecutionResultHandlerAsync(response);
+            if (response.IsNotSuccess) return ExecutionResultHandlerAsync(response);
             return NoContent();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="operation"></param>
+        /// <returns></returns>
         protected async Task<ActionResult<TResult>> ExecutionResultHandlerAsync<TResult>(Func<Task<ExecutionResult<TResult>>> operation)
         {
             ExecutionResult<TResult> response = await operation();
 
-            if (!response.IsSuccess) return ExecutionResultHandlerAsync(response);
+            if (response.IsNotSuccess) return ExecutionResultHandlerAsync(response);
             return Ok(response.Result!);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <returns></returns>
         protected async Task<ActionResult> ExecutionResultHandlerAsync(Func<Task<ExecutionResult>> operation)
         {
             ExecutionResult response = await operation();

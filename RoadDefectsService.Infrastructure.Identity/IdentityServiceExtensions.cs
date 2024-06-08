@@ -26,6 +26,9 @@ namespace RoadDefectsService.Infrastructure.Identity
             services.AddScoped<IRoadInspectorRepository, RoadInspectorRepository>();
             services.AddScoped<IOperatorRepository, OperatorRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<ITaskFixationDefectRepository, TaskFixationDefectRepository>();
+            services.AddScoped<ITaskFixationWorkRepository, TaskFixationWorkRepository>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();

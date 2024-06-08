@@ -248,6 +248,28 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FixationDefect");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationWork", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FixationWork");
+                });
+
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Operator", b =>
                 {
                     b.Property<Guid>("Id")
@@ -266,6 +288,80 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoadInspectors");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)");
+
+                    b.Property<Guid?>("FixationDefectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("RoadInspectorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TaskStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TaskType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FixationDefectId")
+                        .IsUnique();
+
+                    b.HasIndex("RoadInspectorId");
+
+                    b.ToTable("Tasks");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("TaskEntity");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskFixationDefect", b =>
+                {
+                    b.HasBaseType("RoadDefectsService.Core.Domain.Models.TaskEntity");
+
+                    b.Property<string>("ApproximateAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("TaskFixationDefect");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskFixationWork", b =>
+                {
+                    b.HasBaseType("RoadDefectsService.Core.Domain.Models.TaskEntity");
+
+                    b.Property<Guid?>("FixationWorkId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PrevTaskId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("FixationWorkId")
+                        .IsUnique();
+
+                    b.HasIndex("PrevTaskId")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("TaskFixationWork");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -339,6 +435,53 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskEntity", b =>
+                {
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.FixationDefect", "FixationDefect")
+                        .WithOne("Task")
+                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.TaskEntity", "FixationDefectId");
+
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.RoadInspector", "RoadInspector")
+                        .WithMany("AppointedTasks")
+                        .HasForeignKey("RoadInspectorId");
+
+                    b.Navigation("FixationDefect");
+
+                    b.Navigation("RoadInspector");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskFixationWork", b =>
+                {
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.FixationWork", "FixationWork")
+                        .WithOne("TaskFixationWork")
+                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.TaskFixationWork", "FixationWorkId");
+
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.TaskEntity", "PrevTask")
+                        .WithOne()
+                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.TaskFixationWork", "PrevTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FixationWork");
+
+                    b.Navigation("PrevTask");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
+                {
+                    b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationWork", b =>
+                {
+                    b.Navigation("TaskFixationWork");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
+                {
+                    b.Navigation("AppointedTasks");
                 });
 #pragma warning restore 612, 618
         }

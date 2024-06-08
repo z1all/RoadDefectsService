@@ -22,7 +22,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Все пользователи системы (Реализовано) 
+        /// Все пользователи системы
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -42,7 +42,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Изменить профиль пользователя (Реализовано)  
+        /// Изменить профиль пользователя
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -52,9 +52,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// Админ всех пользователей, кроме других админов
         /// </remarks>
         /// <response code="403">Forbidden</response>
-        /// <response code="204">NoContent</response>
+        /// <response code="204">No Content</response>
         [HttpPut("{userId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> ChangeUser([FromRoute] Guid userId, [FromBody] EditUserDTO editUser)
         {
             bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
@@ -63,7 +65,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Удалить пользователя (Реализовано) 
+        /// Удалить пользователя
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
@@ -72,10 +74,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// 
         /// Админ всех пользователей, кроме других админов
         /// </remarks>
+        /// <response code="204">No Content</response>
         /// <response code="403">Forbidden</response>
-        /// <response code="204">NoContent</response>
         [HttpDelete("{userId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteUser([FromRoute] Guid userId)
         {
             bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
@@ -84,24 +87,26 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать дорожного инспектора (Реализовано) 
+        /// Создать дорожного инспектора
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
-        /// <response code="204">NoContent</response>
+        /// <response code="204">No Content</response>
         [HttpPost("road_inspector")]
         [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> CreateRoadInspector([FromBody] CreateUserDTO createRoadInspector)
         {
             return await ExecutionResultHandlerAsync(() => _userService.CreateRoadInspectorAsync(createRoadInspector));
         }
 
         /// <summary>
-        /// Создать оператора (Реализовано) 
+        /// Создать оператора
         /// </summary>
         /// <remarks> Доступ: Админ </remarks>
-        /// <response code="204">NoContent</response>
+        /// <response code="204">No Content</response>
         [HttpPost("operator")]
         [CustomeAuthorize(Roles = Role.Admin)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> CreateOperator([FromBody] CreateUserDTO createOperator)
         {
             return await ExecutionResultHandlerAsync(() => _userService.CreateOperatorAsync(createOperator));

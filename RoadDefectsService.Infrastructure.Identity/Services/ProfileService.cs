@@ -46,7 +46,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
                 return editProfileResult.ToExecutionResultError();
             }
 
-            return new(isSuccess: true);
+            return ExecutionResult.SuccessedResult;
         }
 
         public async Task<ExecutionResult> ChangePasswordAsync(ChangePasswordDTO changePassword, Guid userId)
@@ -63,7 +63,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
                 return changePasswordResult.ToExecutionResultError();
             }
 
-            return new(isSuccess: true);   
+            return ExecutionResult.SuccessedResult;   
         }
     }
 }

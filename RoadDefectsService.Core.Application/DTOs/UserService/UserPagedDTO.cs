@@ -1,11 +1,9 @@
 ﻿using RoadDefectsService.Core.Application.DTOs.Common;
-using RoadDefectsService.Core.Application.DTOs.ContractorService;
 
 namespace RoadDefectsService.Core.Application.DTOs.UserService
 {
-    public class UserPagedDTO
+    public class UserPagedDTO : BasePagedDTO<UserInfoDTO>
     {
-        public required List<UserInfoDTO> Users { get; set; }
-        public required PageInfoDTO Pagination { get; set; }
+        public List<UserInfoDTO> Users { get => Models; set => Models = value; }
     }
 }

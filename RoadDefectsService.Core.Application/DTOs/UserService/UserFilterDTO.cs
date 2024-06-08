@@ -1,13 +1,11 @@
-﻿using RoadDefectsService.Core.Application.Enums;
+﻿using RoadDefectsService.Core.Application.DTOs.Common;
+using RoadDefectsService.Core.Application.Enums;
 
 namespace RoadDefectsService.Core.Application.DTOs.UserService
 {
-    public class UserFilterDTO
+    public class UserFilterDTO : BaseFilterDTO
     {
         public string? UserFullName { get; set; }
         public RoleFilter UserRole { get; set; } = RoleFilter.None;
-
-        public int Page { get; set; } = 1;
-        public int Size { get; set; } = 10;
     }
 }
