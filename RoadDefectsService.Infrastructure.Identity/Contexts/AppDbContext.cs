@@ -48,6 +48,18 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
 
             modelBuilder.Entity<TaskEntity>()
                 .UseTphMappingStrategy();
+
+            // FixationDefect
+            modelBuilder.Entity<FixationDefect>()
+                .HasOne(fixationDefect => fixationDefect.Task)
+                .WithOne(task => task.FixationDefect)
+                .HasForeignKey<TaskEntity>(task => task.FixationDefectId);
+
+            // FixationWork
+            modelBuilder.Entity<FixationWork>()
+                .HasOne(fixationWork => fixationWork.TaskFixationWork)
+                .WithOne(task => task.FixationWork)
+                .HasForeignKey<TaskFixationWork>(task => task.FixationWorkId);
         }
     }
 }

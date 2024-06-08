@@ -50,7 +50,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
             {
                 return new(StatusCodeExecutionResult.BadRequest, keyError: "LogoutFail", error: "The tokens have already been deleted.");
             }
-            return ExecutionResult.Success;
+            return ExecutionResult.SuccessedResult;
         }
 
         public async Task<ExecutionResult> CheckAuthenticationAsync(Guid accessTokenJTI)

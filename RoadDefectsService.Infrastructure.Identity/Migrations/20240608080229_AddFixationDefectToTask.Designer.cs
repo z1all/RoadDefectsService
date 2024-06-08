@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240608080229_AddFixationDefectToTask")]
+    partial class AddFixationDefectToTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,8 +321,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FixationDefectId")
-                        .IsUnique();
+                    b.HasIndex("FixationDefectId");
 
                     b.HasIndex("RoadInspectorId");
 
@@ -355,8 +357,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.Property<Guid>("PrevTaskId")
                         .HasColumnType("uuid");
 
-                    b.HasIndex("FixationWorkId")
-                        .IsUnique();
+                    b.HasIndex("FixationWorkId");
 
                     b.HasIndex("PrevTaskId")
                         .IsUnique();
@@ -440,8 +441,8 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskEntity", b =>
                 {
                     b.HasOne("RoadDefectsService.Core.Domain.Models.FixationDefect", "FixationDefect")
-                        .WithOne("Task")
-                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.TaskEntity", "FixationDefectId");
+                        .WithMany()
+                        .HasForeignKey("FixationDefectId");
 
                     b.HasOne("RoadDefectsService.Core.Domain.Models.RoadInspector", "RoadInspector")
                         .WithMany("AppointedTasks")
@@ -455,8 +456,8 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskFixationWork", b =>
                 {
                     b.HasOne("RoadDefectsService.Core.Domain.Models.FixationWork", "FixationWork")
-                        .WithOne("TaskFixationWork")
-                        .HasForeignKey("RoadDefectsService.Core.Domain.Models.TaskFixationWork", "FixationWorkId");
+                        .WithMany()
+                        .HasForeignKey("FixationWorkId");
 
                     b.HasOne("RoadDefectsService.Core.Domain.Models.TaskEntity", "PrevTask")
                         .WithOne()
@@ -467,16 +468,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.Navigation("FixationWork");
 
                     b.Navigation("PrevTask");
-                });
-
-            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
-                {
-                    b.Navigation("Task");
-                });
-
-            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationWork", b =>
-                {
-                    b.Navigation("TaskFixationWork");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>

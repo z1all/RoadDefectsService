@@ -1,4 +1,5 @@
 ﻿using RoadDefectsService.Core.Application.DTOs.TaskService;
+using RoadDefectsService.Core.Application.Enums;
 using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
@@ -37,7 +38,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _taskRepository.DeleteAsync(task);
 
-            return ExecutionResult.Success;
+            return ExecutionResult.SuccessedResult;
         }
 
         public async Task<ExecutionResult<TaskPagedDTO>> GetInspectorTasksAsync(TaskFilterDTO taskFilter, Guid inspectorId)
@@ -78,7 +79,38 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _taskRepository.UpdateAsync(task);
         
-            return ExecutionResult.Success;
+            return ExecutionResult.SuccessedResult;
+        }
+
+        public async Task<ExecutionResult> ChangeTaskStatusAsync(ChangeTaskStatusDTO changeTaskStatus, Guid taskId)
+        {
+            TaskEntity? task = await _taskRepository.GetByIdAsync(taskId);
+            if (task is null)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
+            }
+
+            if (task.TaskStatus == StatusTask.Completed)
+            {
+                return new(StatusCodeExecutionResult.Forbid, "TaskCompleted", $"Changing the status of a completed task!");
+            }
+
+            if (task.TaskStatus != StatusTask.Processing && changeTaskStatus.ChangeTaskStatus == ChangeTaskStatusEnum.FinishTask)
+            {
+                return new(StatusCodeExecutionResult.Forbid, "TaskNotProcessing", $"Completing a task that has not been started!");
+            }
+
+            task.TaskStatus = changeTaskStatus.ChangeTaskStatus switch
+            {
+                ChangeTaskStatusEnum.StartTask => StatusTask.Processing,
+                ChangeTaskStatusEnum.CancelTask => StatusTask.Created,
+                ChangeTaskStatusEnum.FinishTask => StatusTask.Completed,
+                _ => task.TaskStatus
+            };
+
+            await _taskRepository.UpdateAsync(task);
+            
+            return ExecutionResult.SuccessedResult;
         }
     }
 }

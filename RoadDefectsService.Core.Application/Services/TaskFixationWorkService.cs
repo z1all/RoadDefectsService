@@ -51,7 +51,6 @@ namespace RoadDefectsService.Core.Application.Services
             TaskFixationWork task = new()
             {
                 CreatedDateTime = DateTime.UtcNow,
-                DefectStatus = DefectStatus.NotVerified,
                 TaskStatus = StatusTask.Created,
                 PrevTaskId = createFixationWork.PrevTaskId
             };

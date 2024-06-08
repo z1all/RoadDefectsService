@@ -56,7 +56,7 @@ namespace RoadDefectsService.Core.Application.Models
             StatusCode = statusCode;
         }
 
-        public static ExecutionResult Success { get; } = new(isSuccess: true);
+        public static ExecutionResult SuccessedResult { get; } = new(isSuccess: true);
     }
 
     /// <summary> Наследуется от ExecutionResult и выполняет ту же задачу</summary>

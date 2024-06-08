@@ -41,7 +41,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [HttpDelete("{taskId}")]
         [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult<TaskPagedDTO>> DeleteTask(Guid taskId)
+        public async Task<ActionResult<TaskPagedDTO>> DeleteTask([FromRoute] Guid taskId)
         {
             return await ExecutionResultHandlerAsync(() => _taskService.DeleteTaskAsync(taskId));
         }
@@ -82,6 +82,19 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         public async Task<ActionResult<TaskPagedDTO>> GetOwnTask([FromQuery] TaskFilterDTO taskFilter)
         {
             return await ExecutionResultHandlerAsync((inspectorId) => _taskService.GetInspectorTasksAsync(taskFilter, inspectorId));
+        }
+
+        /// <summary>
+        /// Изменить статус задачи (Начать выполнять, Отменить выполнение, Завершить)
+        /// </summary>
+        /// <remarks> Доступ: Дорожный инспектор </remarks>
+        /// <response code="204">No Content</response> 
+        [HttpPost("{taskId}")]
+        [CustomeAuthorize(Roles = Role.RoadInspector)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ChangeStatusTask([FromRoute] Guid taskId, [FromQuery] ChangeTaskStatusDTO changeStatus)
+        {
+            return await ExecutionResultHandlerAsync(() => _taskService.ChangeTaskStatusAsync(changeStatus, taskId));
         }
     }
 }

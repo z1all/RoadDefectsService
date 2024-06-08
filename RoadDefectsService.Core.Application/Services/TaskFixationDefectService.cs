@@ -45,7 +45,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _taskFixationDefectRepository.UpdateAsync(task);
 
-            return ExecutionResult.Success;
+            return ExecutionResult.SuccessedResult;
         }
 
         public async Task<ExecutionResult<CreateTaskResponseDTO>> CreateFixationDefectTaskAsync(CreateEditFixationDefectTaskDTO createFixationDefect)
@@ -53,7 +53,6 @@ namespace RoadDefectsService.Core.Application.Services
             TaskFixationDefect task = new()
             {
                 CreatedDateTime = DateTime.UtcNow,
-                DefectStatus = DefectStatus.NotVerified,
                 TaskStatus = StatusTask.Created,
                 ApproximateAddress = createFixationDefect.ApproximateAddress,
                 Description = createFixationDefect.Description,

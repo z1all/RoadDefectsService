@@ -22,7 +22,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <summary>
         /// Посмотреть задачу по фиксации выполненных работ 
         /// </summary>
-        /// <remarks> Доступ: Все </remarks>
+        /// <remarks>
+        /// Доступ: Все 
+        /// 
+        /// Инспектор может посмотреть только свои задачи
+        /// </remarks>
         [HttpGet("{taskId}")]
         [CustomeAuthorize]
         [ProducesResponseType(typeof(FixationWorkTaskDTO), StatusCodes.Status200OK)]

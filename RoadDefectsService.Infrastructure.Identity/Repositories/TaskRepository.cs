@@ -71,10 +71,13 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 tasks = tasks.Where(task => task.TaskStatus == (StatusTask)filter.TaskStatus);
             }
 
-            if (filter.DefectStatus != DefectStatusFilter.None)
+            tasks = filter.DefectStatus switch
             {
-                tasks = tasks.Where(task => task.DefectStatus == (DefectStatus)filter.DefectStatus);
-            }
+                DefectStatusFilter.NotVerified => tasks.Where(task => task.TaskStatus != StatusTask.Completed),
+                DefectStatusFilter.ThereIsDefect => tasks.Where(task => task.TaskStatus == StatusTask.Completed && task.FixationDefectId != null),
+                DefectStatusFilter.ThereIsNotDefect => tasks.Where(task => task.TaskStatus == StatusTask.Completed && task.FixationDefectId == null),
+                _ => tasks
+            };
 
             tasks = additionFilter(tasks);
 

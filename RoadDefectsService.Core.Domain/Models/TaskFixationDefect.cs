@@ -5,6 +5,6 @@
         public required string ApproximateAddress { get; set; }
         public required string Description { get; set; }
 
-        public TaskFixationDefect() => base.TaskType = Enums.TaskType.FixationDefectTask;
+        public TaskFixationDefect() => TaskType = Enums.TaskType.FixationDefectTask;
     }
 }
