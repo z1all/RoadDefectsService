@@ -65,7 +65,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
 
             await _userManager.UpdateAsync(user);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         public async Task<ExecutionResult> DeleteUserAsync(Guid userId, bool deleteOperator)
@@ -88,7 +88,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
 
             await _userManager.DeleteAsync(user);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         public Task<ExecutionResult> CreateAdminAsync(CreateUserDTO createAdmin)
@@ -117,7 +117,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
             };
             await _operatorRepository.AddAsync(@operator);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         public async Task<ExecutionResult> CreateRoadInspectorAsync(CreateUserDTO createRoadInspector)
@@ -136,7 +136,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
             };
             await _roadInspectorRepository.AddAsync(roadInspector);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         /// <summary>

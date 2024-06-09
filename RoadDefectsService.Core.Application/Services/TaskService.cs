@@ -38,7 +38,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _taskRepository.DeleteAsync(task);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         public async Task<ExecutionResult<TaskPagedDTO>> GetInspectorTasksAsync(TaskFilterDTO taskFilter, Guid inspectorId)
@@ -79,7 +79,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _taskRepository.UpdateAsync(task);
         
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         public async Task<ExecutionResult> ChangeTaskStatusAsync(ChangeTaskStatusDTO changeTaskStatus, Guid taskId)
@@ -110,7 +110,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _taskRepository.UpdateAsync(task);
             
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
     }
 }

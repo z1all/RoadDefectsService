@@ -5,6 +5,7 @@ using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
+using RoadDefectsService.Presentation.Web.Helpers;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -14,10 +15,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     public class PhotoController : BaseController
     {
         private readonly IPhotoService _photoService;
+        private readonly PhotoTypeHelper _photoTypeHelper;
 
-        public PhotoController(IPhotoService photoService)
+        public PhotoController(IPhotoService photoService, PhotoTypeHelper photoTypeHelper)
         {
             _photoService = photoService;
+            _photoTypeHelper = photoTypeHelper;
         }
 
         /// <summary>
@@ -37,13 +40,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers
             {
                 return ExecutionResultHandler(response);
             }
-
-
-            //if (!fileDTO.Type.TryMapToContentType(out var contentType))
-            //{
-            //    return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "DocumentTypeError", $"Unknown document type {fileDTO.Type}"));
-            //}
-            return File(photo.File, "contentType!", photo.Name);
+            
+            if (!_photoTypeHelper.TryMapToContentType(photo.Type, out string? contentType))
+            {
+                return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "DocumentTypeError", $"Unknown document type {photo.Type}"));
+            }
+            return File(photo.File, contentType!, photo.Name);
         }
 
         /// <summary>
@@ -77,9 +79,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
             {
                 PhotoDTO photo = new()
                 {
-                    Name = Path.GetFileNameWithoutExtension(fileUpload.File.FileName),
-                    Type = Path.GetExtension(fileUpload.File.FileName),
-                    File = await GetFileAsync(fileUpload.File),
+                    Name = Path.GetFileNameWithoutExtension(fileUpload.Photo.FileName),
+                    Type = Path.GetExtension(fileUpload.Photo.FileName),
+                    File = await GetFileAsync(fileUpload.Photo),
                 };
 
                 return await _photoService.AddPhotoAsync(photo);

@@ -1,7 +1,12 @@
-﻿namespace RoadDefectsService.Presentation.Web.DTOs
+﻿using Microsoft.AspNetCore.Mvc;
+using RoadDefectsService.Presentation.Web.Attributes;
+
+namespace RoadDefectsService.Presentation.Web.DTOs
 {
     public class PhotoUpload
     {
-        public required IFormFile File { get; set; }
+        [AllowPhotoType]
+        [PhotoMaxSize]
+        public required IFormFile Photo { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _contractorRepository.AddAsync(newContractor);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         public async Task<ExecutionResult> EditContractorAsync(EditContractorDTO editContractor, Guid contractorId)
@@ -73,7 +73,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _contractorRepository.UpdateAsync(contractor);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         public async Task<ExecutionResult> DeleteContractorAsync(Guid contractorId)
@@ -86,7 +86,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _contractorRepository.DeleteAsync(contractor);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
     }
 }
