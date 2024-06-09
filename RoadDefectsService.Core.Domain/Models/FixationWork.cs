@@ -6,5 +6,7 @@ namespace RoadDefectsService.Core.Domain.Models
     {
         //public required Guid TaskFixationWorkId { get; set; }
         public TaskFixationWork? TaskFixationWork { get; set; }
+
+        public IEnumerable<Photo> Photos { get; set; } = null!;
     }
 }

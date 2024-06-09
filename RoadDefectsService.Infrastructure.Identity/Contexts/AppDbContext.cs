@@ -14,6 +14,8 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
         public DbSet<TaskFixationDefect> FixationDefectTasks { get; set; }
         public DbSet<TaskFixationWork> FixationWorkTasks { get; set; }
 
+        public DbSet<Photo> Photos { get; set; }
+
         public AppDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -60,6 +62,17 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
                 .HasOne(fixationWork => fixationWork.TaskFixationWork)
                 .WithOne(task => task.FixationWork)
                 .HasForeignKey<TaskFixationWork>(task => task.FixationWorkId);
+
+            // Photo
+            modelBuilder.Entity<Photo>()
+                .HasOne(photo => photo.FixationWork)
+                .WithMany(fixationWork => fixationWork.Photos)
+                .HasForeignKey(photo =>  photo.FixationWorkId);
+
+            modelBuilder.Entity<Photo>()
+                .HasOne(photo => photo.FixationDefect)
+                .WithMany(fixationDefect => fixationDefect.Photos)
+                .HasForeignKey(photo => photo.FixationDefectId);
         }
     }
 }

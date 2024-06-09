@@ -6,5 +6,7 @@ namespace RoadDefectsService.Core.Domain.Models
     {
         //public required Guid TaskId { get; set; }
         public TaskEntity? Task { get; set; }
+
+        public IEnumerable<Photo> Photos { get; set; } = null!;
     }
 }

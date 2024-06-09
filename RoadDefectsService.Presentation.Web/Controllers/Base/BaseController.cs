@@ -16,7 +16,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
         /// <param name="executionResult"></param>
         /// <param name="otherMassage"></param>
         /// <returns></returns>
-        protected ObjectResult ExecutionResultHandlerAsync(ExecutionResult executionResult, string? otherMassage = null)
+        protected ObjectResult ExecutionResultHandler(ExecutionResult executionResult, string? otherMassage = null)
         {
             return StatusCode((int)executionResult.StatusCode, new ErrorResponse()
             {
@@ -36,12 +36,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
         {
             if (!HttpContext.TryGetUserId(out Guid userId))
             {
-                return ExecutionResultHandlerAsync(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
+                return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
             }
 
             ExecutionResult<TResult> response = await operation(userId);
 
-            if (response.IsNotSuccess) return ExecutionResultHandlerAsync(response);
+            if (response.IsNotSuccess) return ExecutionResultHandler(response);
             return Ok(response.Result!);
         }
 
@@ -54,12 +54,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
         {
             if (!HttpContext.TryGetUserId(out Guid userId))
             {
-                return ExecutionResultHandlerAsync(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
+                return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
             }
 
             ExecutionResult response = await operation(userId);
 
-            if (response.IsNotSuccess) return ExecutionResultHandlerAsync(response);
+            if (response.IsNotSuccess) return ExecutionResultHandler(response);
             return NoContent();
         }
 
@@ -73,7 +73,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
         {
             ExecutionResult<TResult> response = await operation();
 
-            if (response.IsNotSuccess) return ExecutionResultHandlerAsync(response);
+            if (response.IsNotSuccess) return ExecutionResultHandler(response);
             return Ok(response.Result!);
         }
 
@@ -86,7 +86,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers.Base
         {
             ExecutionResult response = await operation();
 
-            if (!response.IsSuccess) return ExecutionResultHandlerAsync(response);
+            if (!response.IsSuccess) return ExecutionResultHandler(response);
             return NoContent();
         }
     }

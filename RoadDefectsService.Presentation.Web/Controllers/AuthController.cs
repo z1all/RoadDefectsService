@@ -65,7 +65,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         {
             if (!HttpContext.TryGetAccessTokenJTI(out Guid accessTokenJTI))
             {
-                return ExecutionResultHandlerAsync(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
+                return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
             }
 
             return await ExecutionResultHandlerAsync(() => _authService.LogoutAsync(accessTokenJTI));
