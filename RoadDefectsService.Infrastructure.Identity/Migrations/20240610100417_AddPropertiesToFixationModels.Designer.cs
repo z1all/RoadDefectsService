@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240610100417_AddPropertiesToFixationModels")]
+    partial class AddPropertiesToFixationModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,14 +272,14 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<double>("CoordinatesX")
-                        .HasColumnType("double precision");
+                    b.Property<int>("CoordinatesX")
+                        .HasColumnType("integer");
 
-                    b.Property<double>("CoordinatesY")
-                        .HasColumnType("double precision");
+                    b.Property<int>("CoordinatesY")
+                        .HasColumnType("integer");
 
-                    b.Property<double>("DamagedCanvasSquareMeter")
-                        .HasColumnType("double precision");
+                    b.Property<int>("DamagedCanvasSquareMeter")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("DefectTypeId")
                         .HasColumnType("uuid");

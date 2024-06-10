@@ -3,8 +3,7 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
-    public interface ITaskFixationDefectRepository : IBaseWithBaseEntityRepository<TaskFixationDefect>
+    public interface IDefectTypeResponse : IBaseWithBaseEntityRepository<DefectType>
     {
-        Task<TaskFixationDefect?> GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(Guid id);
     }
 }

@@ -10,13 +10,18 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
     {
         public TaskFixationWorkRepository(AppDbContext dbContext) : base(dbContext) { }
 
-        public Task<TaskFixationWork?> GetByIdWithInspectorAndPrevTaskAndDefectAsync(Guid id)
+        public Task<TaskFixationWork?> GetByIdWithInspectorAndPrevTaskAndFixationsWithPhotosAndDefectTypeAsync(Guid id)
         {
             return _dbContext.FixationWorkTasks
                 .Include(task => task.RoadInspector)
                     .ThenInclude(inspector => inspector!.User)
                 .Include(task => task.PrevTask)
-                //.Include(task => task.Defect)
+                .Include(task => task.FixationDefect)
+                    .ThenInclude(fixationDefect => fixationDefect!.Photos)
+                .Include(task => task.FixationDefect)
+                    .ThenInclude(fixationDefect => fixationDefect!.DefectType)
+                .Include(task => task.FixationWork)
+                    .ThenInclude(fixationWork => fixationWork!.Photos)
                 .FirstOrDefaultAsync(task => task.Id == id);
         }
 

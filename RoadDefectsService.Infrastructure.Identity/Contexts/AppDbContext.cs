@@ -15,6 +15,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
         public DbSet<TaskFixationWork> FixationWorkTasks { get; set; }
 
         public DbSet<FixationDefect> FixationDefects { get; set; }
+        public DbSet<DefectType> DefectTypes { get; set; }
         public DbSet<FixationWork> FixationWorks { get; set; }
 
         public DbSet<Photo> Photos { get; set; }
@@ -65,6 +66,12 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
                .WithOne()
                .HasForeignKey(photo => photo.FixationDefectId);
 
+            modelBuilder.Entity<FixationDefect>()
+                .HasOne(fixation => fixation.DefectType)
+                .WithMany()
+                .HasForeignKey(fixation => fixation.DefectTypeId)
+                .IsRequired();
+
             modelBuilder.Entity<Photo>()
                 .HasIndex(c => new { c.FixationWorkId, c.FixationDefectId });
 
@@ -77,6 +84,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
                 .WithMany()
                 .HasForeignKey(photo => photo.OwnerId)
                 .IsRequired();
+
         }
     }
 }

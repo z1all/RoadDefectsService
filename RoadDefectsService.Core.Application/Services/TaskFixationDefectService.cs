@@ -19,7 +19,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<FixationDefectTaskDTO>> GetFixationDefectTaskAsync(Guid taskId, Guid? inspectorId = null)
         {
-            TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndDefectAsync(taskId);
+            TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(taskId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
@@ -34,7 +34,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> EditFixationDefectTaskAsync(CreateEditFixationDefectTaskDTO editFixationDefect, Guid taskId)
         {
-            TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndDefectAsync(taskId);
+            TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(taskId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");

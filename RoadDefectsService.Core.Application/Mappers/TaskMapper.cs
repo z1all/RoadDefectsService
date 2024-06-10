@@ -32,7 +32,8 @@ namespace RoadDefectsService.Core.Application.Mappers
                 TaskStatus = task.TaskStatus,
                 CreatedDateTime = task.CreatedDateTime,
                 DefectStatus = task.DefectStatus,
-                DefectFixation = null,
+                DefectFixation = task.FixationDefect?.ToFixationDefectDTO() ?? null,
+                FixationWork = task.FixationWork?.ToFixationWorkDTO() ?? null,
                 Executor = task.RoadInspector?.ToRoadInspectorDTO(),
                 PrevTask = task.PrevTask!.ToTaskDTO(),
             };
@@ -48,7 +49,7 @@ namespace RoadDefectsService.Core.Application.Mappers
                 DefectStatus = task.DefectStatus,
                 ApproximateAddress = task.ApproximateAddress,
                 Description = task.Description,
-                DefectFixation = null,
+                DefectFixation = task.FixationDefect?.ToFixationDefectDTO() ?? null,
                 Executor = task.RoadInspector?.ToRoadInspectorDTO(),
             };
         }

@@ -32,6 +32,7 @@ namespace RoadDefectsService.Infrastructure.Identity
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IFixationDefectRepository, FixationDefectRepository>();
             services.AddScoped<IFixationWorkRepository, FixationWorkRepository>();
+            services.AddScoped<IDefectTypeResponse, DefectTypeResponse>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();

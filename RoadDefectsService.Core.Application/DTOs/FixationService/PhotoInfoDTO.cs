@@ -1,4 +1,4 @@
-﻿namespace RoadDefectsService.Core.Application.DTOs
+﻿namespace RoadDefectsService.Core.Application.DTOs.FixationService
 {
     public class PhotoInfoDTO
     {
