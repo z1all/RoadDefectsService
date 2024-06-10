@@ -15,7 +15,7 @@ namespace RoadDefectsService.Core.Application.Mappers
                 CoordinatesX = fixationDefect.CoordinatesX,
                 CoordinatesY = fixationDefect.CoordinatesY,
                 DamagedCanvasSquareMeter = fixationDefect.DamagedCanvasSquareMeter,
-                DefectType = fixationDefect.DefectType!.ToDefectTypeDTO(),
+                DefectType = fixationDefect.DefectType?.ToDefectTypeDTO(),
                 Photos = fixationDefect.Photos.ToPhotoInfoDTOList(),
             };
         }

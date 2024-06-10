@@ -18,6 +18,8 @@ namespace RoadDefectsService.Core.Application
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IDefectTypeService, DefectTypeService>();
+            services.AddScoped<IFixationDefectService, FixationDefectService>();
+            services.AddScoped<IFixationWorkService, FixationWorkService>();
 
             // Configurations
             services.ConfigureOptions<FileStorageOptionsConfigure>();

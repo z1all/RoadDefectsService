@@ -15,7 +15,7 @@ namespace RoadDefectsService.Core.Application.Mappers
                 CreatedDateTime = task.CreatedDateTime,
                 DefectStatus = task.DefectStatus,
                 ExistRoadInspector = task.RoadInspectorId is not null,
-                ExistDefectInfo = false,
+                ExistDefectInfo = task.FixationDefectId is not null,
             };
         }
 

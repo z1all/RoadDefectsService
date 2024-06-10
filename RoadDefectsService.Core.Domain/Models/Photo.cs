@@ -1,4 +1,5 @@
 ﻿using RoadDefectsService.Core.Domain.Models.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoadDefectsService.Core.Domain.Models
 {
@@ -8,10 +9,9 @@ namespace RoadDefectsService.Core.Domain.Models
         public required string Name { get; set; }
         public required string Type { get; set; }
 
-        public required Guid OwnerId { get; set; }
-        public CustomUser? Owner { get; set; }
-
+        [Required(AllowEmptyStrings = false)]
         public Guid? FixationWorkId { get; set; }
+        [Required(AllowEmptyStrings = false)]
         public Guid? FixationDefectId { get; set; }
     }
 }

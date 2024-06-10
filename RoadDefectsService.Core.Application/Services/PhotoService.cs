@@ -1,4 +1,5 @@
 ﻿using RoadDefectsService.Core.Application.DTOs.PhotoService;
+using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
@@ -24,20 +25,27 @@ namespace RoadDefectsService.Core.Application.Services
             _fixationDefectRepository = fixationDefectRepository;
         }
 
-        public async Task<ExecutionResult<PhotoUploadResponseDTO>> AddPhotoAsync(PhotoDTO addPhoto, Guid ownerId)
+        public async Task<ExecutionResult<PhotoUploadResponseDTO>> AddPhotoAsync(PhotoDTO addPhoto, Guid fixationId, Guid? userId)
         {
+            ExecutionResult<FixationType> checkResult = await CheckOnTaskOwnerAndTaskStatusAsync(fixationId, userId);
+            if (!checkResult.TryGetResult(out FixationType fixationType))
+            {
+                return new() { Errors = checkResult.Errors };
+            }
+
             Photo photo = new()
             {
                 Id = Guid.NewGuid(),
-                OwnerId = ownerId,
                 Name = addPhoto.Name,
                 Type = addPhoto.Type,
+                FixationDefectId = fixationType == FixationType.FixationDefect ? fixationId : null,
+                FixationWorkId = fixationType == FixationType.FixationWork ? fixationId : null,
             };
 
             bool saveResult = await _fileService.SaveFileAsync(photo.PathName, addPhoto.File);
             if (!saveResult)
             {
-                return new(StatusCodeExecutionResult.InternalServer, "SavePhotoFail", $"Error while saving a photo!");
+                return new(StatusCodeExecutionResult.InternalServer, "SavePhotoFail", "Error while saving a photo!");
             }
 
             await _photoRepository.AddAsync(photo);
@@ -45,20 +53,15 @@ namespace RoadDefectsService.Core.Application.Services
             return new PhotoUploadResponseDTO() { UploadedPhotoId = photo.Id };
         }
 
-        public async Task<ExecutionResult> DeletePhotoAsync(Guid photoId, Guid? ownerId)
+        public async Task<ExecutionResult> DeletePhotoAsync(Guid fixationId, Guid photoId, Guid? userId)
         {
-            Photo? photo = await _photoRepository.GetByIdAsync(photoId);
+            Photo? photo = await _photoRepository.GetByIdAndFixationIdAsync(photoId, fixationId);
             if (photo is null)
             {
-                return new(StatusCodeExecutionResult.NotFound, "PhotoNotFound", $"Photo with id {photoId} not found!");
+                return new(StatusCodeExecutionResult.NotFound, "PhotoNotFound", $"Photo with id {photoId} not found in fixation with id {fixationId}!");
             }
 
-            if (ownerId.HasValue && photo.OwnerId != ownerId.Value)
-            {
-                return new(StatusCodeExecutionResult.Forbid, "DeletePhotoFail", $"You can't delete a photo because you don't own it!");
-            }
-
-            ExecutionResult checkResult = await CheckPhotoReferentsAsync(photo);
+            ExecutionResult checkResult = await CheckOnTaskOwnerAndTaskStatusAsync(photo, userId);
             if (checkResult.IsNotSuccess)
             {
                 return checkResult;
@@ -67,7 +70,7 @@ namespace RoadDefectsService.Core.Application.Services
             bool deleteResult = _fileService.DeleteFile(photo.PathName);
             if (!deleteResult)
             {
-                return new(StatusCodeExecutionResult.InternalServer, "DeletePhotoFail", $"Error while deleting a photo!");
+                return new(StatusCodeExecutionResult.InternalServer, "DeletePhotoFail", "Error while deleting a photo!");
             }
 
             await _photoRepository.DeleteAsync(photo);
@@ -75,58 +78,18 @@ namespace RoadDefectsService.Core.Application.Services
             return ExecutionResult.SucceededResult;
         }
 
-        private Task<ExecutionResult> CheckPhotoReferentsAsync(Photo photo)
+        public async Task<ExecutionResult<PhotoDTO>> GetPhotoAsync(Guid fixationId, Guid photoId, Guid? userId)
         {
-            if (photo.FixationDefectId is not null)
-            {
-                return CheckPhotoReferentsAsync(
-                    photo.FixationDefectId.Value, 
-                    _fixationDefectRepository.GetByIdWithTaskAsync, 
-                    fixation => fixation.Task!.TaskStatus);
-            }
-            else if (photo.FixationWorkId is not null)
-            {
-                return CheckPhotoReferentsAsync(
-                    photo.FixationWorkId.Value, 
-                    _fixationWorkRepository.GetByIdWithTaskAsync,
-                    fixation => fixation.TaskFixationWork!.TaskStatus);
-            }
-
-            return Task.FromResult(ExecutionResult.SucceededResult);
-        }
-
-        private async Task<ExecutionResult> CheckPhotoReferentsAsync<TFixation>(Guid fixationId, Func<Guid, Task<TFixation?>> getByIdAsync, Func<TFixation, StatusTask> getStatus)
-        {
-            TFixation? fixation = await getByIdAsync(fixationId);
-            if (fixation is null)
-            {
-                return new(StatusCodeExecutionResult.NotFound, "FixationNotFound", $"Fixation with id {fixationId} not found!");
-            }
-
-            StatusTask status = getStatus(fixation);
-            if (status == StatusTask.Completed)
-            {
-                return new(StatusCodeExecutionResult.BadRequest, "TaskCompleted", "You cannot modify a completed task.");
-            }
-            else if (status == StatusTask.Created)
-            {
-                return new(StatusCodeExecutionResult.BadRequest, "TaskNotProcessing", "You cannot change a task that has not been started.");
-            }
-
-            return ExecutionResult.SucceededResult;
-        }
-
-        public async Task<ExecutionResult<PhotoDTO>> GetPhotoAsync(Guid photoId, Guid? ownerId)
-        {
-            Photo? photo = await _photoRepository.GetByIdAsync(photoId);
+            Photo? photo = await _photoRepository.GetByIdAndFixationIdAsync(photoId, fixationId);
             if (photo is null)
             {
-                return new(StatusCodeExecutionResult.NotFound, "PhotoNotFound", $"Photo with id {photoId} not found!");
+                return new(StatusCodeExecutionResult.NotFound, "PhotoNotFound", $"Photo with id {photoId} not found in fixation with id {fixationId}!");
             }
 
-            if (ownerId.HasValue && photo.OwnerId != ownerId.Value)
+            ExecutionResult checkResult = await CheckOnTaskOwnerAndTaskStatusAsync(photo, userId);
+            if (checkResult.IsNotSuccess)
             {
-                return new(StatusCodeExecutionResult.Forbid, "DeletePhotoFail", $"You can't delete a photo because you don't own it!");
+                return new() { Errors = checkResult.Errors };
             }
 
             byte[]? photoFile = await _fileService.GetFileAsync(photo.PathName);
@@ -141,6 +104,60 @@ namespace RoadDefectsService.Core.Application.Services
                 Type = photo.Type,
                 File = photoFile,
             };
+        }
+
+        private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Photo photo, Guid? userId)
+        {
+            return CheckOnTaskOwnerAndTaskStatusAsync(userId, () => GetTaskAsync(photo));
+        }
+
+        private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Guid fixationId, Guid? userId)
+        {
+            return CheckOnTaskOwnerAndTaskStatusAsync(userId, () => GetTaskAsync(fixationId));
+        }
+
+        private async Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Guid? userId, Func<Task<ExecutionResult<(TaskEntity, FixationType)>>> getTaskAsync)
+        {
+            ExecutionResult<(TaskEntity task, FixationType fixationType)> getTaskResult = await getTaskAsync();
+            if (!getTaskResult.TryGetResult(out var task))
+            {
+                return new() { Errors = getTaskResult.Errors };
+            }
+
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus(task.task, userId);
+            if (checkResult.IsNotSuccess)
+            {
+                return new() { Errors = checkResult.Errors };
+            }
+
+            return task.fixationType;
+        }
+
+        private async Task<ExecutionResult<(TaskEntity, FixationType)>> GetTaskAsync(Photo photo)
+        {
+            if (photo.FixationDefectId is not null)
+            {
+                FixationDefect? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAsync(photo.FixationDefectId.Value);
+                if (fixationDefect is not null) return (fixationDefect.Task!, FixationType.FixationDefect);
+            }
+            else if (photo.FixationWorkId is not null)
+            {
+                FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(photo.FixationWorkId.Value);
+                if (fixationWork is not null) return (fixationWork.TaskFixationWork!, FixationType.FixationWork);
+            }
+
+            return new(StatusCodeExecutionResult.InternalServer, "FixationNotFound", $"Fixation not found!");
+        }
+
+        private async Task<ExecutionResult<(TaskEntity, FixationType)>> GetTaskAsync(Guid fixationId)
+        {
+            FixationDefect? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAsync(fixationId);
+            if (fixationDefect is not null) return (fixationDefect.Task!, FixationType.FixationDefect);
+
+            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationId);
+            if (fixationWork is not null) return (fixationWork.TaskFixationWork!, FixationType.FixationWork);
+
+            return new(StatusCodeExecutionResult.NotFound, "FixationNotFound", $"Fixation with id {fixationId} not found!");
         }
     }
 }

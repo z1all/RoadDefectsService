@@ -69,21 +69,21 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
             modelBuilder.Entity<FixationDefect>()
                 .HasOne(fixation => fixation.DefectType)
                 .WithMany()
-                .HasForeignKey(fixation => fixation.DefectTypeId)
-                .IsRequired();
+                .HasForeignKey(fixation => fixation.DefectTypeId);
 
             modelBuilder.Entity<Photo>()
                 .HasIndex(c => new { c.FixationWorkId, c.FixationDefectId });
 
             modelBuilder.Entity<Photo>()
-                .ToTable(table => table.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL OR \"FixationDefectId\" IS NULL)"));
+                .ToTable(table => table.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL     AND \"FixationDefectId\" IS NOT NULL OR " +
+                                                                                         "\"FixationWorkId\" IS NOT NULL AND \"FixationDefectId\" IS NULL)"));
 
-            // Photo
-            modelBuilder.Entity<Photo>()
-                .HasOne(photo => photo.Owner)
-                .WithMany()
-                .HasForeignKey(photo => photo.OwnerId)
-                .IsRequired();
+            //// Photo
+            //modelBuilder.Entity<Photo>()
+            //    .HasOne(photo => photo.Owner)
+            //    .WithMany()
+            //    .HasForeignKey(photo => photo.OwnerId)
+            //    .IsRequired();
         }
     }
 }

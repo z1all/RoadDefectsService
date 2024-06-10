@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Core.Application.DTOs.FixationService;
+using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Presentation.Web.Attributes;
+using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
+using RoadDefectsService.Core.Application.Helpers;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -10,8 +13,15 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [Route("api/fixation_defect")]
     [ApiController]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-    public class FixationDefectController : ControllerBase
+    public class FixationDefectController : BaseController
     {
+        private readonly IFixationDefectService _fixationDefectService;
+
+        public FixationDefectController(IFixationDefectService fixationDefectService)
+        {
+            _fixationDefectService = fixationDefectService;
+        }
+
         /// <summary>
         /// Фиксация дефекта (Не реализовано)
         /// </summary>
@@ -24,7 +34,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<FixationDefectDTO>> GetFixationDefect([FromRoute] Guid fixationDefectId)
         {
-            return Ok();
+            return await ExecutionResultHandlerAsync((userId) =>
+                _fixationDefectService.GetFixationDefectAsync(fixationDefectId, userId.GetUserIdIfRoadInspectorOrNull(HttpContext)));
         }
 
         /// <summary>
@@ -39,11 +50,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteFixationDefect([FromRoute] Guid fixationDefectId)
         {
-            return NoContent();
+            return await ExecutionResultHandlerAsync((userId) =>
+                _fixationDefectService.DeleteFixationDefectAsync(fixationDefectId, userId.GetUserIdIfRoadInspectorOrNull(HttpContext)));
         }
 
         /// <summary>
-        /// Зафиксировать дефект (Не реализовано)
+        /// Создать фиксацию дефекта (Не реализовано)
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -51,10 +63,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <response code="204">No Content</response> 
         [HttpPost]
         [CustomeAuthorize]
+        [ProducesResponseType(typeof(CreateFixationResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> CreateFixationDefect([FromBody] CreateFixationDefectDTO createFixationDefect)
+        public async Task<ActionResult<CreateFixationResponseDTO>> CreateFixationDefect([FromBody] CreateFixationDefectDTO createFixationDefect)
         {
-            return NoContent();
+            return await ExecutionResultHandlerAsync((userId) =>
+               _fixationDefectService.CreateFixationDefectAsync(createFixationDefect, userId.GetUserIdIfRoadInspectorOrNull(HttpContext)));
         }
 
         /// <summary>
@@ -70,7 +84,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> ChangeFixationDefect([FromRoute] Guid fixationDefectId, [FromBody] EditFixationDefectDTO editFixationDefect)
         {
-            return NoContent();
+            return await ExecutionResultHandlerAsync((userId) =>
+               _fixationDefectService.ChangeFixationDefectAsync(editFixationDefect, fixationDefectId, userId.GetUserIdIfRoadInspectorOrNull(HttpContext)));
         }
     }
 }

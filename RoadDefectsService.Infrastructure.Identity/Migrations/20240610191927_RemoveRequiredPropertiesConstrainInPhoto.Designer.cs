@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240610191927_RemoveRequiredPropertiesConstrainInPhoto")]
+    partial class RemoveRequiredPropertiesConstrainInPhoto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,6 +282,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<Guid?>("DefectTypeId")
+                        .IsRequired()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ExactAddress")
@@ -494,7 +498,9 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                 {
                     b.HasOne("RoadDefectsService.Core.Domain.Models.DefectType", "DefectType")
                         .WithMany()
-                        .HasForeignKey("DefectTypeId");
+                        .HasForeignKey("DefectTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DefectType");
                 });
