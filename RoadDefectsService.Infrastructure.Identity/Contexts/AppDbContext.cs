@@ -84,7 +84,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
                 .WithMany()
                 .HasForeignKey(photo => photo.OwnerId)
                 .IsRequired();
-
         }
     }
 }

@@ -32,7 +32,7 @@ namespace RoadDefectsService.Infrastructure.Identity
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IFixationDefectRepository, FixationDefectRepository>();
             services.AddScoped<IFixationWorkRepository, FixationWorkRepository>();
-            services.AddScoped<IDefectTypeResponse, DefectTypeResponse>();
+            services.AddScoped<IDefectTypeRepository, DefectTypeRepository>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();
@@ -104,6 +104,9 @@ namespace RoadDefectsService.Infrastructure.Identity
                 var _contractorService = scope.ServiceProvider.GetRequiredService<IContractorService>();
                 var _contractorRepository = scope.ServiceProvider.GetRequiredService<IContractorRepository>();
                 AppDbSeed.AddContractors(_contractorService, _contractorRepository);
+
+                var _defectTypeResponse = scope.ServiceProvider.GetRequiredService<IDefectTypeRepository>();
+                AppDbSeed.AddDefectTypes(_defectTypeResponse);
             }
         }
 
