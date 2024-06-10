@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240610065813_AddFixationIdToPhoto")]
+    partial class AddFixationIdToPhoto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -296,9 +299,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
@@ -306,8 +306,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FixationDefectId");
-
-                    b.HasIndex("OwnerId");
 
                     b.HasIndex("FixationWorkId", "FixationDefectId");
 
@@ -472,14 +470,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.HasOne("RoadDefectsService.Core.Domain.Models.FixationWork", null)
                         .WithMany("Photos")
                         .HasForeignKey("FixationWorkId");
-
-                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>

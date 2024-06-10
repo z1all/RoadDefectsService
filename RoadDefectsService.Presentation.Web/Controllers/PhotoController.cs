@@ -2,6 +2,7 @@
 using RoadDefectsService.Core.Application.DTOs.PhotoService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
+using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
@@ -35,7 +36,20 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DownloadPhoto([FromRoute] Guid photoId)
         {
-            ExecutionResult<PhotoDTO> response = await _photoService.GetPhotoAsync(photoId);
+            Guid? ownerId = null;
+            if (HttpContext.User.IsInRole(Role.RoadInspector))
+            {
+                if (!HttpContext.TryGetUserId(out Guid userId))
+                {
+                    return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
+                }
+                else
+                {
+                    ownerId = userId;
+                }
+            }
+
+            ExecutionResult<PhotoDTO> response = await _photoService.GetPhotoAsync(photoId, ownerId);
             if (!response.TryGetResult(out PhotoDTO photo))
             {
                 return ExecutionResultHandler(response);
@@ -60,7 +74,14 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeletePhoto([FromRoute] Guid photoId)
         {
-            return await ExecutionResultHandlerAsync(() => _photoService.DeletePhotoAsync(photoId));
+            return await ExecutionResultHandlerAsync((userId) =>
+            {
+                if (HttpContext.User.IsInRole(Role.RoadInspector))
+                {
+                    return _photoService.DeletePhotoAsync(photoId, userId);
+                }
+                return _photoService.DeletePhotoAsync(photoId, null);
+            });
         }
 
         /// <summary>
@@ -75,7 +96,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PhotoUploadResponseDTO>> UploadPhoto(PhotoUpload fileUpload)
         {
-            return await ExecutionResultHandlerAsync(async applicantId =>
+            return await ExecutionResultHandlerAsync(async userId =>
             {
                 PhotoDTO photo = new()
                 {
@@ -84,7 +105,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
                     File = await GetFileAsync(fileUpload.Photo),
                 };
 
-                return await _photoService.AddPhotoAsync(photo);
+                return await _photoService.AddPhotoAsync(photo, userId);
             });
         }
 

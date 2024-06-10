@@ -14,7 +14,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
         public DbSet<TaskFixationDefect> FixationDefectTasks { get; set; }
         public DbSet<TaskFixationWork> FixationWorkTasks { get; set; }
 
-        public DbSet<Fixation> Fixations { get; set; }
         public DbSet<FixationDefect> FixationDefects { get; set; }
         public DbSet<FixationWork> FixationWorks { get; set; }
 
@@ -56,23 +55,28 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
                 .UseTphMappingStrategy();
 
             // Fixation
-            modelBuilder.Entity<FixationDefect>()
-                .HasOne(fixationDefect => fixationDefect.Task)
-                .WithOne(task => task.FixationDefect)
-                .HasForeignKey<TaskEntity>(task => task.FixationDefectId);
-
             modelBuilder.Entity<FixationWork>()
-                .HasOne(fixationWork => fixationWork.TaskFixationWork)
-                .WithOne(task => task.FixationWork)
-                .HasForeignKey<TaskFixationWork>(task => task.FixationWorkId);
-
-            modelBuilder.Entity<Fixation>()
                 .HasMany(fixation => fixation.Photos)
-                .WithOne(photo => photo.Fixation)
-                .HasForeignKey(photo => photo.FixationId);
+                .WithOne()
+                .HasForeignKey(photo => photo.FixationWorkId);
 
-            modelBuilder.Entity<Fixation>()
-                .UseTpcMappingStrategy();
+            modelBuilder.Entity<FixationDefect>()
+               .HasMany(fixation => fixation.Photos)
+               .WithOne()
+               .HasForeignKey(photo => photo.FixationDefectId);
+
+            modelBuilder.Entity<Photo>()
+                .HasIndex(c => new { c.FixationWorkId, c.FixationDefectId });
+
+            modelBuilder.Entity<Photo>()
+                .ToTable(table => table.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL OR \"FixationDefectId\" IS NULL)"));
+
+            // Photo
+            modelBuilder.Entity<Photo>()
+                .HasOne(photo => photo.Owner)
+                .WithMany()
+                .HasForeignKey(photo => photo.OwnerId)
+                .IsRequired();
         }
     }
 }
