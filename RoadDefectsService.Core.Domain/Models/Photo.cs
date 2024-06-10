@@ -8,10 +8,7 @@ namespace RoadDefectsService.Core.Domain.Models
         public required string Name { get; set; }
         public required string Type { get; set; }
 
-        public Guid? FixationWorkId { get; set; }
-        public FixationWork? FixationWork { get; set; }
-
-        public Guid? FixationDefectId { get; set; }
-        public FixationDefect? FixationDefect { get; set; }
+        public Guid? FixationId { get; set; }
+        public Fixation? Fixation { get; set; }
     }
 }

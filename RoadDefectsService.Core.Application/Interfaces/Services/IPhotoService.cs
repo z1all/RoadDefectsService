@@ -13,7 +13,7 @@ namespace RoadDefectsService.Core.Application.Interfaces.Services
         /// <summary>
         /// Сохраняет фото в нужной директории, которая указана в конфигурации, также сохраняет информацию о фото в бд
         /// </summary>
-        Task<ExecutionResult<PhotoUploadResponseDTO>> AddPhotoAsync(PhotoDTO photo);
+        Task<ExecutionResult<PhotoUploadResponseDTO>> AddPhotoAsync(PhotoDTO addPhoto);
 
         /// <summary>
         /// Фото можно удалить только в том случае, если он не прикреплено к фиксации дефекта или выполненных работ

@@ -24,7 +24,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Скачать фото (Не реализовано) (Не все модели указаны)
+        /// Скачать фото
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -36,7 +36,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         public async Task<ActionResult> DownloadPhoto([FromRoute] Guid photoId)
         {
             ExecutionResult<PhotoDTO> response = await _photoService.GetPhotoAsync(photoId);
-            if (response.TryGetResult(out PhotoDTO photo))
+            if (!response.TryGetResult(out PhotoDTO photo))
             {
                 return ExecutionResultHandler(response);
             }
@@ -49,7 +49,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Удалить фото (Не реализовано) (Не все модели указаны)
+        /// Удалить фото
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -64,7 +64,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Загрузить фото (Не реализовано) (Не все модели указаны)
+        /// Загрузить фото
         /// </summary>
         /// <remarks> 
         /// Доступ: Все

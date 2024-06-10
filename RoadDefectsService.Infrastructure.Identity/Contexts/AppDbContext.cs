@@ -14,6 +14,10 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
         public DbSet<TaskFixationDefect> FixationDefectTasks { get; set; }
         public DbSet<TaskFixationWork> FixationWorkTasks { get; set; }
 
+        public DbSet<Fixation> Fixations { get; set; }
+        public DbSet<FixationDefect> FixationDefects { get; set; }
+        public DbSet<FixationWork> FixationWorks { get; set; }
+
         public DbSet<Photo> Photos { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options) { }
@@ -51,28 +55,24 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
             modelBuilder.Entity<TaskEntity>()
                 .UseTphMappingStrategy();
 
-            // FixationDefect
+            // Fixation
             modelBuilder.Entity<FixationDefect>()
                 .HasOne(fixationDefect => fixationDefect.Task)
                 .WithOne(task => task.FixationDefect)
                 .HasForeignKey<TaskEntity>(task => task.FixationDefectId);
 
-            // FixationWork
             modelBuilder.Entity<FixationWork>()
                 .HasOne(fixationWork => fixationWork.TaskFixationWork)
                 .WithOne(task => task.FixationWork)
                 .HasForeignKey<TaskFixationWork>(task => task.FixationWorkId);
 
-            // Photo
-            modelBuilder.Entity<Photo>()
-                .HasOne(photo => photo.FixationWork)
-                .WithMany(fixationWork => fixationWork.Photos)
-                .HasForeignKey(photo =>  photo.FixationWorkId);
+            modelBuilder.Entity<Fixation>()
+                .HasMany(fixation => fixation.Photos)
+                .WithOne(photo => photo.Fixation)
+                .HasForeignKey(photo => photo.FixationId);
 
-            modelBuilder.Entity<Photo>()
-                .HasOne(photo => photo.FixationDefect)
-                .WithMany(fixationDefect => fixationDefect.Photos)
-                .HasForeignKey(photo => photo.FixationDefectId);
+            modelBuilder.Entity<Fixation>()
+                .UseTpcMappingStrategy();
         }
     }
 }
