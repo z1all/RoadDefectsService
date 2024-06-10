@@ -45,7 +45,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _taskFixationDefectRepository.UpdateAsync(task);
 
-            return ExecutionResult.SuccussedResult;
+            return ExecutionResult.SucceededResult;
         }
 
         public async Task<ExecutionResult<CreateTaskResponseDTO>> CreateFixationDefectTaskAsync(CreateEditFixationDefectTaskDTO createFixationDefect)

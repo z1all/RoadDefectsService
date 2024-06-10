@@ -14,6 +14,9 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
         public DbSet<TaskFixationDefect> FixationDefectTasks { get; set; }
         public DbSet<TaskFixationWork> FixationWorkTasks { get; set; }
 
+        public DbSet<FixationDefect> FixationDefects { get; set; }
+        public DbSet<FixationWork> FixationWorks { get; set; }
+
         public DbSet<Photo> Photos { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options) { }
@@ -51,28 +54,29 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
             modelBuilder.Entity<TaskEntity>()
                 .UseTphMappingStrategy();
 
-            // FixationDefect
-            modelBuilder.Entity<FixationDefect>()
-                .HasOne(fixationDefect => fixationDefect.Task)
-                .WithOne(task => task.FixationDefect)
-                .HasForeignKey<TaskEntity>(task => task.FixationDefectId);
-
-            // FixationWork
+            // Fixation
             modelBuilder.Entity<FixationWork>()
-                .HasOne(fixationWork => fixationWork.TaskFixationWork)
-                .WithOne(task => task.FixationWork)
-                .HasForeignKey<TaskFixationWork>(task => task.FixationWorkId);
+                .HasMany(fixation => fixation.Photos)
+                .WithOne()
+                .HasForeignKey(photo => photo.FixationWorkId);
+
+            modelBuilder.Entity<FixationDefect>()
+               .HasMany(fixation => fixation.Photos)
+               .WithOne()
+               .HasForeignKey(photo => photo.FixationDefectId);
+
+            modelBuilder.Entity<Photo>()
+                .HasIndex(c => new { c.FixationWorkId, c.FixationDefectId });
+
+            modelBuilder.Entity<Photo>()
+                .ToTable(table => table.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL OR \"FixationDefectId\" IS NULL)"));
 
             // Photo
             modelBuilder.Entity<Photo>()
-                .HasOne(photo => photo.FixationWork)
-                .WithMany(fixationWork => fixationWork.Photos)
-                .HasForeignKey(photo =>  photo.FixationWorkId);
-
-            modelBuilder.Entity<Photo>()
-                .HasOne(photo => photo.FixationDefect)
-                .WithMany(fixationDefect => fixationDefect.Photos)
-                .HasForeignKey(photo => photo.FixationDefectId);
+                .HasOne(photo => photo.Owner)
+                .WithMany()
+                .HasForeignKey(photo => photo.OwnerId)
+                .IsRequired();
         }
     }
 }

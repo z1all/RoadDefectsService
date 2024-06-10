@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240609161441_AddBaseModelForFixation")]
+    partial class AddBaseModelForFixation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,7 +251,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Fixation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -256,18 +259,9 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FixationDefects");
-                });
+                    b.ToTable("Fixations");
 
-            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationWork", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FixationWorks");
+                    b.UseTpcMappingStrategy();
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Operator", b =>
@@ -286,18 +280,12 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("FixationDefectId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("FixationWorkId")
+                    b.Property<Guid?>("FixationId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -305,16 +293,9 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FixationDefectId");
+                    b.HasIndex("FixationId");
 
-                    b.HasIndex("OwnerId");
-
-                    b.HasIndex("FixationWorkId", "FixationDefectId");
-
-                    b.ToTable("Photos", t =>
-                        {
-                            t.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL OR \"FixationDefectId\" IS NULL)");
-                        });
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
@@ -365,6 +346,20 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("TaskEntity");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
+                {
+                    b.HasBaseType("RoadDefectsService.Core.Domain.Models.Fixation");
+
+                    b.ToTable("FixationDefects");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationWork", b =>
+                {
+                    b.HasBaseType("RoadDefectsService.Core.Domain.Models.Fixation");
+
+                    b.ToTable("FixationWorks");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.TaskFixationDefect", b =>
@@ -465,21 +460,11 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Photo", b =>
                 {
-                    b.HasOne("RoadDefectsService.Core.Domain.Models.FixationDefect", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.Fixation", "Fixation")
                         .WithMany("Photos")
-                        .HasForeignKey("FixationDefectId");
+                        .HasForeignKey("FixationId");
 
-                    b.HasOne("RoadDefectsService.Core.Domain.Models.FixationWork", null)
-                        .WithMany("Photos")
-                        .HasForeignKey("FixationWorkId");
-
-                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
+                    b.Navigation("Fixation");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
@@ -525,23 +510,24 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.Navigation("PrevTask");
                 });
 
-            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Fixation", b =>
                 {
                     b.Navigation("Photos");
-
-                    b.Navigation("Task");
-                });
-
-            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationWork", b =>
-                {
-                    b.Navigation("Photos");
-
-                    b.Navigation("TaskFixationWork");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
                 {
                     b.Navigation("AppointedTasks");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
+                {
+                    b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationWork", b =>
+                {
+                    b.Navigation("TaskFixationWork");
                 });
 #pragma warning restore 612, 618
         }

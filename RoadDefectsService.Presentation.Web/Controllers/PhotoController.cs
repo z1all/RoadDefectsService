@@ -2,9 +2,11 @@
 using RoadDefectsService.Core.Application.DTOs.PhotoService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
+using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
+using RoadDefectsService.Presentation.Web.Helpers;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -14,14 +16,16 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     public class PhotoController : BaseController
     {
         private readonly IPhotoService _photoService;
+        private readonly PhotoTypeHelper _photoTypeHelper;
 
-        public PhotoController(IPhotoService photoService)
+        public PhotoController(IPhotoService photoService, PhotoTypeHelper photoTypeHelper)
         {
             _photoService = photoService;
+            _photoTypeHelper = photoTypeHelper;
         }
 
         /// <summary>
-        /// Скачать фото (Не реализовано) (Не все модели указаны)
+        /// Скачать фото
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -32,22 +36,34 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DownloadPhoto([FromRoute] Guid photoId)
         {
-            ExecutionResult<PhotoDTO> response = await _photoService.GetPhotoAsync(photoId);
-            if (response.TryGetResult(out PhotoDTO photo))
+            Guid? ownerId = null;
+            if (HttpContext.User.IsInRole(Role.RoadInspector))
+            {
+                if (!HttpContext.TryGetUserId(out Guid userId))
+                {
+                    return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
+                }
+                else
+                {
+                    ownerId = userId;
+                }
+            }
+
+            ExecutionResult<PhotoDTO> response = await _photoService.GetPhotoAsync(photoId, ownerId);
+            if (!response.TryGetResult(out PhotoDTO photo))
             {
                 return ExecutionResultHandler(response);
             }
-
-
-            //if (!fileDTO.Type.TryMapToContentType(out var contentType))
-            //{
-            //    return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "DocumentTypeError", $"Unknown document type {fileDTO.Type}"));
-            //}
-            return File(photo.File, "contentType!", photo.Name);
+            
+            if (!_photoTypeHelper.TryMapToContentType(photo.Type, out string? contentType))
+            {
+                return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "DocumentTypeError", $"Unknown document type {photo.Type}"));
+            }
+            return File(photo.File, contentType!, photo.Name);
         }
 
         /// <summary>
-        /// Удалить фото (Не реализовано) (Не все модели указаны)
+        /// Удалить фото
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -58,11 +74,18 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeletePhoto([FromRoute] Guid photoId)
         {
-            return await ExecutionResultHandlerAsync(() => _photoService.DeletePhotoAsync(photoId));
+            return await ExecutionResultHandlerAsync((userId) =>
+            {
+                if (HttpContext.User.IsInRole(Role.RoadInspector))
+                {
+                    return _photoService.DeletePhotoAsync(photoId, userId);
+                }
+                return _photoService.DeletePhotoAsync(photoId, null);
+            });
         }
 
         /// <summary>
-        /// Загрузить фото (Не реализовано) (Не все модели указаны)
+        /// Загрузить фото
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -73,16 +96,16 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PhotoUploadResponseDTO>> UploadPhoto(PhotoUpload fileUpload)
         {
-            return await ExecutionResultHandlerAsync(async applicantId =>
+            return await ExecutionResultHandlerAsync(async userId =>
             {
                 PhotoDTO photo = new()
                 {
-                    Name = Path.GetFileNameWithoutExtension(fileUpload.File.FileName),
-                    Type = Path.GetExtension(fileUpload.File.FileName),
-                    File = await GetFileAsync(fileUpload.File),
+                    Name = Path.GetFileNameWithoutExtension(fileUpload.Photo.FileName),
+                    Type = Path.GetExtension(fileUpload.Photo.FileName),
+                    File = await GetFileAsync(fileUpload.Photo),
                 };
 
-                return await _photoService.AddPhotoAsync(photo);
+                return await _photoService.AddPhotoAsync(photo, userId);
             });
         }
 

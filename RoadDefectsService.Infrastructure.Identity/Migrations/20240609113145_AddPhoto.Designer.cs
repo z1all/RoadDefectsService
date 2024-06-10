@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240609113145_AddPhoto")]
+    partial class AddPhoto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,7 +259,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FixationDefects");
+                    b.ToTable("FixationDefect");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationWork", b =>
@@ -267,7 +270,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FixationWorks");
+                    b.ToTable("FixationWork");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Operator", b =>
@@ -296,9 +299,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
@@ -307,14 +307,9 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
                     b.HasIndex("FixationDefectId");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("FixationWorkId");
 
-                    b.HasIndex("FixationWorkId", "FixationDefectId");
-
-                    b.ToTable("Photos", t =>
-                        {
-                            t.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL OR \"FixationDefectId\" IS NULL)");
-                        });
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
@@ -465,21 +460,17 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Photo", b =>
                 {
-                    b.HasOne("RoadDefectsService.Core.Domain.Models.FixationDefect", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.FixationDefect", "FixationDefect")
                         .WithMany("Photos")
                         .HasForeignKey("FixationDefectId");
 
-                    b.HasOne("RoadDefectsService.Core.Domain.Models.FixationWork", null)
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.FixationWork", "FixationWork")
                         .WithMany("Photos")
                         .HasForeignKey("FixationWorkId");
 
-                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("FixationDefect");
 
-                    b.Navigation("Owner");
+                    b.Navigation("FixationWork");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>
