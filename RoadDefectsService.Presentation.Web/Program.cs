@@ -2,6 +2,7 @@ using RoadDefectsService.Presentation.Web;
 using RoadDefectsService.Presentation.Web.Middlewares.Extensions;
 using RoadDefectsService.Infrastructure.Identity;
 using RoadDefectsService.Core.Application;
+using RoadDefectsService.Infrastructure.SMTP;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddCors();
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices();
+builder.Services.AddSmtpServices();
 
 builder.Services.AddControllers();
 

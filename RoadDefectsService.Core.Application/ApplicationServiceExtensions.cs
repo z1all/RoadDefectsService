@@ -20,6 +20,7 @@ namespace RoadDefectsService.Core.Application
             services.AddScoped<IDefectTypeService, DefectTypeService>();
             services.AddScoped<IFixationDefectService, FixationDefectService>();
             services.AddScoped<IFixationWorkService, FixationWorkService>();
+            services.AddScoped<IAssignmentService, AssignmentService>();
 
             // Configurations
             services.ConfigureOptions<FileStorageOptionsConfigure>();

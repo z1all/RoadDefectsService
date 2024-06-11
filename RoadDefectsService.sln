@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadDefectsService.Core.Dom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadDefectsService.Infrastructure.Identity", "RoadDefectsService.Infrastructure.Identity\RoadDefectsService.Infrastructure.Identity.csproj", "{5465DFB4-F4BC-4F64-85FE-9825428C7CF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadDefectsService.Infrastructure.SMTP", "RoadDefectsService.Infrastructure.SMTP\RoadDefectsService.Infrastructure.SMTP.csproj", "{A9BE357E-96B4-4F13-9217-5AF51A242084}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5465DFB4-F4BC-4F64-85FE-9825428C7CF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5465DFB4-F4BC-4F64-85FE-9825428C7CF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5465DFB4-F4BC-4F64-85FE-9825428C7CF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9BE357E-96B4-4F13-9217-5AF51A242084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9BE357E-96B4-4F13-9217-5AF51A242084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9BE357E-96B4-4F13-9217-5AF51A242084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9BE357E-96B4-4F13-9217-5AF51A242084}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
