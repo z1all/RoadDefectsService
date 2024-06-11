@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RoadDefectsService.Core.Application.Configurations.FileStorage;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Services;
 
@@ -11,6 +12,17 @@ namespace RoadDefectsService.Core.Application
             // Services
             services.AddScoped<IAccessTokenService, JWTTokenService>();
             services.AddScoped<IContractorService, ContractorService>();
+            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<ITaskFixationDefectService, TaskFixationDefectService>();
+            services.AddScoped<ITaskFixationWorkService, TaskFixationWorkService>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IDefectTypeService, DefectTypeService>();
+            services.AddScoped<IFixationDefectService, FixationDefectService>();
+            services.AddScoped<IFixationWorkService, FixationWorkService>();
+
+            // Configurations
+            services.ConfigureOptions<FileStorageOptionsConfigure>();
 
             return services;
         }

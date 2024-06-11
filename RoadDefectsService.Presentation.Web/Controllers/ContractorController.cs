@@ -26,18 +26,18 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Все подрядчики (Реализовано)
+        /// Все подрядчики
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("contractors")]
-        [ProducesResponseType(typeof(List<ContractorDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ContractorPagedDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<ContractorPagedDTO>> GetContractors([FromQuery] ContractorFilterDTO contractorFilter)
         {
             return await ExecutionResultHandlerAsync(() => _contractorService.GetContractorsAsync(contractorFilter));
         }
 
         /// <summary>
-        /// Конкретный подрядчик (Реализовано)
+        /// Конкретный подрядчик
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("{contractorId}")]
@@ -49,7 +49,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать подрядчика (Реализовано)
+        /// Создать подрядчика
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
@@ -61,7 +61,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Редактировать информацию подрядчика (Реализовано)
+        /// Редактировать информацию подрядчика
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
@@ -71,6 +71,18 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         public async Task<ActionResult> ChangeContractor([FromRoute] Guid contractorId, [FromBody] EditContractorDTO contractor)
         {
             return await ExecutionResultHandlerAsync(() => _contractorService.EditContractorAsync(contractor, contractorId));
+        }
+
+        /// <summary>
+        /// Удалить подрядчика
+        /// </summary>
+        /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <response code="204">NoContent</response> 
+        [HttpDelete("{contractorId}")]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteContractor([FromRoute] Guid contractorId)
+        {
+            return await ExecutionResultHandlerAsync(() => _contractorService.DeleteContractorAsync(contractorId));
         }
     }
 }

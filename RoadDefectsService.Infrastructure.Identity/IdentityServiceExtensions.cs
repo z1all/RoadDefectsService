@@ -6,10 +6,10 @@ using Microsoft.Extensions.Options;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Services;
+using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Infrastructure.Identity.Configurations;
 using RoadDefectsService.Infrastructure.Identity.Configurations.DbSeed;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
-using RoadDefectsService.Infrastructure.Identity.Models;
 using RoadDefectsService.Infrastructure.Identity.Repositories;
 using RoadDefectsService.Infrastructure.Identity.Services;
 using StackExchange.Redis;
@@ -23,10 +23,21 @@ namespace RoadDefectsService.Infrastructure.Identity
             // Repositories
             services.AddScoped<ITokenRepository, TokenRedisRepository>();
             services.AddScoped<IContractorRepository, ContractorRepository>();
+            services.AddScoped<IRoadInspectorRepository, RoadInspectorRepository>();
+            services.AddScoped<IOperatorRepository, OperatorRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<ITaskFixationDefectRepository, TaskFixationDefectRepository>();
+            services.AddScoped<ITaskFixationWorkRepository, TaskFixationWorkRepository>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
+            services.AddScoped<IFixationDefectRepository, FixationDefectRepository>();
+            services.AddScoped<IFixationWorkRepository, FixationWorkRepository>();
+            services.AddScoped<IDefectTypeRepository, DefectTypeRepository>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IAccessTokenService, JWTTokenService>();
 
             // Configuration
@@ -93,6 +104,9 @@ namespace RoadDefectsService.Infrastructure.Identity
                 var _contractorService = scope.ServiceProvider.GetRequiredService<IContractorService>();
                 var _contractorRepository = scope.ServiceProvider.GetRequiredService<IContractorRepository>();
                 AppDbSeed.AddContractors(_contractorService, _contractorRepository);
+
+                var _defectTypeResponse = scope.ServiceProvider.GetRequiredService<IDefectTypeRepository>();
+                AppDbSeed.AddDefectTypes(_defectTypeResponse);
             }
         }
 

@@ -11,29 +11,21 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
     {
         public ContractorRepository(AppDbContext dbContext) : base(dbContext) { }
 
-        public async Task<List<Contractor>> GetContractorsByFilterAsync(ContractorFilterDTO contractorFilter)
+        public async Task<List<Contractor>> GetAllByFilterAsync(ContractorFilterDTO contractorFilter)
         {
-            var contractors = _dbContext.Contractors.AsQueryable();
-
-            if (contractorFilter.ContractorFullName is not null)
-            {
-                contractors = contractors
-                    .Where(contractor => contractor.ContractorFullName.ToLower().Contains(contractorFilter.ContractorFullName.ToLower()));
-            }
-
-            if (contractorFilter.OrganizationName is not null)
-            {
-                contractors = contractors
-                    .Where(contractor => contractor.OrganizationName.ToLower().Contains(contractorFilter.OrganizationName.ToLower()));
-            }
-
-            return await contractors
+            return await ApplyFilter(contractorFilter)
                 .Skip((contractorFilter.Page - 1) * contractorFilter.Size)
                 .Take(contractorFilter.Size)
                 .ToListAsync();
         }
 
-        public async Task<int> CountContractorsByFilterAsync(ContractorFilterDTO contractorFilter)
+        public async Task<int> CountByFilterAsync(ContractorFilterDTO contractorFilter)
+        {
+            return await ApplyFilter(contractorFilter)
+                .CountAsync();
+        }
+
+        private IQueryable<Contractor> ApplyFilter(ContractorFilterDTO contractorFilter)
         {
             var contractors = _dbContext.Contractors.AsQueryable();
 
@@ -49,8 +41,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                     .Where(contractor => contractor.OrganizationName.ToLower().Contains(contractorFilter.OrganizationName.ToLower()));
             }
 
-            return await contractors
-                .CountAsync();
+            return contractors;
         }
 
         public Task<bool> AnyByEmailAsync(string email)

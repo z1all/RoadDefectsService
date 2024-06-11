@@ -31,6 +31,7 @@ namespace RoadDefectsService.Core.Application.Models
                 if (IsSuccess) StatusCode = StatusCodeExecutionResult.Ok;
             }
         }
+        public bool IsNotSuccess { get => !_isSuccess; }
 
         public StatusCodeExecutionResult StatusCode { get; set; }
 
@@ -54,6 +55,8 @@ namespace RoadDefectsService.Core.Application.Models
             _errors = errors;
             StatusCode = statusCode;
         }
+
+        public static ExecutionResult SucceededResult { get; } = new(isSuccess: true);
     }
 
     /// <summary> Наследуется от ExecutionResult и выполняет ту же задачу</summary>
@@ -78,6 +81,14 @@ namespace RoadDefectsService.Core.Application.Models
         public ExecutionResult(StatusCodeExecutionResult statusCode, string keyError, params string[] error) : base(statusCode, keyError, error) { }
         public ExecutionResult(StatusCodeExecutionResult statusCode, ImmutableDictionary<string, List<string>> errors) : base(statusCode, errors) { }
 
+        public bool TryGetResult(out TSuccessResult result)
+        {
+            result = default;
+            if (IsNotSuccess || Result is null) return false;
+
+            result = Result;
+            return true;
+        }
 
         public static implicit operator ExecutionResult<TSuccessResult>(TSuccessResult value)
         {

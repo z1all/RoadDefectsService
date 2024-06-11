@@ -1,89 +1,115 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using RoadDefectsService.Core.Application.DTOs.UserService;
+using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
+using RoadDefectsService.Presentation.Web.DTOs;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
+    /// <response code="401">Unauthorized</response>
     [Route("api/user")]
     [ApiController]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class UserController : BaseController
     {
+        private IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         /// <summary>
-        /// Все пользователи системы (Не реализовано) (Не все модели указаны)
+        /// Все пользователи системы
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
         /// 
         /// Оператор видит только дорожных инспекторов
+        /// 
         /// Админ всех пользователей
         /// </remarks>
         [HttpGet("users")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> GetUsers()
+        [ProducesResponseType(typeof(UserPagedDTO), StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserPagedDTO>> GetUsers([FromQuery] UserFilterDTO userFilter)
         {
-            return Ok();
+            bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
+
+            return await ExecutionResultHandlerAsync(() => _userService.GetUsersAsync(userFilter, showOperators: isAdmin));
         }
 
         /// <summary>
-        /// Конкретный пользователь (Не реализовано) (Не все модели указаны)
+        /// Изменить профиль пользователя
         /// </summary>
         /// <remarks> 
         /// Доступ: Оператор и админ 
         /// 
-        /// Оператор может смотреть только дорожных инспекторов
-        /// Админ всех пользователей
+        /// Оператор может изменять только дорожных инспекторов
+        /// 
+        /// Админ всех пользователей, кроме других админов
         /// </remarks>
-        [HttpGet("{userId}")]
+        /// <response code="403">Forbidden</response>
+        /// <response code="204">No Content</response>
+        [HttpPut("{userId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> GetUser([FromRoute] Guid userId)
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ChangeUser([FromRoute] Guid userId, [FromBody] EditUserDTO editUser)
         {
-            return Ok();
+            bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
+
+            return await ExecutionResultHandlerAsync(() => _userService.EditUserAsync(editUser, userId, editOperator: isAdmin));
         }
 
         /// <summary>
-        /// Создать дорожного инспектора (Не реализовано) (Не все модели указаны)
+        /// Удалить пользователя
+        /// </summary>
+        /// <remarks> 
+        /// Доступ: Оператор и админ 
+        /// 
+        /// Оператор может удалить только дорожных инспекторов
+        /// 
+        /// Админ всех пользователей, кроме других админов
+        /// </remarks>
+        /// <response code="204">No Content</response>
+        /// <response code="403">Forbidden</response>
+        [HttpDelete("{userId}")]
+        [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteUser([FromRoute] Guid userId)
+        {
+            bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
+
+            return await ExecutionResultHandlerAsync(() => _userService.DeleteUserAsync(userId, deleteOperator: isAdmin));
+        }
+
+        /// <summary>
+        /// Создать дорожного инспектора
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <response code="204">No Content</response>
         [HttpPost("road_inspector")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> CreateRoadInspector()
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CreateRoadInspector([FromBody] CreateUserDTO createRoadInspector)
         {
-            return Ok();
+            return await ExecutionResultHandlerAsync(() => _userService.CreateRoadInspectorAsync(createRoadInspector));
         }
 
         /// <summary>
-        /// Изменить профиль дорожного инспектора (Не реализовано) (Не все модели указаны)
-        /// </summary>
-        /// <remarks> Доступ: Оператор и админ </remarks>
-        [HttpPut("road_inspector")]
-        [CustomeAuthorize(Roles = Role.Operator)]
-        public async Task<ActionResult> ChangeRoadInspector()
-        {
-            return Ok();
-        }
-
-        /// <summary>
-        /// Создать оператора (Не реализовано) (Не все модели указаны)
+        /// Создать оператора
         /// </summary>
         /// <remarks> Доступ: Админ </remarks>
+        /// <response code="204">No Content</response>
         [HttpPost("operator")]
         [CustomeAuthorize(Roles = Role.Admin)]
-        public async Task<ActionResult> CreateOperator()
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CreateOperator([FromBody] CreateUserDTO createOperator)
         {
-            return Ok();
-        }
-
-        /// <summary>
-        /// Изменить профиль оператора (Не реализовано) (Не все модели указаны)
-        /// </summary>
-        /// <remarks> Доступ: Админ </remarks>
-        [HttpPut("operator")]
-        [CustomeAuthorize(Roles = Role.Admin)]
-        public async Task<ActionResult> ChangeOperator()
-        {
-            return Ok();
+            return await ExecutionResultHandlerAsync(() => _userService.CreateOperatorAsync(createOperator));
         }
     }
 }

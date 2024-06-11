@@ -1,4 +1,4 @@
-﻿using RoadDefectsService.Core.Application.DTOs;
+﻿using RoadDefectsService.Core.Application.DTOs.UserService;
 
 namespace RoadDefectsService.Infrastructure.Identity.Configurations.DbSeed
 {

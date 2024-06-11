@@ -9,5 +9,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Services
         Task<ExecutionResult<ContractorDTO>> GetContractorAsync(Guid contractorId);
         Task<ExecutionResult> CreateContractorAsync(CreateContractorDTO createContractor);
         Task<ExecutionResult> EditContractorAsync(EditContractorDTO editContractor, Guid contractorId);
+        Task<ExecutionResult> DeleteContractorAsync(Guid contractorId);
     }
 }
