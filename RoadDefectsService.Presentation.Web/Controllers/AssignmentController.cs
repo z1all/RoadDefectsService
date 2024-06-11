@@ -15,6 +15,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [Route("api/assignment")]
     [ApiController]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [SwaggerControllerOrder(Order = 5)]
     public class AssignmentController : BaseController
     {
         private readonly IAssignmentService _assignmentService;

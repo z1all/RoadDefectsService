@@ -11,6 +11,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     /// <response code="401">Unauthorized</response>
     [Route("api/defect_type")]
     [ApiController]
+    [SwaggerControllerOrder(Order = 5)]
     public class DefectTypeController : BaseController
     {
         private readonly IDefectTypeService _defectTypeService;

@@ -13,6 +13,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [Route("api/fixation_work")]
     [ApiController]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [SwaggerControllerOrder(Order = 7)]
     public class FixationWorkController : BaseController
     {
         private readonly IFixationWorkService _fixationWorkService;

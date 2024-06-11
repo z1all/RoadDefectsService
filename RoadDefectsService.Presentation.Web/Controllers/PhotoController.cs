@@ -13,6 +13,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     /// <response code="401">Unauthorized</response>
     [Route("api")]
     [ApiController]
+    [SwaggerControllerOrder(Order = 4)]
     public class PhotoController : BaseController
     {
         private readonly IPhotoService _photoService;

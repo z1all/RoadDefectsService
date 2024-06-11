@@ -12,6 +12,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [Route("api/user")]
     [ApiController]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [SwaggerControllerOrder(Order = 2)]
     public class UserController : BaseController
     {
         private IUserService _userService;

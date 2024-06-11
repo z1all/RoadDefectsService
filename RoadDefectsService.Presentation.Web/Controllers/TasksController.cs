@@ -13,6 +13,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [Route("api/task")]
     [ApiController]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [SwaggerControllerOrder(Order = 10)]
     public class TasksController : BaseController
     {
         private readonly ITaskService _taskService;

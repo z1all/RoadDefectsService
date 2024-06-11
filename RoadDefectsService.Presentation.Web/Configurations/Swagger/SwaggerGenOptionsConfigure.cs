@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using RoadDefectsService.Presentation.Web.Controllers.Base;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
@@ -9,6 +10,10 @@ namespace RoadDefectsService.Presentation.Web.Configurations.Swagger
     {
         public void Configure(SwaggerGenOptions options)
         {
+            SwaggerControllerOrder<BaseController> swaggerControllerOrder = new SwaggerControllerOrder<BaseController>(Assembly.GetEntryAssembly());
+
+            options.OrderActionsBy((apiDesc) => $"{swaggerControllerOrder.SortKey(apiDesc.ActionDescriptor.RouteValues["controller"])}");
+
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
             {
                 Name = "Authorization",

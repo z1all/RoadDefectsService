@@ -13,6 +13,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [ApiController]
     [CustomeAuthorize]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [SwaggerControllerOrder(Order = 1)]
     public class ProfileController : BaseController
     {
         private readonly IProfileService _profileService;

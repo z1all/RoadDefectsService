@@ -10,6 +10,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
 {
     [Route("api/fixation_work_task")]
     [ApiController]
+    [SwaggerControllerOrder(Order = 9)]
     public class TaskFixationWorkController : BaseController
     {
         private readonly ITaskFixationWorkService _taskFixationWorkService;

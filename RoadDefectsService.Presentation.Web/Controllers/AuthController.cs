@@ -13,6 +13,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [ApiController]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [SwaggerControllerOrder(Order = 0)]
     public class AuthController : BaseController
     {
         private readonly IAuthService _authService;

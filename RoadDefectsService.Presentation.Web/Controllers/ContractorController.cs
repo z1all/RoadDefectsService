@@ -13,6 +13,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [Route("api/contractor")]
     [ApiController]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [SwaggerControllerOrder(Order = 3)]
     public class ContractorController : BaseController
     {
         private readonly IContractorService _contractorService;

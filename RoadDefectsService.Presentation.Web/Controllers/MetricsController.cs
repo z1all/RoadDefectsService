@@ -8,6 +8,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [Route("api/metrics")]
     [ApiController]
     [CustomeAuthorize(Roles = Role.Operator)]
+    [SwaggerControllerOrder(Order = 11)]
     public class MetricsController : BaseController
     {
         /// <summary>
