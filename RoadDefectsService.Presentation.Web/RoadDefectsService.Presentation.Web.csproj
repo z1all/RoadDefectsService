@@ -21,11 +21,13 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RoadDefectsService.Core.Application\RoadDefectsService.Core.Application.csproj" />
     <ProjectReference Include="..\RoadDefectsService.Infrastructure.Identity\RoadDefectsService.Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\RoadDefectsService.Infrastructure.SMTP\RoadDefectsService.Infrastructure.SMTP.csproj" />
   </ItemGroup>
 
 </Project>

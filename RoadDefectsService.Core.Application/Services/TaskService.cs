@@ -84,10 +84,16 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> ChangeTaskStatusAsync(ChangeTaskStatusDTO changeTaskStatus, Guid taskId)
         {
-            TaskEntity? task = await _taskRepository.GetByIdAsync(taskId);
+            TaskEntity? task = await _taskRepository.GetByIdWithFixationDefectAsync(taskId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
+            }
+
+            if (changeTaskStatus.ChangeTaskStatus == ChangeTaskStatusEnum.FinishTask)
+            {
+                ExecutionResult checkResult = CheckOnNullProperties(task.FixationDefect);
+                if (checkResult.IsNotSuccess) return checkResult;
             }
 
             if (task.TaskStatus == StatusTask.Completed)
@@ -110,6 +116,19 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _taskRepository.UpdateAsync(task);
             
+            return ExecutionResult.SucceededResult;
+        }
+
+        private ExecutionResult CheckOnNullProperties(FixationDefect? fixationDefect)
+        {
+            if (fixationDefect is not null &&
+               (fixationDefect.ExactAddress is null || fixationDefect.CoordinatesX is null ||
+                fixationDefect.CoordinatesY is null || fixationDefect.DamagedCanvasSquareMeter is null ||
+                fixationDefect.DefectTypeId is null))
+            {
+                return new(StatusCodeExecutionResult.BadRequest, "FixationDefectNullProperties", "You cannot complete the task because one or more properties of the fixation defect have a null value!");
+            }
+
             return ExecutionResult.SucceededResult;
         }
     }

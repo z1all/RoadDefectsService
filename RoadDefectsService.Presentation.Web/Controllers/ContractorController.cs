@@ -12,7 +12,6 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     /// <response code="403">Forbidden</response>
     [Route("api/contractor")]
     [ApiController]
-    [CustomeAuthorize(Roles = Role.Operator)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class ContractorController : BaseController
     {
@@ -28,8 +27,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <summary>
         /// Все подрядчики
         /// </summary>
-        /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <remarks> Доступ: Все </remarks>
         [HttpGet("contractors")]
+        [CustomeAuthorize]
         [ProducesResponseType(typeof(ContractorPagedDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<ContractorPagedDTO>> GetContractors([FromQuery] ContractorFilterDTO contractorFilter)
         {
@@ -41,6 +41,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("{contractorId}")]
+        [CustomeAuthorize(Roles = Role.Operator)]
         [ProducesResponseType(typeof(ContractorDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ContractorDTO>> GetContractor([FromRoute] Guid contractorId)
@@ -54,6 +55,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
         [HttpPost]
+        [CustomeAuthorize(Roles = Role.Operator)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> CreateContractor([FromBody] CreateContractorDTO contractor)
         {
@@ -66,6 +68,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
         [HttpPut("{contractorId}")]
+        [CustomeAuthorize(Roles = Role.Operator)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> ChangeContractor([FromRoute] Guid contractorId, [FromBody] EditContractorDTO contractor)
@@ -79,6 +82,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> Доступ: Оператор и админ </remarks>
         /// <response code="204">NoContent</response> 
         [HttpDelete("{contractorId}")]
+        [CustomeAuthorize(Roles = Role.Operator)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteContractor([FromRoute] Guid contractorId)
         {

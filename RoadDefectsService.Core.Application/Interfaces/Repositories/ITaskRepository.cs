@@ -9,6 +9,7 @@ namespace RoadDefectsService.Core.Application.Interfaces.Repositories
         IFilterableRepository<CommonTaskFilterDTO, TaskEntity>
         //IFilterableRepository<TaskFilterDTO, TaskEntity>
     {
+        Task<TaskEntity?> GetByIdWithFixationDefectAsync(Guid id);
         Task<List<TaskEntity>> GetAllByFilterAsync(TaskFilterDTO taskFilter, Guid inspectorId);
         Task<int> CountByFilterAsync(TaskFilterDTO taskFilter, Guid inspectorId);
     }

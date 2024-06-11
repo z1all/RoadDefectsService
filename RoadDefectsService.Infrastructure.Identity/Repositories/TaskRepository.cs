@@ -13,6 +13,13 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
     {
         public TaskRepository(AppDbContext dbContext) : base(dbContext) { }
 
+        public Task<TaskEntity?> GetByIdWithFixationDefectAsync(Guid id)
+        {
+            return _dbContext.Tasks
+                .Include(task => task.FixationDefect)
+                .FirstOrDefaultAsync(task => task.Id == id);
+        }
+
         public async Task<int> CountByFilterAsync(TaskFilterDTO taskFilter, Guid inspectorId)
         {
             return await ApplyFilter(taskFilter, inspectorId)

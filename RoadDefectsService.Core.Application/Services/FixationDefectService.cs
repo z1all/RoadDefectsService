@@ -48,7 +48,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "FixationDefectNotFound", $"Fixation defect with id {fixationDefectId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus(fixationDefect.Task!, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(fixationDefect.Task!, userId);
             if (checkResult.IsNotSuccess) return checkResult;
 
             await _fixationDefectRepository.DeleteAsync(fixationDefect);
@@ -64,7 +64,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {createFixationDefect.TaskId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus(task, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(task, userId);
             if (checkResult.IsNotSuccess) return new() { Errors = checkResult.Errors };
 
             if (task.FixationDefectId.HasValue)
@@ -92,7 +92,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "FixationDefectNotFound", $"Fixation defect with id {fixationDefectId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus(fixationDefect.Task!, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(fixationDefect.Task!, userId);
             if (checkResult.IsNotSuccess) return checkResult;
 
             bool existDefectType = await _defectTypeRepository.AnyByIdAsync(editFixationDefect.DefectTypeId);

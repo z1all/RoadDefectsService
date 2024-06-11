@@ -20,6 +20,8 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
 
         public DbSet<Photo> Photos { get; set; }
 
+        public DbSet<Assignment> Assignments { get; set; }
+
         public AppDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -78,12 +80,16 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
                 .ToTable(table => table.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL     AND \"FixationDefectId\" IS NOT NULL OR " +
                                                                                          "\"FixationWorkId\" IS NOT NULL AND \"FixationDefectId\" IS NULL)"));
 
-            //// Photo
-            //modelBuilder.Entity<Photo>()
-            //    .HasOne(photo => photo.Owner)
-            //    .WithMany()
-            //    .HasForeignKey(photo => photo.OwnerId)
-            //    .IsRequired();
+            // Assignment
+            modelBuilder.Entity<Assignment>()
+                .HasOne(assignment => assignment.FixationDefect)
+                .WithOne()
+                .HasForeignKey<Assignment>(assignment => assignment.FixationDefectId);
+
+            modelBuilder.Entity<Assignment>()
+               .HasOne(assignment => assignment.Contractor)
+               .WithOne()
+               .HasForeignKey<Assignment>(assignment => assignment.ContractorId);
         }
     }
 }
