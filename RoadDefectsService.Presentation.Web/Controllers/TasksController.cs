@@ -39,8 +39,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpDelete("{taskId}")]
-        [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
         [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TaskPagedDTO>> DeleteTask([FromRoute] Guid taskId)
         {
             return await ExecutionResultHandlerAsync(() => _taskService.DeleteTaskAsync(taskId));

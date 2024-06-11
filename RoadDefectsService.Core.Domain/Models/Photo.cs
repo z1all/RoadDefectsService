@@ -8,9 +8,6 @@ namespace RoadDefectsService.Core.Domain.Models
         public required string Name { get; set; }
         public required string Type { get; set; }
 
-        public required Guid OwnerId { get; set; }
-        public CustomUser? Owner { get; set; }
-
         public Guid? FixationWorkId { get; set; }
         public Guid? FixationDefectId { get; set; }
     }

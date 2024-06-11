@@ -248,13 +248,48 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.DefectType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DefectTypes");
+                });
+
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<double?>("CoordinatesX")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("CoordinatesY")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("DamagedCanvasSquareMeter")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid?>("DefectTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ExactAddress")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RecordedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DefectTypeId");
 
                     b.ToTable("FixationDefects");
                 });
@@ -264,6 +299,12 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("RecordedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool?>("WorkDone")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -296,9 +337,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
@@ -307,13 +345,11 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
 
                     b.HasIndex("FixationDefectId");
 
-                    b.HasIndex("OwnerId");
-
                     b.HasIndex("FixationWorkId", "FixationDefectId");
 
                     b.ToTable("Photos", t =>
                         {
-                            t.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL OR \"FixationDefectId\" IS NULL)");
+                            t.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL     AND \"FixationDefectId\" IS NOT NULL OR \"FixationWorkId\" IS NOT NULL AND \"FixationDefectId\" IS NULL)");
                         });
                 });
 
@@ -452,6 +488,15 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.FixationDefect", b =>
+                {
+                    b.HasOne("RoadDefectsService.Core.Domain.Models.DefectType", "DefectType")
+                        .WithMany()
+                        .HasForeignKey("DefectTypeId");
+
+                    b.Navigation("DefectType");
+                });
+
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.Operator", b =>
                 {
                     b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "User")
@@ -472,14 +517,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.HasOne("RoadDefectsService.Core.Domain.Models.FixationWork", null)
                         .WithMany("Photos")
                         .HasForeignKey("FixationWorkId");
-
-                    b.HasOne("RoadDefectsService.Core.Domain.Models.CustomUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("RoadDefectsService.Core.Domain.Models.RoadInspector", b =>

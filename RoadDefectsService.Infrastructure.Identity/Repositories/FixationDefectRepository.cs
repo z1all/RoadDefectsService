@@ -16,5 +16,14 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .Include(fixation => fixation.Task)
                 .FirstOrDefaultAsync(fixation => fixation.Id == id);
         }
+
+        public Task<FixationDefect?> GetByIdWithTaskAndPhotosAndDefectTypeAsync(Guid id)
+        {
+            return _dbContext.FixationDefects
+                .Include(fixation => fixation.Task)
+                .Include(fixation => fixation.Photos)
+                .Include(fixation => fixation.DefectType)
+                .FirstOrDefaultAsync(fixation => fixation.Id == id);
+        }
     }
 }

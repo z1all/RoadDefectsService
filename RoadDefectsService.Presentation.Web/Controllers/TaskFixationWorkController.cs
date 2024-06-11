@@ -8,7 +8,7 @@ using RoadDefectsService.Presentation.Web.DTOs;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
-    [Route("api/fixation_work")]
+    [Route("api/fixation_work_task")]
     [ApiController]
     public class TaskFixationWorkController : BaseController
     {

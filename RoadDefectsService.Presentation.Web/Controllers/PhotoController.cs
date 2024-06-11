@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Core.Application.DTOs.PhotoService;
+using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
-using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
@@ -11,7 +11,7 @@ using RoadDefectsService.Presentation.Web.Helpers;
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
     /// <response code="401">Unauthorized</response>
-    [Route("api/photo")]
+    [Route("api")]
     [ApiController]
     public class PhotoController : BaseController
     {
@@ -30,31 +30,23 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// </remarks>
-        [HttpGet("{photoId}")]
+        [HttpGet("fixation/{fixationId}/photo/{photoId}")]
         [CustomeAuthorize]
         [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DownloadPhoto([FromRoute] Guid photoId)
+        public async Task<ActionResult> DownloadPhoto([FromRoute] Guid fixationId, [FromRoute] Guid photoId)
         {
-            Guid? ownerId = null;
-            if (HttpContext.User.IsInRole(Role.RoadInspector))
+            if (!HttpContext.TryGetUserId(out Guid userId))
             {
-                if (!HttpContext.TryGetUserId(out Guid userId))
-                {
-                    return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
-                }
-                else
-                {
-                    ownerId = userId;
-                }
+                return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
             }
 
-            ExecutionResult<PhotoDTO> response = await _photoService.GetPhotoAsync(photoId, ownerId);
+            ExecutionResult<PhotoDTO> response = await _photoService.GetPhotoAsync(fixationId, photoId, userId.GetUserIdIfRoadInspectorOrNull(HttpContext));
             if (!response.TryGetResult(out PhotoDTO photo))
             {
                 return ExecutionResultHandler(response);
             }
-            
+
             if (!_photoTypeHelper.TryMapToContentType(photo.Type, out string? contentType))
             {
                 return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "DocumentTypeError", $"Unknown document type {photo.Type}"));
@@ -69,18 +61,14 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// Доступ: Все
         /// </remarks>
         /// <response code="204">NoContent</response>
-        [HttpDelete("{photoId}")]
+        [HttpDelete("fixation/{fixationId}/photo/{photoId}")]
         [CustomeAuthorize]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DeletePhoto([FromRoute] Guid photoId)
+        public async Task<ActionResult> DeletePhoto([FromRoute] Guid fixationId, [FromRoute] Guid photoId)
         {
             return await ExecutionResultHandlerAsync((userId) =>
             {
-                if (HttpContext.User.IsInRole(Role.RoadInspector))
-                {
-                    return _photoService.DeletePhotoAsync(photoId, userId);
-                }
-                return _photoService.DeletePhotoAsync(photoId, null);
+                return _photoService.DeletePhotoAsync(fixationId, photoId, userId.GetUserIdIfRoadInspectorOrNull(HttpContext));
             });
         }
 
@@ -90,13 +78,13 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// </remarks>
-        [HttpPost]
+        [HttpPost("fixation/{fixationId}/photo")]
         [CustomeAuthorize]
         [ProducesResponseType(typeof(PhotoUploadResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PhotoUploadResponseDTO>> UploadPhoto(PhotoUpload fileUpload)
+        public async Task<ActionResult<PhotoUploadResponseDTO>> UploadPhoto([FromRoute] Guid fixationId, PhotoUpload fileUpload)
         {
-            return await ExecutionResultHandlerAsync(async userId =>
+            return await ExecutionResultHandlerAsync(async (userId) =>
             {
                 PhotoDTO photo = new()
                 {
@@ -105,7 +93,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
                     File = await GetFileAsync(fileUpload.Photo),
                 };
 
-                return await _photoService.AddPhotoAsync(photo, userId);
+                return await _photoService.AddPhotoAsync(photo, fixationId, userId.GetUserIdIfRoadInspectorOrNull(HttpContext));
             });
         }
 
