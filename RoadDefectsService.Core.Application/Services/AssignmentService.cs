@@ -6,7 +6,6 @@ using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Core.Domain.Models;
-using System.Diagnostics.Contracts;
 
 namespace RoadDefectsService.Core.Application.Services
 {
@@ -53,8 +52,14 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "FixationDefectNotFound", $"Fixation defect with id {createAssignment.FixationDefectId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwner(fixationDefect.Task!, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndCompletedTaskStatus(fixationDefect.Task!, userId);
             if (checkResult.IsNotSuccess) return checkResult;
+
+            bool existAssignmentWithSameFixationDefect = await _assignmentRepository.AnyByFixationDefectIdAsync(createAssignment.FixationDefectId);
+            if (existAssignmentWithSameFixationDefect)
+            {
+                return new(StatusCodeExecutionResult.BadRequest, "AssignmentAlreadyExist", $"Fixation defect with id {createAssignment.FixationDefectId} already has a request for work!");
+            }
 
             Contractor? contractor = await _contractorRepository.GetByIdAsync(createAssignment.ContractorId);
             if (contractor is null)
@@ -86,11 +91,11 @@ namespace RoadDefectsService.Core.Application.Services
         {
             try
             {
-                CreatedAssignmentNotification notification = new()
+                CreatedAssignmentNotificationDTO notification = new()
                 {
                     AssignmentId = assignmentId,
                     Contractor = contractor.ToContractorDTO(),
-                    FixationDefect = fixationDefect.ToFixationDefectDTO(),
+                    FixationDefect = fixationDefect.ToFixationDefectWithPhotoShortInfoDTO(),
                 };
 
                 ExecutionResult sendResult = await _notificationService.SendCreatedAssignmentNotificationAsync(notification);

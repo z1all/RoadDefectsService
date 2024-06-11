@@ -65,5 +65,11 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
 
             return assignments;
         }
+
+        public Task<bool> AnyByFixationDefectIdAsync(Guid fixationDefectId)
+        {
+            return _dbContext.Assignments
+                .AnyAsync(assignment => assignment.FixationDefectId == fixationDefectId);
+        }
     }
 }

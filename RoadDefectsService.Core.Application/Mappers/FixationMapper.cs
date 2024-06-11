@@ -1,11 +1,25 @@
 ﻿using RoadDefectsService.Core.Application.DTOs.AssignmentService;
 using RoadDefectsService.Core.Application.DTOs.FixationService;
+using RoadDefectsService.Core.Application.DTOs.NotificationService;
 using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Mappers
 {
     public static class FixationMapper
     {
+        public static FixationDefectWithPhotoShortInfoDTO ToFixationDefectWithPhotoShortInfoDTO(this FixationDefect fixationDefect)
+        {
+            return new()
+            {
+                Id = fixationDefect.Id,
+                RecordedDateTime = fixationDefect.RecordedDateTime,
+                ExactAddress = fixationDefect.ExactAddress,
+                DamagedCanvasSquareMeter = fixationDefect.DamagedCanvasSquareMeter,
+                DefectTypeName = fixationDefect.DefectType?.Name,
+                Photos = fixationDefect.Photos.ToPhotoShortInfoDTOList(),
+            };
+        }
+
         public static FixationDefectDTO ToFixationDefectDTO(this FixationDefect fixationDefect)
         {
             return new()

@@ -9,5 +9,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Repositories
         IFilterableRepository<AssignmentFilterDTO, Assignment>
     {
         Task<Assignment?> GetByIdWithContractorAndFixationDefectWithDefectTypeAndPhotosAsync(Guid id);
+        Task<bool> AnyByFixationDefectIdAsync(Guid fixationDefectId);
     }
 }

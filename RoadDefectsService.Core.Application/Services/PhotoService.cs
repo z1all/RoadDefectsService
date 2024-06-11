@@ -113,12 +113,12 @@ namespace RoadDefectsService.Core.Application.Services
 
         private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Photo photo, Guid? userId)
         {
-            return CheckTaskAsync(userId, () => GetTaskAsync(photo), CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus);
+            return CheckTaskAsync(userId, () => GetTaskAsync(photo), CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus);
         }
 
         private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Guid fixationId, Guid? userId)
         {
-            return CheckTaskAsync(userId, () => GetTaskAsync(fixationId), CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus);
+            return CheckTaskAsync(userId, () => GetTaskAsync(fixationId), CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus);
         }
 
         private async Task<ExecutionResult<FixationType>> CheckTaskAsync(

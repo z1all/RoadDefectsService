@@ -5,6 +5,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Services
 {
     public interface INotificationService
     {
-        Task<ExecutionResult> SendCreatedAssignmentNotificationAsync(CreatedAssignmentNotification notification);
+        Task<ExecutionResult> SendCreatedAssignmentNotificationAsync(CreatedAssignmentNotificationDTO notification);
     }
 }

@@ -6,6 +6,7 @@ using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -49,7 +50,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать поручение на выполнение работ (Не реализовано)
+        /// Создать поручение на выполнение работ
         /// </summary>
         /// <remarks> Доступ: Дорожный инспектор </remarks>
         /// <response code="204">NoContent</response> 
