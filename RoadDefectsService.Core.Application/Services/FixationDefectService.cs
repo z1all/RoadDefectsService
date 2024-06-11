@@ -12,11 +12,15 @@ namespace RoadDefectsService.Core.Application.Services
     {
         private readonly IFixationDefectRepository _fixationDefectRepository;
         private readonly ITaskRepository _taskRepository;
+        private readonly IDefectTypeRepository _defectTypeRepository;
 
-        public FixationDefectService(IFixationDefectRepository fixationDefectRepository, ITaskRepository taskRepository)
+        public FixationDefectService(
+            IFixationDefectRepository fixationDefectRepository, ITaskRepository taskRepository,
+            IDefectTypeRepository defectTypeRepository)
         {
             _fixationDefectRepository = fixationDefectRepository;
             _taskRepository = taskRepository;
+            _defectTypeRepository = defectTypeRepository;
         }
 
         public async Task<ExecutionResult<FixationDefectDTO>> GetFixationDefectAsync(Guid fixationDefectId, Guid? userId)
@@ -63,6 +67,11 @@ namespace RoadDefectsService.Core.Application.Services
             ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus(task, userId);
             if (checkResult.IsNotSuccess) return new() { Errors = checkResult.Errors };
 
+            if (task.FixationDefectId.HasValue)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"The task with id {createFixationDefect.TaskId} already has a defect fixation with id {task.FixationDefectId}!");
+            }
+
             FixationDefect fixationDefect = new()
             {
                 RecordedDateTime = DateTime.UtcNow,
@@ -85,6 +94,12 @@ namespace RoadDefectsService.Core.Application.Services
 
             ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus(fixationDefect.Task!, userId);
             if (checkResult.IsNotSuccess) return checkResult;
+
+            bool existDefectType = await _defectTypeRepository.AnyByIdAsync(editFixationDefect.DefectTypeId);
+            if (!existDefectType)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "DefectTypeNotFound", $"Defect type defect with id {editFixationDefect.DefectTypeId} not found!");
+            }
 
             fixationDefect.RecordedDateTime = DateTime.UtcNow;
             fixationDefect.ExactAddress = editFixationDefect.ExactAddress;

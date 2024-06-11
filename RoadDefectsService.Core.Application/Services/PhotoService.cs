@@ -86,7 +86,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "PhotoNotFound", $"Photo with id {photoId} not found in fixation with id {fixationId}!");
             }
 
-            ExecutionResult checkResult = await CheckOnTaskOwnerAndTaskStatusAsync(photo, userId);
+            ExecutionResult checkResult = await CheckOnTaskOwnerAsync(photo, userId);
             if (checkResult.IsNotSuccess)
             {
                 return new() { Errors = checkResult.Errors };
@@ -106,17 +106,24 @@ namespace RoadDefectsService.Core.Application.Services
             };
         }
 
+        private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAsync(Photo photo, Guid? userId)
+        {
+            return CheckTaskAsync(userId, () => GetTaskAsync(photo), CheckTaskHelper.CheckOnTaskOwner);
+        }
+
         private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Photo photo, Guid? userId)
         {
-            return CheckOnTaskOwnerAndTaskStatusAsync(userId, () => GetTaskAsync(photo));
+            return CheckTaskAsync(userId, () => GetTaskAsync(photo), CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus);
         }
 
         private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Guid fixationId, Guid? userId)
         {
-            return CheckOnTaskOwnerAndTaskStatusAsync(userId, () => GetTaskAsync(fixationId));
+            return CheckTaskAsync(userId, () => GetTaskAsync(fixationId), CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus);
         }
 
-        private async Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Guid? userId, Func<Task<ExecutionResult<(TaskEntity, FixationType)>>> getTaskAsync)
+        private async Task<ExecutionResult<FixationType>> CheckTaskAsync(
+            Guid? userId, Func<Task<ExecutionResult<(TaskEntity, FixationType)>>> getTaskAsync, 
+            Func<TaskEntity, Guid?, ExecutionResult> checker)
         {
             ExecutionResult<(TaskEntity task, FixationType fixationType)> getTaskResult = await getTaskAsync();
             if (!getTaskResult.TryGetResult(out var task))
@@ -124,7 +131,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new() { Errors = getTaskResult.Errors };
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndTaskStatus(task.task, userId);
+            ExecutionResult checkResult = checker(task.task, userId);
             if (checkResult.IsNotSuccess)
             {
                 return new() { Errors = checkResult.Errors };

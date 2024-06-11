@@ -23,7 +23,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Фиксация выполненных работ (Не реализовано) 
+        /// Фиксация выполненных работ
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -39,7 +39,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Удаление фиксации выполненных работ (Не реализовано)
+        /// Удаление фиксации выполненных работ
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -55,7 +55,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Создать фиксацию выполненных работ (Не реализовано)
+        /// Создать фиксацию выполненных работ
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
@@ -72,7 +72,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Редактирование фиксации выполненных работ (Не реализовано)
+        /// Редактирование фиксации выполненных работ
         /// </summary>
         /// <remarks> 
         /// Доступ: Все
