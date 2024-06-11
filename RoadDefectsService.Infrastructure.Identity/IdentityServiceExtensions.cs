@@ -33,6 +33,7 @@ namespace RoadDefectsService.Infrastructure.Identity
             services.AddScoped<IFixationDefectRepository, FixationDefectRepository>();
             services.AddScoped<IFixationWorkRepository, FixationWorkRepository>();
             services.AddScoped<IDefectTypeRepository, DefectTypeRepository>();
+            services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();
