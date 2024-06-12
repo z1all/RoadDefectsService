@@ -43,6 +43,22 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
                );
         }
 
+        public async Task<ExecutionResult<UserInfoDTO>> GetUserAsync(Guid userId, bool showAdmins)
+        {
+            CustomUser? user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user is null)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
+            }
+
+            if (!showAdmins && user.HighestRole == Role.Admin)
+            {
+                return new(StatusCodeExecutionResult.Forbid, "GetAdminFail", $"You cannot get a user with the admin role!");
+            }
+
+            return user.ToUserInfoDTO();
+        }
+
         public async Task<ExecutionResult> EditUserAsync(EditUserDTO editUser, Guid userId, bool editOperator)
         {
             CustomUser? user = await _userManager.FindByIdAsync(userId.ToString());

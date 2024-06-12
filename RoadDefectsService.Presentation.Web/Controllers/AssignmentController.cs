@@ -6,7 +6,6 @@ using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {

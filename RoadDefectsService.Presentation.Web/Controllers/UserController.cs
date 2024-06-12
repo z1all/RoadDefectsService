@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RoadDefectsService.Core.Application.DTOs.Common;
 using RoadDefectsService.Core.Application.DTOs.UserService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Domain.Enums;
@@ -41,6 +42,29 @@ namespace RoadDefectsService.Presentation.Web.Controllers
 
             return await ExecutionResultHandlerAsync(() => _userService.GetUsersAsync(userFilter, showOperators: isAdmin));
         }
+
+        /// <summary>
+        /// Конкретный пользователь
+        /// </summary>
+        /// <remarks> 
+        /// Доступ: Оператор и админ 
+        /// 
+        /// Оператор видит только дорожных инспекторов
+        /// 
+        /// Админ всех пользователей
+        /// </remarks>
+        /// <response code="204">No Content</response>
+        /// <response code="403">Forbidden</response>
+        [HttpGet("{userId}")]
+        [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserInfoDTO>> GetUser([FromRoute] Guid userId)
+        {
+            bool isAdmin = HttpContext.User.IsInRole(Role.Admin);
+
+            return await ExecutionResultHandlerAsync(() => _userService.GetUserAsync(userId, showAdmins: isAdmin));
+        }
+
 
         /// <summary>
         /// Изменить профиль пользователя

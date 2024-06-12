@@ -1,4 +1,5 @@
-﻿using RoadDefectsService.Core.Application.DTOs.UserService;
+﻿using RoadDefectsService.Core.Application.DTOs.Common;
+using RoadDefectsService.Core.Application.DTOs.UserService;
 using RoadDefectsService.Core.Application.Models;
 
 namespace RoadDefectsService.Core.Application.Interfaces.Services
@@ -9,6 +10,11 @@ namespace RoadDefectsService.Core.Application.Interfaces.Services
         /// Если флаг showOperators равен true, то помимо инспекторов будет показываться операторы
         /// </summary>
         Task<ExecutionResult<UserPagedDTO>> GetUsersAsync(UserFilterDTO userFilter, bool showOperators);
+
+        /// <summary>
+        /// Если флаг showOperators равен true, то помимо инспекторов будет показываться операторы
+        /// </summary>
+        Task<ExecutionResult<UserInfoDTO>> GetUserAsync(Guid userId, bool showAdmins);
 
         /// <summary>
         /// Если флаг editOperator равен false, то если редактируемый пользователь является оператором, будет выдана ошибка Forbid
