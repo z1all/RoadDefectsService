@@ -44,7 +44,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             if (prevTask.DefectStatus != DefectStatus.ThereIsDefect)
             {
-                return new(StatusCodeExecutionResult.BadRequest, "CreateFixationWorkTaskFail", $"Prev task does not have defect!");
+                return new(StatusCodeExecutionResult.BadRequest, "CreateFixationWorkTaskFail", $"Prev task does not have defect status 'ThereIsDefect'!");
             }
 
             bool existWithSamePrevTask = await _taskFixationWorkRepository.AnyWithPrevTaskId(createFixationWork.PrevTaskId);
