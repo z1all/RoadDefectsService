@@ -29,6 +29,7 @@ namespace RoadDefectsService.Core.Application.Mappers
                 ExactAddress = fixationDefect.ExactAddress,
                 CoordinatesX = fixationDefect.CoordinatesX,
                 CoordinatesY = fixationDefect.CoordinatesY,
+                IsEliminated = fixationDefect.IsEliminated,
                 DamagedCanvasSquareMeter = fixationDefect.DamagedCanvasSquareMeter,
                 DefectType = fixationDefect.DefectType?.ToDefectTypeDTO(),
                 Photos = fixationDefect.Photos.ToPhotoInfoDTOList(),

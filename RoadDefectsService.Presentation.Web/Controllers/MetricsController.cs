@@ -45,12 +45,12 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Посмотреть зафиксированные дефекты на карте за определенный период (Не реализовано)
+        /// Посмотреть зафиксированные дефекты на карте за определенный период
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("fixations_defects_coordinates")]
-        [ProducesResponseType(typeof(List<CoordinateInfo>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<CoordinateInfo>>> GetCoordinatesFixationsDefects([FromQuery] CoordinatesFilter coordinatesFilter)
+        [ProducesResponseType(typeof(List<CoordinateFixationDefectDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<CoordinateFixationDefectDTO>>> GetCoordinatesFixationsDefects([FromQuery] CoordinatesFilter coordinatesFilter)
         {
             return await ExecutionResultHandlerAsync(() => _metricsService.GetCoordinatesFixationsDefectsAsync(coordinatesFilter));
         }
