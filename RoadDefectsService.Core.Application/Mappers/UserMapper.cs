@@ -13,7 +13,7 @@ namespace RoadDefectsService.Core.Application.Mappers
                 Id = user.Id,
                 Email = user.Email!,
                 FullName = user.FullName,
-                HighestRole = user.HighestRole
+                HighestRole = user.HighestRole.ToRoleEnum(),
             };
         }
 
