@@ -8,5 +8,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Repositories
         Task<FixationWork?> GetByIdWithTaskAsync(Guid id);
         Task<FixationWork?> GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(Guid id);
         Task<FixationWork?> GetByIdWithTaskAndPhotosAsync(Guid id);
+        Task<FixationWork?> GetByIdWithPhotosAndTaskWithPrevTaskAsync(Guid id);
     }
 }

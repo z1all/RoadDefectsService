@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Core.Application.DTOs.MetricsService;
+using RoadDefectsService.Core.Application.DTOs.PhotoService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
+using RoadDefectsService.Core.Application.Models;
+using RoadDefectsService.Core.Application.Services;
 using RoadDefectsService.Core.Domain.Enums;
+using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
@@ -25,13 +29,20 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
-        /// Получить отчет о проведенных работах по устранению дефекта (Не реализовано) (Не все модели указаны)
+        /// Получить отчет о проведенных работах по устранению дефекта (Не реализовано)
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
-        [HttpGet("report")]
-        public async Task<ActionResult> GetReport()
+        [HttpGet("fixation_work/{fixationWorkId}/report")]
+        [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> GetReport([FromRoute] Guid fixationWorkId)
         {
-            return Ok();
+            ExecutionResult<ReportDTO> response = await _metricsService.GetWorkReportAsync(fixationWorkId);
+            if (!response.TryGetResult(out ReportDTO report))
+            {
+                return ExecutionResultHandler(response);
+            }
+            return File(report.File, "application/pdf", report.Name);
         }
 
         /// <summary>

@@ -14,11 +14,6 @@ namespace RoadDefectsService.Presentation.Web.Helpers
         public readonly Dictionary<string, string> _mappingToContentType;
 
         /// <summary>
-        /// Словарь для сопоставления типа контента для Http запроса с типом фотографии 
-        /// </summary>
-        public readonly Dictionary<string, string> _mappingToPhotoType;
-
-        /// <summary>
         /// 
         /// </summary>
         public PhotoTypeHelper(IOptions<PhotoTypeOptions> options)
@@ -26,14 +21,11 @@ namespace RoadDefectsService.Presentation.Web.Helpers
             List<KeyValuePair<string, string>> mappings = options.Value.PhotoTypeToContentType.ToList();
 
             Dictionary<string, string> mappingToContentType = new();
-            Dictionary<string, string> mappingToPhotoType = new();
             foreach (var mapping in mappings)
             {
                 mappingToContentType.Add(mapping.Key, mapping.Value);
-                mappingToPhotoType.TryAdd(mapping.Value, mapping.Key);
             }
             _mappingToContentType = mappingToContentType;
-            _mappingToPhotoType = mappingToPhotoType;
         }
 
         /// <summary>
@@ -59,14 +51,6 @@ namespace RoadDefectsService.Presentation.Web.Helpers
         public bool TryMapToContentType(string photoType, out string? contentType)
         {
             return _mappingToContentType.TryGetValue(photoType.ToLower(), out contentType);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool TryMapToPhotoType(string contentType, out string? photoType)
-        {
-            return _mappingToPhotoType.TryGetValue(contentType.ToLower(), out photoType);
         }
     }
 }
