@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /RoadDefectsService.Presentation.Web/appsettings.Development.json
 storage/
+/RoadDefectsService.sln
+/RoadDefectsService.Presentation.Web/appsettings.Development.json

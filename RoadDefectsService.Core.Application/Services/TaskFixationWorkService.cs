@@ -36,10 +36,15 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<CreateTaskResponseDTO>> CreateFixationWorkTaskAsync(CreateFixationWorkTaskDTO createFixationWork)
         {
-            bool existPrevTask = await _taskRepository.AnyByIdAsync(createFixationWork.PrevTaskId);
-            if (!existPrevTask)
+            TaskEntity? prevTask = await _taskRepository.GetByIdAsync(createFixationWork.PrevTaskId);
+            if (prevTask is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "PrevTaskNotFound", $"Prev task with id {createFixationWork.PrevTaskId} not found!");
+            }
+
+            if (prevTask.DefectStatus != DefectStatus.ThereIsDefect)
+            {
+                return new(StatusCodeExecutionResult.BadRequest, "CreateFixationWorkTaskFail", $"Prev task does not have defect!");
             }
 
             bool existWithSamePrevTask = await _taskFixationWorkRepository.AnyWithPrevTaskId(createFixationWork.PrevTaskId);
