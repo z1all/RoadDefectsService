@@ -1,8 +1,8 @@
 version: "3.5"
 
 services:
-  app:
-    container_name: dotnetbackend
+  roaddefectsservice.presentation.web:
+    image: ${DOCKER_REGISTRY-}roaddefectsservicepresentationweb
     build:
       context: .
       dockerfile: RoadDefectsService.Presentation.Web/Dockerfile
@@ -39,3 +39,13 @@ services:
 networks:
   my-net:
     driver: bridge
+
+
+# version: '3.4'
+
+# services:
+  # roaddefectsservice.presentation.web:
+  #   image: ${DOCKER_REGISTRY-}roaddefectsservicepresentationweb
+  #   build:
+  #     context: .
+  #     dockerfile: RoadDefectsService.Presentation.Web/Dockerfile

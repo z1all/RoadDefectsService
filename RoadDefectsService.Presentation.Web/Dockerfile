@@ -9,11 +9,11 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["RoadDefectsService.Presentation.Web/RoadDefectsService.Presentation.Web.csproj", "RoadDefectsService.Presentation.Web/"]
 COPY ["RoadDefectsService.Core.Application/RoadDefectsService.Core.Application.csproj", "RoadDefectsService.Core.Application/"]
 COPY ["RoadDefectsService.Core.Domain/RoadDefectsService.Core.Domain.csproj", "RoadDefectsService.Core.Domain/"]
-#COPY ["RoadDefectsService.Infrastructure.Persistence/RoadDefectsService.Infrastructure.Persistence.csproj", "RoadDefectsService.Infrastructure.Persistence/"]
 COPY ["RoadDefectsService.Infrastructure.Identity/RoadDefectsService.Infrastructure.Identity.csproj", "RoadDefectsService.Infrastructure.Identity/"]
-COPY ["RoadDefectsService.Presentation.Web/RoadDefectsService.Presentation.Web.csproj", "RoadDefectsService.Presentation.Web/"]
+COPY ["RoadDefectsService.Infrastructure.SMTP/RoadDefectsService.Infrastructure.SMTP.csproj", "RoadDefectsService.Infrastructure.SMTP/"]
 RUN dotnet restore "./RoadDefectsService.Presentation.Web/RoadDefectsService.Presentation.Web.csproj"
 COPY . .
 WORKDIR "/src/RoadDefectsService.Presentation.Web"
