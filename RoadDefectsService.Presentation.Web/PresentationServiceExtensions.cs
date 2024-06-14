@@ -2,6 +2,7 @@
 using RoadDefectsService.Core.Application.Configurations.JwtToken;
 using RoadDefectsService.Presentation.Web.Configurations.Authorization;
 using RoadDefectsService.Presentation.Web.Configurations.CORS;
+using RoadDefectsService.Presentation.Web.Configurations.File;
 using RoadDefectsService.Presentation.Web.Configurations.Other;
 using RoadDefectsService.Presentation.Web.Configurations.Photo;
 using RoadDefectsService.Presentation.Web.Configurations.Swagger;
@@ -14,6 +15,7 @@ namespace RoadDefectsService.Presentation.Web
         public static IServiceCollection AddPresentationServices(this IServiceCollection services)
         {
             // Configurations
+            services.AddFileTypeOptionsConfigure();
             services.AddFormFileConfigure();
             services.AddPhotoTypeOptionsConfigure();
             services.AddCorsConfigure();
@@ -23,6 +25,14 @@ namespace RoadDefectsService.Presentation.Web
 
             // Helpers
             services.AddSingleton<PhotoTypeHelper>();
+            services.AddSingleton<FileTypeHelper>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddFileTypeOptionsConfigure(this IServiceCollection services)
+        {
+            services.ConfigureOptions<FileTypeOptionsConfigure>();
 
             return services;
         }

@@ -23,14 +23,16 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     public class MetricsController : BaseController
     {
         private readonly IMetricsService _metricsService;
+        private readonly FileTypeHelper _fileTypeHelper;
 
-        public MetricsController(IMetricsService metricsService)
+        public MetricsController(IMetricsService metricsService, FileTypeHelper fileTypeHelper)
         {
             _metricsService = metricsService;
+            _fileTypeHelper = fileTypeHelper;
         }
 
         /// <summary>
-        /// Получить отчет о проведенных работах по устранению дефекта (Не реализовано)
+        /// Получить отчет о проведенных работах по устранению дефекта
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
         [HttpGet("fixation_work/{fixationWorkId}/report")]
@@ -49,7 +51,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
                 return ExecutionResultHandler(response);
             }
 
-            return File(report.File, "application/pdf", report.Name);
+            if (!_fileTypeHelper.TryMapToContentType(report.Type, out string? contentType))
+            {
+                return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "DocumentTypeError", $"Unknown document type {report.Type}"));
+            }
+            return File(report.File, contentType!, report.Name);
         }
 
         /// <summary>

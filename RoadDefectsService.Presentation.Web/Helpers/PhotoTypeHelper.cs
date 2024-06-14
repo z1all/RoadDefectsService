@@ -8,24 +8,17 @@ namespace RoadDefectsService.Presentation.Web.Helpers
     /// </summary>
     public class PhotoTypeHelper
     {
-        /// <summary>
-        /// Словарь для сопоставления типа фотографии с типом контента для Http запроса
-        /// </summary>
-        public readonly Dictionary<string, string> _mappingToContentType;
+        private readonly HashSet<string> _photoTypes;
+        private readonly FileTypeHelper _fileTypeHelper;
 
         /// <summary>
         /// 
         /// </summary>
-        public PhotoTypeHelper(IOptions<PhotoTypeOptions> options)
+        /// <param name="options"></param>
+        public PhotoTypeHelper(IOptions<PhotoTypeOptions> options, FileTypeHelper fileTypeHelper)
         {
-            List<KeyValuePair<string, string>> mappings = options.Value.PhotoTypeToContentType.ToList();
-
-            Dictionary<string, string> mappingToContentType = new();
-            foreach (var mapping in mappings)
-            {
-                mappingToContentType.Add(mapping.Key, mapping.Value);
-            }
-            _mappingToContentType = mappingToContentType;
+            _photoTypes = new(options.Value.AllowPhotoTypes);
+            _fileTypeHelper = fileTypeHelper;
         }
 
         /// <summary>
@@ -33,7 +26,7 @@ namespace RoadDefectsService.Presentation.Web.Helpers
         /// </summary>
         public bool ExistPhotoType(string photoType)
         {
-            return _mappingToContentType.ContainsKey(photoType.ToLower());
+            return _photoTypes.Contains(photoType) && _fileTypeHelper.ExistFileType(photoType);
         }
 
         /// <summary>
@@ -41,7 +34,7 @@ namespace RoadDefectsService.Presentation.Web.Helpers
         /// </summary>
         public string GetExistPhotoTypeString()
         {
-            List<string> keys = _mappingToContentType.Keys.ToList();
+            List<string> keys = _photoTypes.Where(_fileTypeHelper.ExistFileType).ToList();
             return string.Join(", ", keys);
         }
 
@@ -50,7 +43,13 @@ namespace RoadDefectsService.Presentation.Web.Helpers
         /// </summary>
         public bool TryMapToContentType(string photoType, out string? contentType)
         {
-            return _mappingToContentType.TryGetValue(photoType.ToLower(), out contentType);
+            if (_photoTypes.Contains(photoType))
+            {
+                return _fileTypeHelper.TryMapToContentType(photoType, out contentType);
+            }
+
+            contentType = null;
+            return false;
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public class PhotoTypeOptions
     {
-        public required Dictionary<string, string> PhotoTypeToContentType { get; set; }
+        public required List<string> AllowPhotoTypes { get; set; }
     }
 }
