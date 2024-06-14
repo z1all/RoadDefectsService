@@ -3,6 +3,7 @@ using DinkToPdf;
 using Microsoft.Extensions.DependencyInjection;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Infrastructure.DinkToPdf.Services;
+using RoadDefectsService.Infrastructure.DinkToPdf.Helper;
 
 namespace RoadDefectsService.Infrastructure.DinkToPdf
 {
@@ -12,8 +13,18 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf
         {
             services.AddScoped<IReportService, PdfReportService>();
 
+            string path = "";
+            if (AppHelper.IsDebugBuild())
+            {
+                path = "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Libs\\libwkhtmltox.dll";
+            }
+            else
+            {
+                path = "Libs\\libwkhtmltox.dll";
+            }
+
             var context = new CustomAssemblyLoadContext();
-            context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Libs\\libwkhtmltox.dll"));
+            context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), path));
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 

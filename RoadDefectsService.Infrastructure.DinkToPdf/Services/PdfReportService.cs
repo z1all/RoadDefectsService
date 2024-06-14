@@ -18,7 +18,17 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 
         public ExecutionResult<ReportDTO> GenerateReport(GenerateWorkReportDTO generateWorkReport)
         {
-            string viewPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "RoadDefectsService.Infrastructure.DinkToPdf", "Views", "WorkReport", "WorkReport.html");
+            string path = "";
+            if (AppHelper.IsDebugBuild())
+            {
+                path = "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Views\\WorkReport\\WorkReport.html";
+            }
+            else
+            {
+                path = "Views\\WorkReport\\WorkReport.html";
+            }
+
+            string viewPath = Path.Combine(Directory.GetCurrentDirectory(), "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Views\\WorkReport\\WorkReport.html");
 
             string htmlContent = File.ReadAllText(viewPath);
 
