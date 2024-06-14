@@ -3,7 +3,6 @@ using DinkToPdf.Contracts;
 using RoadDefectsService.Core.Application.DTOs.MetricsService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
-using RoadDefectsService.Infrastructure.DinkToPdf.Helper;
 
 namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 {
@@ -18,17 +17,7 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 
         public ExecutionResult<ReportDTO> GenerateReport(GenerateWorkReportDTO generateWorkReport)
         {
-            string path = "";
-            if (AppHelper.IsWindows()) 
-            {
-                path = "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Views\\WorkReport\\WorkReport.html";
-            }
-            else if (AppHelper.IsLinux())
-            {
-                path = "Views/WorkReport/WorkReport.html";
-            }
-
-            string viewPath = Path.Combine(Directory.GetCurrentDirectory(), "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Views\\WorkReport\\WorkReport.html");
+            string viewPath = Path.Combine(Directory.GetCurrentDirectory(), "Views", "WorkReport", "WorkReport.html");
 
             string htmlContent = File.ReadAllText(viewPath);
 

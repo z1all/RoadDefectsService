@@ -13,18 +13,19 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf
         {
             services.AddScoped<IReportService, PdfReportService>();
 
-            string path = "";
-            if (AppHelper.IsWindows())
-            {
-                path = "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Libs\\libwkhtmltox.dll";
-            }
-            else if (AppHelper.IsLinux())
-            {
-                path = "Libs/libwkhtmltox.dll";
-            }
-
-            var context = new CustomAssemblyLoadContext();
-            context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), path));
+            //string lib = "";
+            //if (AppHelper.IsLinux())
+            //{
+            //    lib = "libwkhtmltox.so";
+            //}
+            //else if (AppHelper.IsWindows())
+            //{
+            //    lib = "libwkhtmltox.dll";
+            //}
+            ////Console.WriteLine(Path.Combine(Directory.GetCurrentDirectory(), "Libs", lib));
+            ////Console.WriteLine(File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Libs", lib)));
+            //var context = new CustomAssemblyLoadContext();
+            //context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "Libs", lib));
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
