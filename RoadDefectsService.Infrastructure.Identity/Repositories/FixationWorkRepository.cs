@@ -10,6 +10,15 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
     {
         public FixationWorkRepository(AppDbContext dbContext) : base(dbContext) { }
 
+        public Task<FixationWork?> GetByIdWithPhotosAndTaskWithPrevTaskAsync(Guid id)
+        {
+            return _dbContext.FixationWorks
+                .Include(fixation => fixation.Photos)
+                .Include(fixation => fixation.TaskFixationWork)
+                    .ThenInclude(task => task!.PrevTask)
+                .FirstOrDefaultAsync(fixation => fixation.Id == id);
+        }
+
         public Task<FixationWork?> GetByIdWithTaskAndPhotosAsync(Guid id)
         {
             return _dbContext.FixationWorks
@@ -22,6 +31,15 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
         {
             return _dbContext.FixationWorks
                 .Include(fixation => fixation.TaskFixationWork)
+                .FirstOrDefaultAsync(fixation => fixation.Id == id);
+        }
+
+        public Task<FixationWork?> GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(Guid id)
+        {
+            return _dbContext.FixationWorks
+                .Include(fixation => fixation.TaskFixationWork)
+                    .ThenInclude(task => task!.PrevTask)
+                        .ThenInclude(prevTask => prevTask!.FixationDefect)
                 .FirstOrDefaultAsync(fixation => fixation.Id == id);
         }
     }

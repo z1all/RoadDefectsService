@@ -7,5 +7,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Repositories
     {
         Task<List<CustomUser>> GetAllByFilterAsync(UserFilterDTO userFilter, bool showOperators);
         Task<int> CountByFilterAsync(UserFilterDTO userFilter, bool showOperators);
+        Task<CustomUser?> GetByIdAsync(Guid id);
     }
 }

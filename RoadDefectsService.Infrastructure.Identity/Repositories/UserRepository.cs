@@ -56,5 +56,11 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
 
             return users;
         }
+
+        public Task<CustomUser?> GetByIdAsync(Guid id)
+        {
+            return _dbContext.Users
+                .FirstOrDefaultAsync(user => user.Id == id);
+        }
     }
 }

@@ -34,6 +34,7 @@ namespace RoadDefectsService.Infrastructure.Identity
             services.AddScoped<IFixationWorkRepository, FixationWorkRepository>();
             services.AddScoped<IDefectTypeRepository, DefectTypeRepository>();
             services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+            services.AddScoped<ICoordinateFixationDefectRepository, CoordinateFixationDefectRepository>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();

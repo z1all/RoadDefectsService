@@ -8,6 +8,8 @@
         public double? CoordinatesY { get; set; }
         public double? DamagedCanvasSquareMeter { get; set; }
 
+        public bool IsEliminated { get; set; } = false;
+
         public Guid? DefectTypeId { get; set; }
         public DefectType? DefectType { get; set; }
 

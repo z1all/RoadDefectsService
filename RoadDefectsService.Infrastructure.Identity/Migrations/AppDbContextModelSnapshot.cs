@@ -313,6 +313,9 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                     b.Property<string>("ExactAddress")
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsEliminated")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime>("RecordedDateTime")
                         .HasColumnType("timestamp with time zone");
 

@@ -10,5 +10,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Repositories
     {
         Task<Assignment?> GetByIdWithContractorAndFixationDefectWithDefectTypeAndPhotosAsync(Guid id);
         Task<bool> AnyByFixationDefectIdAsync(Guid fixationDefectId);
+        Task<Assignment?> GetByFixationDefectIdWithAllNestingAsync(Guid fixationDefectId);
     }
 }

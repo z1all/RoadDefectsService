@@ -60,7 +60,7 @@ namespace RoadDefectsService.Core.Application.Services
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {createFixationWork.TaskFixationWorkId} not found!");
             }
-            
+
             ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(task, userId);
             if (checkResult.IsNotSuccess) return new() { Errors = checkResult.Errors };
 
@@ -68,7 +68,7 @@ namespace RoadDefectsService.Core.Application.Services
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"The task with id {createFixationWork.TaskFixationWorkId} already has a defect fixation with id {task.FixationDefectId}!");
             }
-            
+
             FixationWork fixationWork = new()
             {
                 RecordedDateTime = DateTime.UtcNow,
@@ -83,7 +83,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> ChangeFixationWorkAsync(EditFixationWorkDTO editFixationWork, Guid fixationWorkId, Guid? userId)
         {
-            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationWorkId);
+            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(fixationWorkId);
             if (fixationWork is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work defect with id {fixationWorkId} not found!");
@@ -94,6 +94,11 @@ namespace RoadDefectsService.Core.Application.Services
 
             fixationWork.RecordedDateTime = DateTime.UtcNow;
             fixationWork.WorkDone = editFixationWork.WorkDone;
+
+            if (fixationWork.TaskFixationWork?.PrevTask?.FixationDefect is not null)
+            {
+                fixationWork.TaskFixationWork.PrevTask.FixationDefect.IsEliminated = editFixationWork.WorkDone;
+            }
 
             await _fixationWorkRepository.UpdateAsync(fixationWork);
 
