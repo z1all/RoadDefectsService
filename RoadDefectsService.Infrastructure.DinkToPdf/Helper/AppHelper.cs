@@ -1,14 +1,17 @@
-﻿namespace RoadDefectsService.Infrastructure.DinkToPdf.Helper
+﻿using System.Runtime.InteropServices;
+
+namespace RoadDefectsService.Infrastructure.DinkToPdf.Helper
 {
     public static class AppHelper
     {
-        public static bool IsDebugBuild()
+        public static bool IsLinux()
         {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+        }
+
+        public static bool IsWindows()
+        {
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
     }
 }

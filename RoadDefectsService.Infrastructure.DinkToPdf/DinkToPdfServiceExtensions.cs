@@ -14,11 +14,11 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf
             services.AddScoped<IReportService, PdfReportService>();
 
             string path = "";
-            if (AppHelper.IsDebugBuild())
+            if (AppHelper.IsWindows())
             {
                 path = "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Libs\\libwkhtmltox.dll";
             }
-            else
+            else if (AppHelper.IsLinux())
             {
                 path = "Libs\\libwkhtmltox.dll";
             }

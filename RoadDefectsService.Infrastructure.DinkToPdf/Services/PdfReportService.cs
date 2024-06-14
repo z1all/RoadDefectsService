@@ -19,11 +19,11 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
         public ExecutionResult<ReportDTO> GenerateReport(GenerateWorkReportDTO generateWorkReport)
         {
             string path = "";
-            if (AppHelper.IsDebugBuild())
+            if (AppHelper.IsWindows()) 
             {
                 path = "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Views\\WorkReport\\WorkReport.html";
             }
-            else
+            else if (AppHelper.IsLinux())
             {
                 path = "Views\\WorkReport\\WorkReport.html";
             }
