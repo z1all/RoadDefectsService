@@ -1,23 +1,19 @@
-﻿using DinkToPdf;
-using DinkToPdf.Contracts;
+﻿using iText.Html2pdf;
+using iText.Kernel.Pdf;
 using RoadDefectsService.Core.Application.DTOs.MetricsService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
+using iText.Kernel.Geom;
+using iText.Layout;
 
 namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 {
     public class PdfReportService : IReportService
     {
-        private readonly IConverter _converter;
-
-        public PdfReportService(IConverter converter)
-        {
-            _converter = converter;
-        }
 
         public ExecutionResult<ReportDTO> GenerateReport(GenerateWorkReportDTO generateWorkReport)
         {
-            string viewPath = Path.Combine(Directory.GetCurrentDirectory(), "Views", "WorkReport", "WorkReport.html");
+            string viewPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Views", "WorkReport", "WorkReport.html");
 
             string htmlContent = File.ReadAllText(viewPath);
 
@@ -52,7 +48,7 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 
         private string ReplaceKeys(string htmlContent, Dictionary<string, string> replacements)
         {
-            foreach(var replacement in replacements)
+            foreach (var replacement in replacements)
             {
                 htmlContent = htmlContent.Replace(replacement.Key, replacement.Value);
             }
@@ -72,12 +68,12 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
                     workVisualAssessment = "Работы выполнены с дефектом";
                     conclusion =
                         $"Работы по устранению дефектов на {generateWorkReport.FixationDefect.ExactAddress!} выполнены. " +
-                        "Однако в процессе технического осмотра были выявлены дефекты."; 
+                        "Однако в процессе технического осмотра были выявлены дефекты.";
                 }
                 else
                 {
                     workVisualAssessment = "Работы выполнены в полном объеме";
-                    conclusion = 
+                    conclusion =
                         $"Все работы по устранению дефектов на {generateWorkReport.FixationDefect.ExactAddress!} выполнены в полном объеме и в установленные сроки. " +
                         "Качество выполненных работ соответствует нормативным требованиям и договорным обязательствам. " +
                         "Рекомендовано принять выполненные работы и произвести оплату в соответствии с условиями договора.";
@@ -86,7 +82,7 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
             else
             {
                 workVisualAssessment = "Работы не выполнены";
-                conclusion = 
+                conclusion =
                     $"В процессе технического осмотра было выявлено, что работы по устранению дефектов на {generateWorkReport.FixationDefect.ExactAddress!} не выполнен.";
             }
 
@@ -95,22 +91,22 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 
         private byte[] GeneratePdfFromHtml(string htmlContent)
         {
-            HtmlToPdfDocument pdfDocument = new()
+            using (MemoryStream outputStream = new MemoryStream())
             {
-                GlobalSettings = {
-                    ColorMode = ColorMode.Color,
-                    Orientation = Orientation.Portrait,
-                    PaperSize = PaperKind.A4,
-                    Margins = new MarginSettings { Top = 0, Bottom = 0, Left = 0, Right = 0 }
-                },
-                Objects = {
-                    new ObjectSettings() {
-                        HtmlContent = htmlContent
-                    }
-                }
-            };
+                PdfWriter pdfWriter = new PdfWriter(outputStream);
 
-            return _converter.Convert(pdfDocument);
+                DocumentProperties documentProperties = new();
+
+                PdfDocument pdf = new PdfDocument(pdfWriter);
+                pdf.SetDefaultPageSize(new PageSize(700, 1100));
+
+                ConverterProperties converterProperties = new ConverterProperties();
+
+                HtmlConverter.ConvertToPdf(htmlContent, pdf, converterProperties);
+                pdf.Close();
+
+                return outputStream.ToArray();
+            }
         }
     }
 }

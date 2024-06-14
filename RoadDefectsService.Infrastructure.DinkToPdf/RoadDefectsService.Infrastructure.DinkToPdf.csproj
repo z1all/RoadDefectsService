@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,12 +12,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DinkToPdf" Version="1.0.8" />
-    <PackageReference Include="DotNetCorePdf" Version="1.0.3" />
+    <PackageReference Include="itext7" Version="7.2.6" />
+    <PackageReference Include="itext7.pdfhtml" Version="5.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RoadDefectsService.Core.Application\RoadDefectsService.Core.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Libs\libwkhtmltox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Libs\libwkhtmltox.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Libs\libwkhtmltox.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
