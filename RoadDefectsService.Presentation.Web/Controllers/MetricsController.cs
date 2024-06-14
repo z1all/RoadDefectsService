@@ -9,6 +9,7 @@ using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
+using RoadDefectsService.Presentation.Web.Helpers;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -37,11 +38,17 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetReport([FromRoute] Guid fixationWorkId)
         {
-            ExecutionResult<ReportDTO> response = await _metricsService.GetWorkReportAsync(fixationWorkId);
+            if (!HttpContext.TryGetUserId(out Guid userId))
+            {
+                return ExecutionResultHandler(new ExecutionResult(StatusCodeExecutionResult.InternalServer, "UnknowError", "Unknow error"));
+            }
+
+            ExecutionResult<ReportDTO> response = await _metricsService.GetWorkReportAsync(fixationWorkId, userId);
             if (!response.TryGetResult(out ReportDTO report))
             {
                 return ExecutionResultHandler(response);
             }
+
             return File(report.File, "application/pdf", report.Name);
         }
 

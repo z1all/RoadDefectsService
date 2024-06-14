@@ -10,7 +10,7 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf
     {
         public static IServiceCollection AddDinkToPdfServices(this IServiceCollection services)
         {
-            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IReportService, PdfReportService>();
 
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Libs\\libwkhtmltox.dll"));

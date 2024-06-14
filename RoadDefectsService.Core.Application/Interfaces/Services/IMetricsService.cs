@@ -6,6 +6,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Services
     public interface IMetricsService
     {
         Task<ExecutionResult<List<CoordinateFixationDefectDTO>>> GetCoordinatesFixationsDefectsAsync(CoordinatesFilter filter);
-        Task<ExecutionResult<ReportDTO>> GetWorkReportAsync(Guid fixationWorkId);
+        Task<ExecutionResult<ReportDTO>> GetWorkReportAsync(Guid fixationWorkId, Guid userId);
     }
 }

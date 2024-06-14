@@ -43,6 +43,7 @@ namespace RoadDefectsService.Core.Application.Mappers
                 Id = fixationWork.Id,
                 RecordedDateTime = fixationWork.RecordedDateTime,
                 WorkDone = fixationWork.WorkDone,
+                WorkDoneWithDefect = fixationWork.TaskFixationWork?.FixationDefectId.HasValue,
                 Photos = fixationWork.Photos.ToPhotoInfoDTOList(),
             };
         }

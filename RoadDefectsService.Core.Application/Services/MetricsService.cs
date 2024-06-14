@@ -14,15 +14,18 @@ namespace RoadDefectsService.Core.Application.Services
         private readonly IFixationWorkRepository _fixationWorkRepository;
         private readonly IReportService _reportService;
         private readonly IAssignmentRepository _assignmentRepository;
+        private readonly IUserRepository _userRepository;
 
         public MetricsService(
             IFixationWorkRepository fixationWorkRepository, IAssignmentRepository assignmentRepository, 
-            ICoordinateFixationDefectRepository coordinateFixationDefectRepository, IReportService reportService)
+            ICoordinateFixationDefectRepository coordinateFixationDefectRepository, IReportService reportService, 
+            IUserRepository userRepository)
         {
             _coordinateFixationDefectRepository = coordinateFixationDefectRepository;
             _fixationWorkRepository = fixationWorkRepository;
             _reportService = reportService;
             _assignmentRepository = assignmentRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<ExecutionResult<List<CoordinateFixationDefectDTO>>> GetCoordinatesFixationsDefectsAsync(CoordinatesFilter filter)
@@ -32,7 +35,7 @@ namespace RoadDefectsService.Core.Application.Services
             return coordinates.ToCoordinateFixationDefectDTOList();
         }
 
-        public async Task<ExecutionResult<ReportDTO>> GetWorkReportAsync(Guid fixationWorkId)
+        public async Task<ExecutionResult<ReportDTO>> GetWorkReportAsync(Guid fixationWorkId, Guid userId)
         {
             FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithPhotosAndTaskWithPrevTaskAsync(fixationWorkId);
             if (fixationWork is null)
@@ -46,9 +49,17 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "AssignmentNotFound", $"Assignment defect with id {fixationWork.TaskFixationWork.FixationDefectId} not found!");
             }
 
+            CustomUser? user = await _userRepository.GetByIdAsync(userId);
+            if (user is null)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
+            }
+
             GenerateWorkReportDTO generateWorkReport = new()
             {
                 AssignmentId = assignment.Id,
+                CreatedAssignmentDateTime = assignment.CreatedDateTime,
+                Creator = user.ToUserInfoDTO(),
                 Contractor = assignment.Contractor!.ToContractorDTO(),
                 FixationDefect = assignment.FixationDefect!.ToFixationDefectDTO(),
                 FixationWork = fixationWork.ToFixationWorkDTO()
