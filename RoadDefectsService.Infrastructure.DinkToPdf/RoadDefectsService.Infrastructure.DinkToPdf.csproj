@@ -20,16 +20,4 @@
     <ProjectReference Include="..\RoadDefectsService.Core.Application\RoadDefectsService.Core.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Libs\libwkhtmltox.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Libs\libwkhtmltox.dylib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Libs\libwkhtmltox.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

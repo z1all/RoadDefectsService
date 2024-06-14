@@ -27,5 +27,4 @@ RUN dotnet publish "./RoadDefectsService.Presentation.Web.csproj" -c $BUILD_CONF
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY ["RoadDefectsService.Presentation.Web/Libs/", "Libs/"]
 ENTRYPOINT ["dotnet", "RoadDefectsService.Presentation.Web.dll"]
