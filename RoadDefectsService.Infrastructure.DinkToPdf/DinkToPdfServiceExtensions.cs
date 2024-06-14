@@ -20,7 +20,7 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf
             }
             else if (AppHelper.IsLinux())
             {
-                path = "Libs\\libwkhtmltox.dll";
+                path = "Libs/libwkhtmltox.dll";
             }
 
             var context = new CustomAssemblyLoadContext();

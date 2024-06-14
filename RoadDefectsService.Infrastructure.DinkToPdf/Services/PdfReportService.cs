@@ -25,7 +25,7 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
             }
             else if (AppHelper.IsLinux())
             {
-                path = "Views\\WorkReport\\WorkReport.html";
+                path = "Views/WorkReport/WorkReport.html";
             }
 
             string viewPath = Path.Combine(Directory.GetCurrentDirectory(), "..\\RoadDefectsService.Infrastructure.DinkToPdf\\Views\\WorkReport\\WorkReport.html");
