@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчет о проведенных работах по устранению дорожного дефекта</title>
+    <style>
+        @page {
+            margin: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .signatures {
+            margin-top: 40px;
+        }
+
+        .signatures > *:last-child {
+            margin-left: 70px;
+        }
+
+        .signature {
+            display: inline-block;
+        }
+
+        .signature div {
+            width: 360px;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid #000;
+            width: 160px !important;
+            margin-top: 50px;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Отчет о проведенных работах по устранению дорожного дефекта</h1>
+        <p><strong>Название документа:</strong> Отчет о проведенных работах по устранению дорожного дефекта</p>
+        <p><strong>Дата составления:</strong> {createdDateOnly}</p>
+        <p><strong>Место проведения работ:</strong> {workPlace}</p>
+        <p><strong>Подрядчик:</strong> {contractorOrganizationName}</p>
+        <p><strong>Составил:</strong> {creator}</p>
+
+        <h2>Введение</h2>
+        <p>Данный отчет составлен для фиксации выполнения работ по устранению выявленных дорожных дефектов на {workPlace}. Работы проводились подрядной организацией {contractorOrganizationName} в соответствии с договором № {assignmentId} от {assignmentCreatedDateOnly}.</p>
+
+        <h2>Описание выявленных дефектов</h2>
+        <p><strong>Дата фиксации дефектов:</strong> {fixationDefectDateOnly}</p>
+        <ul>
+            <li>Количество повережденного полотна: {damagedCanvasSquareMeter} кв. м.</li>
+            <li>Тип дефекта: {defectTypeName}</li>
+            <li>Фотофиксация в приложении A</li>
+        </ul>
+
+        <h2>Проведенные работы</h2>
+        <p><strong>Дата начала работ:</strong> {assignmentCreatedDateOnly}</p>
+        <p><strong>Дата окончания работ:</strong> {fixationWorkDateOnly}</p>
+        <ul>
+            <li>Фотофиксация в приложении B</li>
+        </ul>
+
+        <h2>Качество выполненных работ</h2>
+        <p><strong>Визуальная оценка:</strong> {workVisualAssessment}</p>
+
+        <h2>Заключение</h2>
+        <p>{conclusion}</p>
+
+        <div class="signatures">
+            <div class="signature">
+                <div>
+                    <p><strong>Подпись составителя:</strong></p>
+                    <div class="signature-line"></div>
+                    <p>[ФИО, должность]</p>
+                </div>
+                <div>
+                    <p><strong>Дата:</strong></p>
+                    <div class="signature-line"></div>
+                    <p>[дата]</p>
+                </div>
+            </div>
+            <div class="signature">
+                <div>
+                    <p><strong>Подпись представителя подрядчика:</strong></p>
+                    <div class="signature-line"></div>
+                    <p>[ФИО, должность]</p>
+                </div>
+                <div>
+                    <p><strong>Дата:</strong></p>
+                    <div class="signature-line"></div>
+                    <p>[дата]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="container">
+        <h2>Приложения A</h2>
+        <ul>
+            <li>Фотоматериалы до устранения дефектов.</li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="container">
+        <h2>Приложения B</h2>
+        <ul>
+            <li>Фотоматериалы после устранения дефектов.</li>
+        </ul>
+    </div>
+</body>
+</html>
