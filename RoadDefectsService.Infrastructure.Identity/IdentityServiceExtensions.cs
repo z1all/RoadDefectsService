@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Services;
@@ -11,6 +9,7 @@ using RoadDefectsService.Infrastructure.Identity.Configurations;
 using RoadDefectsService.Infrastructure.Identity.Configurations.DbSeed;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
 using RoadDefectsService.Infrastructure.Identity.Repositories;
+using RoadDefectsService.Infrastructure.Identity.Seeds.Creators;
 using RoadDefectsService.Infrastructure.Identity.Services;
 using StackExchange.Redis;
 
@@ -83,34 +82,28 @@ namespace RoadDefectsService.Infrastructure.Identity
 
         private static IServiceCollection AddDatabaseSeedConfigurations(this IServiceCollection services)
         {
-            services.ConfigureOptions<AdminsOptionsConfigure>();
+            services.ConfigureOptions<DbSeedOptionsConfigure>();
 
             return services;
+        }
+
+        public static void AddDatabaseSeed(this IServiceCollection services)
+        {
+            services.AddScoped<AdminsCreator>();
+            services.AddScoped<ContractorsCreator>();
+            services.AddScoped<DefectTypesCreator>();
+            services.AddScoped<RolesCreator>();
         }
 
         public static void AddDatabaseSeed(this IServiceProvider services)
         {
             using (var scope = services.CreateScope())
             {
-                // Roles
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<CustomRole>>();
-                AppDbSeed.AddRoles(roleManager);
-
-                // Admins
-                var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<CustomUser>>();
-                var _userService = scope.ServiceProvider.GetRequiredService<IUserService>();
-                var _adminsOptions = scope.ServiceProvider.GetRequiredService<IOptions<AdminsOptions>>();
-                AppDbSeed.AddAdmins(_userService, _userManager, _adminsOptions.Value.CreateAdmins);
-
-                // Contractors
-                var _contractorService = scope.ServiceProvider.GetRequiredService<IContractorService>();
-                var _contractorRepository = scope.ServiceProvider.GetRequiredService<IContractorRepository>();
-                AppDbSeed.AddContractors(_contractorService, _contractorRepository);
-
-                var _defectTypeResponse = scope.ServiceProvider.GetRequiredService<IDefectTypeRepository>();
-                AppDbSeed.AddDefectTypes(_defectTypeResponse);
+                scope.ServiceProvider.GetRequiredService<AdminsCreator>().AddModels();
+                scope.ServiceProvider.GetRequiredService<ContractorsCreator>().AddModels();
+                scope.ServiceProvider.GetRequiredService<DefectTypesCreator>().AddModels();
+                scope.ServiceProvider.GetRequiredService<RolesCreator>().AddModels();
             }
         }
-
     }
 }
