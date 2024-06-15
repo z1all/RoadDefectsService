@@ -15,6 +15,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices();
 builder.Services.AddSmtpServices();
 builder.Services.AddDinkToPdfServices();
+builder.Services.AddDatabaseSeed();
 
 builder.Services.AddControllers();
 

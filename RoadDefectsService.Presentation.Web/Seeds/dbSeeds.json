@@ -1,0 +1,123 @@
+{
+  "CreateAdmins": [
+    {
+      "Email": "admin1@gmail.com",
+      "FullName": "admin1",
+      "Password": "stringA1"
+    },
+    {
+      "Email": "admin2@gmail.com",
+      "FullName": "admin2",
+      "Password": "stringA2"
+    },
+    {
+      "Email": "admin3@gmail.com",
+      "FullName": "admin3",
+      "Password": "stringA3"
+    }
+  ],
+  "CreateContractors": [
+    {
+      "Email": "contractor1@gmail.com",
+      "ContractorFullName": "contractor1",
+      "OrganizationName": "organization1"
+    },
+    {
+      "Email": "contractor2@gmail.com",
+      "ContractorFullName": "contractor2",
+      "OrganizationName": "organization2"
+    },
+    {
+      "Email": "contractor3@gmail.com",
+      "ContractorFullName": "contractor3",
+      "OrganizationName": "organization3"
+    },
+    {
+      "Email": "contractor3@gmail.com",
+      "ContractorFullName": "contractor3",
+      "OrganizationName": "organization3"
+    },
+
+    {
+      "Email": "contractor4@gmail.com",
+      "ContractorFullName": "contractor4",
+      "OrganizationName": "organization4"
+    },
+    {
+      "Email": "contractor5@gmail.com",
+      "ContractorFullName": "contractor5",
+      "OrganizationName": "organization5"
+    },
+    {
+      "Email": "contractor6@gmail.com",
+      "ContractorFullName": "contractor6",
+      "OrganizationName": "organization6"
+    }
+  ],
+  "CreateDefectTypes": [
+    {
+      "Id": "53b0a60b-924a-41d7-a5e0-763344d846d3",
+      "Name": "Продольные трещины"
+    },
+    {
+      "Id": "1ffafcd5-557a-4365-995f-175ffb5f9cb9",
+      "Name": "Поперечные трещины"
+    },
+    {
+      "Id": "5e4ad8ad-8cf6-4159-8d61-c1ff162ed14c",
+      "Name": "Аллигаторные трещины"
+    },
+    {
+      "Id": "d29082f6-b230-45a3-806e-f377c8f503c8",
+      "Name": "Ямы"
+    },
+    {
+      "Id": "c636a0cd-d260-4546-a21a-1bb0ef2a935e",
+      "Name": "Просадки"
+    },
+    {
+      "Id": "e0de7729-d775-401e-aa29-edef541d14e0",
+      "Name": "Выбоины"
+    },
+    {
+      "Id": "ecfa2272-aa36-4f9e-b46c-d33652ec0fc1",
+      "Name": "Волны и бугры"
+    },
+    {
+      "Id": "fcd22fba-876f-4996-b588-863c0c74fafc",
+      "Name": "Колейность"
+    },
+    {
+      "Id": "c4f6a58c-61be-47e1-9a47-d04f0c0e3bb9",
+      "Name": "Износ верхнего слоя"
+    },
+    {
+      "Id": "df096cbd-c06e-4a8b-a90c-9d7d551bec77",
+      "Name": "Гладкость (полировка"
+    },
+    {
+      "Id": "e5de55f7-bed2-4c12-b220-5e77c7d66900",
+      "Name": "Застой воды"
+    },
+    {
+      "Id": "5c161e82-2ec4-4b2f-b5d2-a34f89137938",
+      "Name": "Стирание разметки"
+    },
+    {
+      "Id": "dd01ccf7-910d-44e8-8612-33ffb39f0de0",
+      "Name": "Поврежденные или отсутствующие дорожные знаки"
+    },
+    {
+      "Id": "bbe33c4f-6aad-43fa-9b44-f56193ab6d8a",
+      "Name": "Разрушение бордюров"
+    },
+    {
+      "Id": "95a9e364-83b7-4365-83a1-163fb8111a8a",
+      "Name": "Эрозия обочин"
+    },
+    {
+      "Id": "12a9e364-83b7-4365-83a1-163fb8111a8a",
+      "Name": "Обвал"
+    }
+  ]
+}
