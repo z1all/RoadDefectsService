@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using RoadDefectsService.Core.Application.DTOs.Common;
 using RoadDefectsService.Core.Application.DTOs.UserService;
 using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
-using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Core.Domain.Models;
@@ -19,17 +19,19 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         private readonly IRoadInspectorRepository _roadInspectorRepository;
         private readonly IOperatorRepository _operatorRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
         public UserService(
             UserManager<CustomUser> userManager, RoleManager<CustomRole> roleManager,
             IRoadInspectorRepository roadInspectorRepository, IOperatorRepository operatorRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _roadInspectorRepository = roadInspectorRepository;
             _operatorRepository = operatorRepository;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public async Task<ExecutionResult<UserPagedDTO>> GetUsersAsync(UserFilterDTO userFilter, bool showOperators)
@@ -39,7 +41,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
                    userFilter,
                    (filter) => _userRepository.CountByFilterAsync(filter, showOperators), 
                    (filter) => _userRepository.GetAllByFilterAsync(filter, showOperators),
-                   (users) => users.ToToUserInfoDTOList()
+                   (users) => _mapper.Map<List<UserInfoDTO>>(users)
                );
         }
 
@@ -56,7 +58,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
                 return new(StatusCodeExecutionResult.Forbid, "GetAdminFail", $"You cannot get a user with the admin role!");
             }
 
-            return user.ToUserInfoDTO();
+            return _mapper.Map<UserInfoDTO>(user);
         }
 
         public async Task<ExecutionResult> EditUserAsync(EditUserDTO editUser, Guid userId, bool editOperator)

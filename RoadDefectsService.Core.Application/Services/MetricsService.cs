@@ -1,7 +1,10 @@
-﻿using RoadDefectsService.Core.Application.DTOs.MetricsService;
+﻿using AutoMapper;
+using RoadDefectsService.Core.Application.DTOs.Common;
+using RoadDefectsService.Core.Application.DTOs.ContractorService;
+using RoadDefectsService.Core.Application.DTOs.FixationService;
+using RoadDefectsService.Core.Application.DTOs.MetricsService;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
-using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Core.Domain;
 using RoadDefectsService.Core.Domain.Models;
@@ -15,24 +18,26 @@ namespace RoadDefectsService.Core.Application.Services
         private readonly IReportService _reportService;
         private readonly IAssignmentRepository _assignmentRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
         public MetricsService(
             IFixationWorkRepository fixationWorkRepository, IAssignmentRepository assignmentRepository, 
             ICoordinateFixationDefectRepository coordinateFixationDefectRepository, IReportService reportService, 
-            IUserRepository userRepository)
+            IUserRepository userRepository, IMapper mapper)
         {
             _coordinateFixationDefectRepository = coordinateFixationDefectRepository;
             _fixationWorkRepository = fixationWorkRepository;
             _reportService = reportService;
             _assignmentRepository = assignmentRepository;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public async Task<ExecutionResult<List<CoordinateFixationDefectDTO>>> GetCoordinatesFixationsDefectsAsync(CoordinatesFilter filter)
         {
             List<CoordinateFixationDefect> coordinates = await _coordinateFixationDefectRepository.GetAllByFilterAsync(filter);
 
-            return coordinates.ToCoordinateFixationDefectDTOList();
+            return _mapper.Map<List<CoordinateFixationDefectDTO>>(coordinates);
         }
 
         public async Task<ExecutionResult<ReportDTO>> GetWorkReportAsync(Guid fixationWorkId, Guid userId)
@@ -54,15 +59,15 @@ namespace RoadDefectsService.Core.Application.Services
             {
                 return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
             }
-
+            
             GenerateWorkReportDTO generateWorkReport = new()
             {
                 AssignmentId = assignment.Id,
                 CreatedAssignmentDateTime = assignment.CreatedDateTime,
-                Creator = user.ToUserInfoDTO(),
-                Contractor = assignment.Contractor!.ToContractorDTO(),
-                FixationDefect = assignment.FixationDefect!.ToFixationDefectDTO(),
-                FixationWork = fixationWork.ToFixationWorkDTO()
+                Creator = _mapper.Map<UserInfoDTO>(user),
+                Contractor = _mapper.Map<ContractorDTO>(assignment.Contractor),
+                FixationDefect = _mapper.Map<FixationDefectDTO>(assignment.FixationDefect!),
+                FixationWork = _mapper.Map<FixationWorkDTO>(fixationWork)
             };
 
             return _reportService.GenerateReport(generateWorkReport);

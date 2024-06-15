@@ -1,5 +1,4 @@
-﻿using RoadDefectsService.Core.Application.DTOs.Common;
-using RoadDefectsService.Core.Application.DTOs.FixationService;
+﻿using RoadDefectsService.Core.Application.DTOs.FixationService;
 using RoadDefectsService.Core.Domain.Enums;
 
 namespace RoadDefectsService.Core.Application.DTOs.TaskService

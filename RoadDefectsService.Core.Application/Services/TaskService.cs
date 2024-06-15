@@ -1,9 +1,9 @@
-﻿using RoadDefectsService.Core.Application.DTOs.TaskService;
+﻿using AutoMapper;
+using RoadDefectsService.Core.Application.DTOs.TaskService;
 using RoadDefectsService.Core.Application.Enums;
 using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
-using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Core.Domain.Models;
@@ -14,18 +14,22 @@ namespace RoadDefectsService.Core.Application.Services
     {
         private readonly ITaskRepository _taskRepository;
         private readonly IRoadInspectorRepository _roadInspectorRepository;
+        private readonly IMapper _mapper;
 
-        public TaskService(ITaskRepository taskRepository, IRoadInspectorRepository roadInspectorRepository)
+        public TaskService(
+            ITaskRepository taskRepository, IRoadInspectorRepository roadInspectorRepository,
+            IMapper mapper)
         {
             _taskRepository = taskRepository;
             _roadInspectorRepository = roadInspectorRepository;
+            _mapper = mapper;
         }
 
         public async Task<ExecutionResult<TaskPagedDTO>> GetTasksAsync(CommonTaskFilterDTO taskFilter)
         {
             return await FiltrationHelper
                 .FilterAsync<CommonTaskFilterDTO, TaskEntity, TaskDTO, TaskPagedDTO>(
-                taskFilter, _taskRepository, (tasks) => tasks.ToTaskDTOList());
+                taskFilter, _taskRepository, (tasks) => _mapper.Map<List<TaskDTO>>(tasks));
         }
 
         public async Task<ExecutionResult> DeleteTaskAsync(Guid taskId)
@@ -48,7 +52,7 @@ namespace RoadDefectsService.Core.Application.Services
                    taskFilter,
                    (filter) => _taskRepository.CountByFilterAsync(filter, inspectorId),
                    (filter) => _taskRepository.GetAllByFilterAsync(filter, inspectorId),
-                   (tasks) => tasks.ToTaskDTOList()
+                   (tasks) => _mapper.Map<List<TaskDTO>>(tasks)
                );
         }
 
