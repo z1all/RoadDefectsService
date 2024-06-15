@@ -3,11 +3,11 @@ using Microsoft.Extensions.Options;
 
 namespace RoadDefectsService.Infrastructure.Identity.Configurations.DbSeed
 {
-    public class AdminsOptionsConfigure(IConfiguration configuration) : IConfigureOptions<AdminsOptions>
+    public class DbSeedOptionsConfigure(IConfiguration configuration) : IConfigureOptions<DbSeedOptions>
     {
         private readonly string valueKey = "DbSeed";
         private readonly IConfiguration _configuration = configuration;
 
-        public void Configure(AdminsOptions options) => _configuration.GetSection(valueKey).Bind(options);
+        public void Configure(DbSeedOptions options) => _configuration.GetSection(valueKey).Bind(options);
     }
 }
