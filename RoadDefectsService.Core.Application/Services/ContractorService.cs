@@ -1,8 +1,8 @@
-﻿using RoadDefectsService.Core.Application.DTOs.ContractorService;
+﻿using AutoMapper;
+using RoadDefectsService.Core.Application.DTOs.ContractorService;
 using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
-using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Core.Domain.Models;
 
@@ -11,17 +11,19 @@ namespace RoadDefectsService.Core.Application.Services
     public class ContractorService : IContractorService
     {
         private readonly IContractorRepository _contractorRepository;
+        private readonly IMapper _mapper;
 
-        public ContractorService(IContractorRepository contractorRepository)
+        public ContractorService(IContractorRepository contractorRepository, IMapper mapper)
         {
             _contractorRepository = contractorRepository;
+            _mapper = mapper;
         }
 
         public async Task<ExecutionResult<ContractorPagedDTO>> GetContractorsAsync(ContractorFilterDTO contractorFilter)
         {
             return await FiltrationHelper
                 .FilterAsync<ContractorFilterDTO, Contractor, ContractorDTO, ContractorPagedDTO>(
-                contractorFilter, _contractorRepository, (contractors) => contractors.ToContractorDTOList());
+                contractorFilter, _contractorRepository, (contractors) => _mapper.Map<List<ContractorDTO>>(contractors));
         }
 
         public async Task<ExecutionResult<ContractorDTO>> GetContractorAsync(Guid contractorId)
@@ -32,7 +34,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "ContractorNotFound", $"Contractor with id {contractorId} not found!");
             }
 
-            return contractor.ToContractorDTO();
+            return _mapper.Map<ContractorDTO>(contractor);
         }
 
         public async Task<ExecutionResult> CreateContractorAsync(CreateContractorDTO createContractor)
@@ -43,7 +45,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.BadRequest, "EmailAlreadyUse", $"Email {createContractor.Email} is already in use!");
             }
 
-            Contractor newContractor = createContractor.ToContractor();
+            Contractor newContractor = _mapper.Map<Contractor>(createContractor);
 
             await _contractorRepository.AddAsync(newContractor);
 

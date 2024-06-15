@@ -15,6 +15,7 @@ namespace RoadDefectsService.Presentation.Web.Helpers
         /// 
         /// </summary>
         /// <param name="options"></param>
+        /// <param name="fileTypeHelper"></param>
         public PhotoTypeHelper(IOptions<PhotoTypeOptions> options, FileTypeHelper fileTypeHelper)
         {
             _photoTypes = new(options.Value.AllowPhotoTypes);
