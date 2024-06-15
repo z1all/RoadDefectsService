@@ -1,4 +1,6 @@
-﻿using RoadDefectsService.Core.Application.DTOs.AssignmentService;
+﻿using AutoMapper;
+using RoadDefectsService.Core.Application.DTOs.AssignmentService;
+using RoadDefectsService.Core.Application.DTOs.ContractorService;
 using RoadDefectsService.Core.Application.DTOs.NotificationService;
 using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
@@ -15,22 +17,25 @@ namespace RoadDefectsService.Core.Application.Services
         private readonly INotificationService _notificationService;
         private readonly IFixationDefectRepository _fixationDefectRepository;
         private readonly IContractorRepository _contractorRepository;
+        private readonly IMapper _mapper;
 
         public AssignmentService(
             IAssignmentRepository assignmentRepository, INotificationService notificationService,
-            IFixationDefectRepository fixationDefectRepository, IContractorRepository contractorRepository)
+            IFixationDefectRepository fixationDefectRepository, IContractorRepository contractorRepository,
+            IMapper mapper)
         {
             _assignmentRepository = assignmentRepository;
             _notificationService = notificationService;
             _fixationDefectRepository = fixationDefectRepository;
             _contractorRepository = contractorRepository;
+            _mapper = mapper;
         }
 
         public Task<ExecutionResult<AssignmentPagedDTO>> GetAssignmentsAsync(AssignmentFilterDTO assignmentFilterDTO)
         {
             return FiltrationHelper
                 .FilterAsync<AssignmentFilterDTO, Assignment, AssignmentShortInfoDTO, AssignmentPagedDTO>(
-                assignmentFilterDTO, _assignmentRepository, (assignments) => assignments.ToAssignmentShortInfoDTOList());
+                assignmentFilterDTO, _assignmentRepository, (assignments) => _mapper.Map<List<AssignmentShortInfoDTO>>(assignments));
         }
 
         public async Task<ExecutionResult<AssignmentDTO>> GetAssignmentAsync(Guid assignmentId)
@@ -41,7 +46,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "AssignmentNotFound", $"Assignment with id {assignmentId} not found!");
             }
 
-            return assignment.ToAssignmentDTO();
+            return _mapper.Map<AssignmentDTO>(assignment);
         }
 
         public async Task<ExecutionResult> CreateAssignmentAsync(CreateAssignmentDTO createAssignment, Guid? userId)
@@ -94,8 +99,8 @@ namespace RoadDefectsService.Core.Application.Services
                 CreatedAssignmentNotificationDTO notification = new()
                 {
                     AssignmentId = assignmentId,
-                    Contractor = contractor.ToContractorDTO(),
-                    FixationDefect = fixationDefect.ToFixationDefectWithPhotoShortInfoDTO(),
+                    Contractor = _mapper.Map<ContractorDTO>(contractor),
+                    FixationDefect = _mapper.Map<FixationDefectWithPhotoShortInfoDTO>(fixationDefect),
                 };
 
                 ExecutionResult sendResult = await _notificationService.SendCreatedAssignmentNotificationAsync(notification);

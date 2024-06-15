@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using RoadDefectsService.Core.Application.DTOs.Common;
 using RoadDefectsService.Core.Application.DTOs.ProfileService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
-using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Infrastructure.Identity.Mappers;
@@ -12,10 +12,12 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
     public class ProfileService : IProfileService
     {
         private readonly UserManager<CustomUser> _userManager;
+        private readonly IMapper _mapper;
 
-        public ProfileService(UserManager<CustomUser> userManager)
+        public ProfileService(UserManager<CustomUser> userManager, IMapper mapper)
         {
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         public async Task<ExecutionResult<UserInfoDTO>> GetProfileInfoAsync(Guid userId)
@@ -26,7 +28,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
                 return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
             }
 
-            return user.ToUserInfoDTO();
+            return _mapper.Map<UserInfoDTO>(user);
         }
 
         public async Task<ExecutionResult> EditProfileInfoAsync(EditProfileDTO editProfile, Guid userId)

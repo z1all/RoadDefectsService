@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RoadDefectsService.Core.Application.Configurations.FileStorage;
 using RoadDefectsService.Core.Application.Interfaces.Services;
+using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Services;
 
 namespace RoadDefectsService.Core.Application
@@ -25,6 +26,12 @@ namespace RoadDefectsService.Core.Application
 
             // Configurations
             services.ConfigureOptions<FileStorageOptionsConfigure>();
+
+            // AutoMapper
+            services.AddAutoMapper(
+                typeof(UserMappingProfile), typeof(PhotoMappingProfile), typeof(FixationMappingProfile),
+                typeof(ContractorMappingProfile), typeof(TaskMappingProfile), typeof(DefectTypeMappingProfile),
+                typeof(AssignmentMappingProfile), typeof(CoordinateFixationDefectMappingProfile));
 
             return services;
         }

@@ -1,8 +1,8 @@
-﻿using RoadDefectsService.Core.Application.DTOs.FixationService;
+﻿using AutoMapper;
+using RoadDefectsService.Core.Application.DTOs.FixationService;
 using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
-using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Core.Domain.Models;
 
@@ -13,14 +13,16 @@ namespace RoadDefectsService.Core.Application.Services
         private readonly IFixationDefectRepository _fixationDefectRepository;
         private readonly ITaskRepository _taskRepository;
         private readonly IDefectTypeRepository _defectTypeRepository;
+        private readonly IMapper _mapper;
 
         public FixationDefectService(
             IFixationDefectRepository fixationDefectRepository, ITaskRepository taskRepository,
-            IDefectTypeRepository defectTypeRepository)
+            IDefectTypeRepository defectTypeRepository, IMapper mapper)
         {
             _fixationDefectRepository = fixationDefectRepository;
             _taskRepository = taskRepository;
             _defectTypeRepository = defectTypeRepository;
+            _mapper = mapper;
         }
 
         public async Task<ExecutionResult<FixationDefectDTO>> GetFixationDefectAsync(Guid fixationDefectId, Guid? userId)
@@ -37,7 +39,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new() { Errors = checkResult.Errors };
             }
 
-            return fixationDefect.ToFixationDefectDTO();
+            return _mapper.Map<FixationDefectDTO>(fixationDefect);
         }
 
         public async Task<ExecutionResult> DeleteFixationDefectAsync(Guid fixationDefectId, Guid? userId)
