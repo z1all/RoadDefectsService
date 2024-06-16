@@ -36,7 +36,7 @@ namespace RoadDefectsService.Core.Application.Services
             ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwner(fixationDefect.Task!, userId);
             if (checkResult.IsNotSuccess)
             {
-                return new() { Errors = checkResult.Errors };
+                return ExecutionResult<FixationDefectDTO>.FromError(checkResult);
             }
 
             return _mapper.Map<FixationDefectDTO>(fixationDefect);
@@ -67,7 +67,10 @@ namespace RoadDefectsService.Core.Application.Services
             }
 
             ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(task, userId);
-            if (checkResult.IsNotSuccess) return new() { Errors = checkResult.Errors };
+            if (checkResult.IsNotSuccess)
+            {
+                return ExecutionResult<CreateFixationResponseDTO>.FromError(checkResult);
+            }
 
             if (task.FixationDefectId.HasValue)
             {
