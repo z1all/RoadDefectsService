@@ -66,18 +66,15 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
             ExecutionResult<AccessTokenDTO> generateResult = _tokenService.GenerateToken(user.ToUserDTO(), roles.ToRoleClaims());
             if (generateResult.IsNotSuccess)
             {
-                return new() { Errors = generateResult.Errors };
+                return ExecutionResult<TokenResponseDTO>.FromError(generateResult);
             }
             AccessTokenDTO accessToken = generateResult.Result!;
 
             bool saveTokenResult = await _tokenRepository.SaveTokenAsync(accessToken.JTI);
             if (!saveTokenResult)
             {
-                //_logger.LogError(new Exception(), $"The tokens could not be saved for unknown reasons. User id: {user.Id}");
                 return new(StatusCodeExecutionResult.InternalServer, keyError: "UnknowError", error: "Unknown error");
             }
-
-            //_logger.LogInformation($"Created new tokens for user with id {user.Id}");
 
             return new TokenResponseDTO()
             {

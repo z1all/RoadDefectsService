@@ -14,7 +14,7 @@ namespace RoadDefectsService.Core.Application.Models
         public ImmutableDictionary<string, List<string>> Errors
         {
             get { return _errors; }
-            set
+            protected set
             {
                 _errors = value;
                 IsSuccess = false;
@@ -25,7 +25,7 @@ namespace RoadDefectsService.Core.Application.Models
         public bool IsSuccess
         {
             get { return _isSuccess; }
-            set
+            protected set
             {
                 _isSuccess = value;
                 if (IsSuccess) StatusCode = StatusCodeExecutionResult.Ok;
@@ -33,7 +33,7 @@ namespace RoadDefectsService.Core.Application.Models
         }
         public bool IsNotSuccess { get => !_isSuccess; }
 
-        public StatusCodeExecutionResult StatusCode { get; set; }
+        public StatusCodeExecutionResult StatusCode { get; protected set; }
 
         public ExecutionResult() { }
 
@@ -81,13 +81,18 @@ namespace RoadDefectsService.Core.Application.Models
         public ExecutionResult(StatusCodeExecutionResult statusCode, string keyError, params string[] error) : base(statusCode, keyError, error) { }
         public ExecutionResult(StatusCodeExecutionResult statusCode, ImmutableDictionary<string, List<string>> errors) : base(statusCode, errors) { }
 
-        public bool TryGetResult(out TSuccessResult result)
+        public bool TryGetResult(out TSuccessResult? result)
         {
             result = default;
             if (IsNotSuccess || Result is null) return false;
 
             result = Result;
             return true;
+        }
+
+        public static ExecutionResult<TSuccessResult> FromError(ExecutionResult errorResult)
+        {
+            return new ExecutionResult<TSuccessResult>(errorResult.StatusCode, errorResult.Errors);
         }
 
         public static implicit operator ExecutionResult<TSuccessResult>(TSuccessResult value)

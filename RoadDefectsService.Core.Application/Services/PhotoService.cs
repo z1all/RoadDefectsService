@@ -30,7 +30,7 @@ namespace RoadDefectsService.Core.Application.Services
             ExecutionResult<FixationType> checkResult = await CheckOnTaskOwnerAndTaskStatusAsync(fixationId, userId);
             if (!checkResult.TryGetResult(out FixationType fixationType))
             {
-                return new() { Errors = checkResult.Errors };
+                return ExecutionResult<PhotoUploadResponseDTO>.FromError(checkResult);
             }
 
             Photo photo = new()
@@ -89,7 +89,7 @@ namespace RoadDefectsService.Core.Application.Services
             ExecutionResult checkResult = await CheckOnTaskOwnerAsync(photo, userId);
             if (checkResult.IsNotSuccess)
             {
-                return new() { Errors = checkResult.Errors };
+                return ExecutionResult<PhotoDTO>.FromError(checkResult);
             }
 
             byte[]? photoFile = await _fileService.GetFileAsync(photo.PathName);
@@ -128,13 +128,13 @@ namespace RoadDefectsService.Core.Application.Services
             ExecutionResult<(TaskEntity task, FixationType fixationType)> getTaskResult = await getTaskAsync();
             if (!getTaskResult.TryGetResult(out var task))
             {
-                return new() { Errors = getTaskResult.Errors };
+                return ExecutionResult<FixationType>.FromError(getTaskResult);
             }
 
             ExecutionResult checkResult = checker(task.task, userId);
             if (checkResult.IsNotSuccess)
             {
-                return new() { Errors = checkResult.Errors };
+                return ExecutionResult<FixationType>.FromError(checkResult);
             }
 
             return task.fixationType;
