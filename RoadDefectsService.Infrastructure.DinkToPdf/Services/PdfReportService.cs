@@ -4,7 +4,6 @@ using RoadDefectsService.Core.Application.DTOs.MetricsService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
 using iText.Kernel.Geom;
-using iText.Layout;
 
 namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 {

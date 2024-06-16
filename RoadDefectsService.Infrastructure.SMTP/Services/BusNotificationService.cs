@@ -36,6 +36,7 @@ namespace RoadDefectsService.Infrastructure.SMTP.Services
                $"   <p>Адрес: {notification.FixationDefect.ExactAddress}</p>" +
                $"   <p>Количество поврежденного полотна: {notification.FixationDefect.DamagedCanvasSquareMeter} метров</p>" +
                $"   <p>Тип дефекта: {notification.FixationDefect.DefectTypeName}</p>" +
+               $"   <p>Выполнить до: {notification.DeadlineDateOnly.ToString("dd.MM.yyyy")}</p>" +
                $"   <p>Идентификатор назначения работ: {notification.AssignmentId} (при следующем обращении укажите его)</p>" +
                 "</div>";
 
