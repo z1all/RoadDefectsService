@@ -88,8 +88,8 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
 
             modelBuilder.Entity<Assignment>()
                .HasOne(assignment => assignment.Contractor)
-               .WithOne()
-               .HasForeignKey<Assignment>(assignment => assignment.ContractorId);
+               .WithMany()
+               .HasForeignKey(assignment => assignment.ContractorId);
         }
     }
 }

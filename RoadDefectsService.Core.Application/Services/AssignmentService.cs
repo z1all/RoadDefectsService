@@ -82,7 +82,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             await _assignmentRepository.AddAsync(assignment);
 
-            ExecutionResult sendResult = await SendCreatedAssignmentNotificationAsync(assignment.Id, contractor, fixationDefect);
+            ExecutionResult sendResult = await SendCreatedAssignmentNotificationAsync(assignment, contractor, fixationDefect);
             if (sendResult.IsNotSuccess)
             {
                 await _assignmentRepository.DeleteAsync(assignment);
@@ -92,13 +92,14 @@ namespace RoadDefectsService.Core.Application.Services
             return ExecutionResult.SucceededResult;
         }
 
-        private async Task<ExecutionResult> SendCreatedAssignmentNotificationAsync(Guid assignmentId, Contractor contractor, FixationDefect fixationDefect)
+        private async Task<ExecutionResult> SendCreatedAssignmentNotificationAsync(Assignment assignment, Contractor contractor, FixationDefect fixationDefect)
         {
             try
             {
                 CreatedAssignmentNotificationDTO notification = new()
                 {
-                    AssignmentId = assignmentId,
+                    AssignmentId = assignment.Id,
+                    DeadlineDateOnly = assignment.DeadlineDateOnly,
                     Contractor = _mapper.Map<ContractorDTO>(contractor),
                     FixationDefect = _mapper.Map<FixationDefectWithPhotoShortInfoDTO>(fixationDefect),
                 };
