@@ -25,5 +25,7 @@ namespace RoadDefectsService.Core.Domain.Models
 
         public Guid? RoadInspectorId { get; set; }
         public RoadInspector? RoadInspector { get; set; }
+
+        public TaskFixationWork? NextTask { get; set; }
     }
 }
