@@ -61,12 +61,14 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
             modelBuilder.Entity<FixationWork>()
                 .HasMany(fixation => fixation.Photos)
                 .WithOne()
-                .HasForeignKey(photo => photo.FixationWorkId);
+                .HasForeignKey(photo => photo.FixationWorkId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<FixationDefect>()
                .HasMany(fixation => fixation.Photos)
                .WithOne()
-               .HasForeignKey(photo => photo.FixationDefectId);
+               .HasForeignKey(photo => photo.FixationDefectId)
+               .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<FixationDefect>()
                 .HasOne(fixation => fixation.DefectType)
@@ -79,7 +81,6 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
             modelBuilder.Entity<Photo>()
                 .ToTable(table => table.HasCheckConstraint("CK_ModelC_SingleReference", "(\"FixationWorkId\" IS NULL     AND \"FixationDefectId\" IS NOT NULL OR " +
                                                                                          "\"FixationWorkId\" IS NOT NULL AND \"FixationDefectId\" IS NULL)"));
-
             // Assignment
             modelBuilder.Entity<Assignment>()
                 .HasOne(assignment => assignment.FixationDefect)
