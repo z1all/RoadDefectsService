@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RoadDefectsService.Core.Application.DTOs.TaskService;
+using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
@@ -21,14 +22,16 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<FixationDefectTaskDTO>> GetFixationDefectTaskAsync(Guid taskId, Guid? inspectorId = null)
         {
-            TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(taskId);
+            TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAsync(taskId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
             }
-            else if (inspectorId is not null && task.RoadInspectorId != inspectorId)
+
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAnsNextTaskOwner(task, inspectorId);
+            if (checkResult.IsNotSuccess)
             {
-                return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Inspector with id {inspectorId} doesn't have task with id {taskId}");
+                return ExecutionResult<FixationDefectTaskDTO>.FromError(checkResult);
             }
 
             return _mapper.Map<FixationDefectTaskDTO>(task);

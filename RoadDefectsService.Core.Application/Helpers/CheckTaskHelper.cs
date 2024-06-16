@@ -24,7 +24,16 @@ namespace RoadDefectsService.Core.Application.Helpers
         {
             if (userId is not null && task.RoadInspectorId != userId)
             {
-                return new(StatusCodeExecutionResult.Forbid, "DeleteFixationDefectFail", $"You cannot delete a fixation defect, because the task is assigned to another inspector.");
+                return new(StatusCodeExecutionResult.Forbid, "TaskAccessDenied", $"User with id {userId} does not have access to tasks with id {task.Id}");
+            }
+            return ExecutionResult.SucceededResult;
+        }
+
+        public static ExecutionResult CheckOnTaskOwnerAnsNextTaskOwner(TaskEntity task, Guid? userId)
+        {
+            if (userId is not null && (task.RoadInspectorId != userId && task.NextTask?.RoadInspectorId != userId))
+            {
+                return new(StatusCodeExecutionResult.Forbid, "TaskAccessDenied", $"User with id {userId} does not have access to tasks with id {task.Id}");
             }
             return ExecutionResult.SucceededResult;
         }

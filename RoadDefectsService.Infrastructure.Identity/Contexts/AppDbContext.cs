@@ -50,7 +50,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
 
             modelBuilder.Entity<TaskFixationWork>()
                 .HasOne(task => task.PrevTask)
-                .WithOne()
+                .WithOne(prevTask => prevTask.NextTask)
                 .HasForeignKey<TaskFixationWork>(task => task.PrevTaskId)
                 .IsRequired();
 
