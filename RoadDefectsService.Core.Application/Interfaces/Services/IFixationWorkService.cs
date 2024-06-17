@@ -9,5 +9,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Services
         Task<ExecutionResult> DeleteFixationWorkAsync(Guid fixationWorkId, Guid? userId);
         Task<ExecutionResult<CreateFixationResponseDTO>> CreateFixationWorkAsync(CreateFixationWorkDTO createFixationWork, Guid? userId);
         Task<ExecutionResult> ChangeFixationWorkAsync(EditFixationWorkDTO editFixationWork, Guid fixationWorkId, Guid? userId);
+        Task<ExecutionResult> ChangeMetaInfoFixationWorkAsync(EditMetaInfoFixationWorkDTO editMetaInfoFixationWork, Guid fixationWorkId);
     }
 }

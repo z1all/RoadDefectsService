@@ -52,10 +52,16 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <summary>
         /// Создать поручение на выполнение работ
         /// </summary>
-        /// <remarks> Доступ: Дорожный инспектор </remarks>
+        /// <remarks> 
+        /// Доступ: Все 
+        /// 
+        /// Дорожный инспектор может создавать поручение на фиксации дефектов, если они принадлежат задачам без флага IsTransfer
+        /// 
+        /// Админ же - если фиксации принадлежат задачам с флагом IsTransfer (При этом не будет отправлено сообщение на почту)
+        /// </remarks>
         /// <response code="204">NoContent</response> 
         [HttpPost]
-        [CustomeAuthorize(Roles = Role.RoadInspector)]
+        [CustomeAuthorize]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> CreateAssignment([FromBody] CreateAssignmentDTO createAssignment)
         {

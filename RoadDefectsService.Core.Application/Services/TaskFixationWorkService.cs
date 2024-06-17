@@ -63,8 +63,9 @@ namespace RoadDefectsService.Core.Application.Services
             TaskFixationWork task = new()
             {
                 CreatedDateTime = DateTime.UtcNow,
-                TaskStatus = StatusTask.Created,
-                PrevTaskId = createFixationWork.PrevTaskId
+                TaskStatus = createFixationWork.IsTransfer ? StatusTask.Completed : StatusTask.Created,
+                PrevTaskId = createFixationWork.PrevTaskId,
+                IsTransfer = createFixationWork.IsTransfer,
             };
 
             await _taskFixationWorkRepository.AddAsync(task);

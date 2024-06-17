@@ -37,7 +37,7 @@ namespace RoadDefectsService.Core.Application.Services
             return _mapper.Map<FixationDefectTaskDTO>(task);
         }
 
-        public async Task<ExecutionResult> EditFixationDefectTaskAsync(CreateEditFixationDefectTaskDTO editFixationDefect, Guid taskId)
+        public async Task<ExecutionResult> EditFixationDefectTaskAsync(EditFixationDefectTaskDTO editFixationDefect, Guid taskId)
         {
             TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(taskId);
             if (task is null)
@@ -53,14 +53,15 @@ namespace RoadDefectsService.Core.Application.Services
             return ExecutionResult.SucceededResult;
         }
 
-        public async Task<ExecutionResult<CreateTaskResponseDTO>> CreateFixationDefectTaskAsync(CreateEditFixationDefectTaskDTO createFixationDefect)
+        public async Task<ExecutionResult<CreateTaskResponseDTO>> CreateFixationDefectTaskAsync(CreateFixationDefectTaskDTO createFixationDefect)
         {
             TaskFixationDefect task = new()
             {
                 CreatedDateTime = DateTime.UtcNow,
-                TaskStatus = StatusTask.Created,
+                TaskStatus = createFixationDefect.IsTransfer ? StatusTask.Completed : StatusTask.Created,
                 ApproximateAddress = createFixationDefect.ApproximateAddress,
                 Description = createFixationDefect.Description,
+                IsTransfer = createFixationDefect.IsTransfer,
             };
 
             await _taskFixationDefectRepository.AddAsync(task);
