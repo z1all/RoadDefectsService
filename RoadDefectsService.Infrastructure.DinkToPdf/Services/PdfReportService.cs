@@ -62,7 +62,7 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 
             if (generateWorkReport.FixationWork.WorkDone.HasValue)
             {
-                if (generateWorkReport.FixationWork.WorkDoneWithDefect.HasValue && generateWorkReport.FixationWork.WorkDoneWithDefect.Value)
+                if (generateWorkReport.FixationWork.WorkDoneWithDefect)
                 {
                     workVisualAssessment = "Работы выполнены с дефектом";
                     conclusion =

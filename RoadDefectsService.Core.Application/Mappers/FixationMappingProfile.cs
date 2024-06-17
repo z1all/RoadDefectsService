@@ -14,7 +14,10 @@ namespace RoadDefectsService.Core.Application.Mappers
             CreateMap<FixationDefect, FixationDefectWithPhotoShortInfoDTO>();
             CreateMap<FixationDefect, FixationDefectShortInfoDTO>();
 
-            CreateMap<FixationWork, FixationWorkDTO>();
+            CreateMap<FixationWork, FixationWorkDTO>()
+                .ForMember(
+                    fixationWorkDTO => fixationWorkDTO.WorkDoneWithDefect,
+                    options => options.MapFrom(fixationWork => fixationWork.TaskFixationWork == null ? false : fixationWork.TaskFixationWork.FixationDefectId.HasValue));
         }
     }
 }
