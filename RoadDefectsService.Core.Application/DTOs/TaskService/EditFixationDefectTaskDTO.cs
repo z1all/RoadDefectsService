@@ -2,7 +2,7 @@
 
 namespace RoadDefectsService.Core.Application.DTOs.TaskService
 {
-    public class CreateEditFixationDefectTaskDTO
+    public class EditFixationDefectTaskDTO
     {
         [Required]
         public required string ApproximateAddress { get; set; }

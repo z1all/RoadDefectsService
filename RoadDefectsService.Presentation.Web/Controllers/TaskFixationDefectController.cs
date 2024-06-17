@@ -49,7 +49,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [CustomeAuthorize(Roles = Role.Operator)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> ChangeFixationDefectTask([FromRoute] Guid taskId, [FromBody] CreateEditFixationDefectTaskDTO editFixationDefect)
+        public async Task<ActionResult> ChangeFixationDefectTask([FromRoute] Guid taskId, [FromBody] EditFixationDefectTaskDTO editFixationDefect)
         {
             return await ExecutionResultHandlerAsync(() => _taskFixationDefectService.EditFixationDefectTaskAsync(editFixationDefect, taskId));
         }
@@ -57,12 +57,16 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <summary>
         /// Создать задачу
         /// </summary>
-        /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <remarks>
+        /// Доступ: Оператор и админ 
+        /// 
+        /// Если поставить флаг IsTransfer, то это будет означать, что она используется для переноса данных из бумажного в электронный вид
+        /// </remarks>
         [HttpPost]
         [CustomeAuthorize(Roles = Role.Operator)]
         [ProducesResponseType(typeof(CreateTaskResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CreateTaskResponseDTO>> CreateFixationDefectTask([FromBody] CreateEditFixationDefectTaskDTO createFixationDefect)
+        public async Task<ActionResult<CreateTaskResponseDTO>> CreateFixationDefectTask([FromBody] CreateFixationDefectTaskDTO createFixationDefect)
         {
             return await ExecutionResultHandlerAsync(() => _taskFixationDefectService.CreateFixationDefectTaskAsync(createFixationDefect));
         }

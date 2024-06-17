@@ -6,6 +6,7 @@ namespace RoadDefectsService.Core.Application.DTOs.TaskService
     public class FixationDefectTaskDTO
     {
         public required Guid Id { get; set; }
+        public required bool IsTransfer { get; set; }
         public required DateTime CreatedDateTime { get; set; }
         public required DefectStatus DefectStatus { get; set; }
         public required StatusTask TaskStatus { get; set; }

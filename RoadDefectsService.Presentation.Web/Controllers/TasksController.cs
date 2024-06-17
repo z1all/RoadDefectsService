@@ -36,14 +36,27 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         }
 
         /// <summary>
+        /// Изменить служебные данные задачи (Для переноса данных в электронный вид)
+        /// </summary>
+        /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <response code="204">No Content</response> 
+        [HttpPut("{taskId}")]
+        [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<TaskPagedDTO>> ChangeTask([FromRoute] Guid taskId, [FromBody] EditTaskDTO editTask)
+        {
+            return await ExecutionResultHandlerAsync(() => _taskService.ChangeTaskAsync(editTask, taskId));
+        }
+
+        /// <summary>
         /// Удалить задачу
         /// </summary>
         /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <response code="204">No Content</response> 
         [HttpDelete("{taskId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
-        [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TaskPagedDTO>> DeleteTask([FromRoute] Guid taskId)
+        public async Task<ActionResult> DeleteTask([FromRoute] Guid taskId)
         {
             return await ExecutionResultHandlerAsync(() => _taskService.DeleteTaskAsync(taskId));
         }
@@ -64,7 +77,13 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <summary>
         /// Назначить задачу дорожному инспектору
         /// </summary>
-        /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <remarks> 
+        /// Доступ: Оператор и админ 
+        /// 
+        /// Задачу можно назначить только, когда она имеет статус Created
+        /// 
+        /// Если задача имеет флаг IsTransfer, то ее можно назначить независимо от того, какой статус она имеет
+        /// </remarks>
         /// <response code="204">No Content</response> 
         [HttpPost("inspector/{inspectorId}")]
         [CustomeAuthorize(Roles = Role.Operator)]

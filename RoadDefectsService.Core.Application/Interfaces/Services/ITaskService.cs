@@ -6,6 +6,7 @@ namespace RoadDefectsService.Core.Application.Interfaces.Services
     public interface ITaskService
     {
         Task<ExecutionResult<TaskPagedDTO>> GetTasksAsync(CommonTaskFilterDTO taskFilter);
+        Task<ExecutionResult> ChangeTaskAsync(EditTaskDTO editTask, Guid taskId);
         Task<ExecutionResult> DeleteTaskAsync(Guid taskId);
         Task<ExecutionResult<TaskPagedDTO>> GetInspectorTasksAsync(TaskFilterDTO taskFilter, Guid inspectorId);
         Task<ExecutionResult> AppointTaskAsync(Guid taskId, Guid inspectorId);
