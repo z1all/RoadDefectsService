@@ -32,6 +32,25 @@ namespace RoadDefectsService.Core.Application.Services
                 taskFilter, _taskRepository, (tasks) => _mapper.Map<List<TaskDTO>>(tasks));
         }
 
+        public async Task<ExecutionResult> ChangeTaskAsync(EditTaskDTO editTask, Guid taskId)
+        {
+            TaskEntity? task = await _taskRepository.GetByIdAsync(taskId);
+            if (task is null)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
+            }
+
+            if (!task.IsTransfer)
+            {
+                return new(StatusCodeExecutionResult.BadRequest, "TaskIsNotTransfer", $"The task should be to transfer data from paper to electronic form!");
+            }
+
+            task.CreatedDateTime = editTask.CreatedDateTime;
+            await _taskRepository.UpdateAsync(task);
+
+            return ExecutionResult.SucceededResult;
+        }
+
         public async Task<ExecutionResult> DeleteTaskAsync(Guid taskId)
         {
             TaskEntity? task = await _taskRepository.GetByIdAsync(taskId);
@@ -70,13 +89,16 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "RoadInspectorNotFound", $"Road inspector with id {inspectorId} not found!");
             }
 
-            if (task.TaskStatus == StatusTask.Completed)
+            if (!task.IsTransfer)
             {
-                return new(StatusCodeExecutionResult.Forbid, "TaskCompleted", $"Assigning an inspector to a completed task!");
-            }
-            else if (task.TaskStatus == StatusTask.Processing)
-            {
-                return new(StatusCodeExecutionResult.Forbid, "TaskProcessing", $"Assigning an inspector to a processing task!");
+                if (task.TaskStatus == StatusTask.Completed)
+                {
+                    return new(StatusCodeExecutionResult.Forbid, "TaskCompleted", $"Assigning an inspector to a completed task!");
+                }
+                else if (task.TaskStatus == StatusTask.Processing)
+                {
+                    return new(StatusCodeExecutionResult.Forbid, "TaskProcessing", $"Assigning an inspector to a processing task!");
+                }
             }
 
             task.RoadInspectorId = inspectorId;
