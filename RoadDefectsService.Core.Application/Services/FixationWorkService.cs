@@ -48,7 +48,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work defect with id {fixationWorkId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(fixationWork.TaskFixationWork!, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndAllowedTaskStatusAndTaskTransfer(fixationWork.TaskFixationWork!, AllowedTaskStatus.OnlyProcessing, userId);
             if (checkResult.IsNotSuccess) return checkResult;
 
             await _fixationWorkRepository.DeleteAsync(fixationWork);
@@ -64,7 +64,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {createFixationWork.TaskFixationWorkId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(task, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndAllowedTaskStatusAndTaskTransfer(task, AllowedTaskStatus.OnlyProcessing, userId);
             if (checkResult.IsNotSuccess)
             {
                 return ExecutionResult<CreateFixationResponseDTO>.FromError(checkResult);
@@ -95,7 +95,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work defect with id {fixationWorkId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(fixationWork.TaskFixationWork!, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndAllowedTaskStatusAndTaskTransfer(fixationWork.TaskFixationWork!, AllowedTaskStatus.OnlyProcessing, userId);
             if (checkResult.IsNotSuccess) return checkResult;
 
             fixationWork.RecordedDateTime = DateTime.UtcNow;
