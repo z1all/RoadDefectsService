@@ -61,7 +61,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// 
-        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи (Не реализовано)
+        /// Работает только для фиксаций, которые принадлежат задаче со статусом 'В процессе'
+        /// 
+        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи
         /// </remarks>
         /// <response code="204">NoContent</response>
         [HttpDelete("fixation/{fixationId}/photo/{photoId}")]
@@ -81,7 +83,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// 
-        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи (Не реализовано)
+        /// Работает только для фиксаций, которые принадлежат задаче со статусом 'В процессе'
+        /// 
+        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи
         /// </remarks>
         [HttpPost("fixation/{fixationId}/photo")]
         [CustomeAuthorize]

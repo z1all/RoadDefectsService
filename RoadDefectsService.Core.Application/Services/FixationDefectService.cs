@@ -117,5 +117,24 @@ namespace RoadDefectsService.Core.Application.Services
 
             return ExecutionResult.SucceededResult;
         }
+
+        public async Task<ExecutionResult> ChangeMetaInfoFixationDefectAsync(EditMetaInfoFixationDefectDTO editMetaInfoFixationDefect, Guid fixationDefectId)
+        {
+            FixationDefect? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAsync(fixationDefectId);
+            if (fixationDefect is null)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "FixationDefectNotFound", $"Fixation defect with id {fixationDefectId} not found!");
+            }
+
+            if (!fixationDefect.Task!.IsTransfer)
+            {
+                return new(StatusCodeExecutionResult.BadRequest, "TaskIsNotTransfer", $"The task should be to transfer data from paper to electronic form!");
+            }
+
+            fixationDefect.RecordedDateTime = editMetaInfoFixationDefect.RecordedDateTime;
+            await _fixationDefectRepository.UpdateAsync(fixationDefect);
+
+            return ExecutionResult.SucceededResult;
+        }
     }
 }

@@ -5,6 +5,7 @@ using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
 using RoadDefectsService.Core.Application.Helpers;
+using RoadDefectsService.Core.Domain.Enums;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -45,7 +46,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// 
-        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи (Не реализовано)
+        /// Работает только для фиксаций, которые принадлежат задаче со статусом 'В процессе'
+        /// 
+        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи
         /// </remarks>
         /// <response code="204">No Content</response> 
         [HttpDelete("{fixationWorkId}")]
@@ -63,14 +66,16 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// 
-        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи (Не реализовано)
+        /// Работает только для фиксаций, которые принадлежат задаче со статусом 'В процессе'
+        /// 
+        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи
         /// </remarks>
         /// <response code="204">No Content</response> 
         [HttpPost]
         [CustomeAuthorize]
         [ProducesResponseType(typeof(CreateFixationResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CreateFixationResponseDTO>> CreateFixationDefect([FromBody] CreateFixationWorkDTO createFixationWork)
+        public async Task<ActionResult<CreateFixationResponseDTO>> CreateFixationWork([FromBody] CreateFixationWorkDTO createFixationWork)
         {
             return await ExecutionResultHandlerAsync((userId) =>
                 _fixationWorkService.CreateFixationWorkAsync(createFixationWork, userId.GetUserIdIfRoadInspectorOrNull(HttpContext)));
@@ -82,17 +87,38 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// 
-        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи (Не реализовано)
+        /// Работает только для фиксаций, которые принадлежат задаче со статусом 'В процессе'
+        /// 
+        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи
         /// </remarks>
         /// <response code="204">No Content</response> 
         [HttpPut("{fixationWorkId}")]
         [CustomeAuthorize]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> ChangeFixationDefect([FromRoute] Guid fixationWorkId, [FromBody] EditFixationWorkDTO editFixationWork)
+        public async Task<ActionResult> ChangeFixationWork([FromRoute] Guid fixationWorkId, [FromBody] EditFixationWorkDTO editFixationWork)
         {
             return await ExecutionResultHandlerAsync((userId) =>
                 _fixationWorkService.ChangeFixationWorkAsync(editFixationWork, fixationWorkId, userId.GetUserIdIfRoadInspectorOrNull(HttpContext)));
+        }
+
+        /// <summary>
+        /// Редактирование служебной информации фиксации выполненных работ (Для переноса данных в электронный вид)
+        /// </summary>
+        /// <remarks> 
+        /// Доступ: Оператор и админ
+        /// 
+        /// Работает только для фиксаций, которые принадлежат задаче с флагом IsTransfer
+        /// </remarks>
+        /// <response code="204">No Content</response> 
+        [HttpPut("{fixationWorkId}/meta_info")]
+        [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ChangeMetaInfoFixationWork([FromRoute] Guid fixationWorkId, [FromBody] EditMetaInfoFixationWorkDTO editMetaInfoFixation)
+        {
+            return await ExecutionResultHandlerAsync((userId) =>
+                _fixationWorkService.ChangeMetaInfoFixationWorkAsync(editMetaInfoFixation, fixationWorkId));
         }
     }
 }

@@ -110,5 +110,24 @@ namespace RoadDefectsService.Core.Application.Services
 
             return ExecutionResult.SucceededResult;
         }
+
+        public async Task<ExecutionResult> ChangeMetaInfoFixationWorkAsync(EditMetaInfoFixationWorkDTO editMetaInfoFixationWork, Guid fixationWorkId)
+        {
+            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationWorkId);
+            if (fixationWork is null)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work with id {fixationWorkId} not found!");
+            }
+
+            if (!fixationWork.TaskFixationWork!.IsTransfer)
+            {
+                return new(StatusCodeExecutionResult.BadRequest, "TaskIsNotTransfer", $"The task should be to transfer data from paper to electronic form!");
+            }
+
+            fixationWork.RecordedDateTime = editMetaInfoFixationWork.RecordedDateTime;
+            await _fixationWorkRepository.UpdateAsync(fixationWork);
+
+            return ExecutionResult.SucceededResult;
+        }
     }
 }

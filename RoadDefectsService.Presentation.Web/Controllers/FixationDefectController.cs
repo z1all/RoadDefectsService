@@ -5,6 +5,8 @@ using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
 using RoadDefectsService.Core.Application.Helpers;
+using RoadDefectsService.Core.Application.Services;
+using RoadDefectsService.Core.Domain.Enums;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -45,7 +47,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// 
-        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи (Не реализовано)
+        /// Работает только для фиксаций, которые принадлежат задаче со статусом 'В процессе'
+        /// 
+        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи
         /// </remarks>
         /// <response code="204">No Content</response> 
         [HttpDelete("{fixationDefectId}")]
@@ -63,7 +67,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// 
-        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи (Не реализовано)
+        /// Работает только для фиксаций, которые принадлежат задаче со статусом 'В процессе'
+        /// 
+        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи
         /// </remarks>
         /// <response code="204">No Content</response> 
         [HttpPost]
@@ -82,7 +88,9 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <remarks> 
         /// Доступ: Все
         /// 
-        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи (Не реализовано)
+        /// Работает только для фиксаций, которые принадлежат задаче со статусом 'В процессе'
+        /// 
+        /// Если фиксация относится к задаче с флагом IsTransfer, то можно CRUD фиксацию независимо от статуса ее задачи
         /// </remarks>
         /// <response code="204">No Content</response> 
         [HttpPut("{fixationDefectId}")]
@@ -93,6 +101,25 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         {
             return await ExecutionResultHandlerAsync((userId) =>
                _fixationDefectService.ChangeFixationDefectAsync(editFixationDefect, fixationDefectId, userId.GetUserIdIfRoadInspectorOrNull(HttpContext)));
+        }
+
+        /// <summary>
+        /// Редактирование служебной информации фиксации дефекта (Для переноса данных в электронный вид)
+        /// </summary>
+        /// <remarks> 
+        /// Доступ: Оператор и админ
+        /// 
+        /// Работает только для фиксаций, которые принадлежат задаче с флагом IsTransfer
+        /// </remarks>
+        /// <response code="204">No Content</response> 
+        [HttpPut("{fixationDefectId}/meta_info")]
+        [CustomeAuthorize(Roles = Role.Operator)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ChangeMetaInfoFixationDefect([FromRoute] Guid fixationDefectId, [FromBody] EditMetaInfoFixationDefectDTO metaInfoFixationDefect)
+        {
+            return await ExecutionResultHandlerAsync((userId) =>
+                _fixationDefectService.ChangeMetaInfoFixationDefectAsync(metaInfoFixationDefect, fixationDefectId));
         }
     }
 }
