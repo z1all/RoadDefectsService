@@ -5,5 +5,6 @@ namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
     public interface IRoadInspectorRepository : IBaseWithBaseEntityRepository<RoadInspector>
     {
+        Task<bool> AnyNotDeletedByIdAsync(Guid id);
     }
 }
