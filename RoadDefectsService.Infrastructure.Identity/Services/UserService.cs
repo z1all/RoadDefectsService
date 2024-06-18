@@ -39,7 +39,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
             return await FiltrationHelper
                .FilterAsync<UserFilterDTO, CustomUser, UserInfoDTO, UserPagedDTO>(
                    userFilter,
-                   (filter) => _userRepository.CountByFilterAsync(filter, showOperators), 
+                   (filter) => _userRepository.CountByFilterAsync(filter, showOperators),
                    (filter) => _userRepository.GetAllByFilterAsync(filter, showOperators),
                    (users) => _mapper.Map<List<UserInfoDTO>>(users)
                );
@@ -48,7 +48,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         public async Task<ExecutionResult<UserInfoDTO>> GetUserAsync(Guid userId, bool showAdmins)
         {
             CustomUser? user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
+            if (user is null || user.IsDeleted)
             {
                 return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
             }
@@ -64,7 +64,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         public async Task<ExecutionResult> EditUserAsync(EditUserDTO editUser, Guid userId, bool editOperator)
         {
             CustomUser? user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
+            if (user is null || user.IsDeleted)
             {
                 return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
             }
@@ -89,7 +89,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         public async Task<ExecutionResult> DeleteUserAsync(Guid userId, bool deleteOperator)
         {
             CustomUser? user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
+            if (user is null || user.IsDeleted)
             {
                 return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
             }
@@ -104,7 +104,11 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
                 return new(StatusCodeExecutionResult.Forbid, "DeleteOperatorFail", $"You cannot delete a user with the operator role!");
             }
 
-            await _userManager.DeleteAsync(user);
+            user.IsDeleted = true;
+            await _userManager.UpdateAsync(user);
+
+            IList<string> userRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
 
             return ExecutionResult.SucceededResult;
         }
@@ -121,38 +125,42 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
 
         private async Task<ExecutionResult> CreateOperatorAsync(CreateUserDTO createOperator, List<string> roles)
         {
-            ExecutionResult<CustomUser> creatingResult = await CreateUserAsync(createOperator, roles);
-            if (creatingResult.IsNotSuccess)
+            ExecutionResult<(CustomUser user, bool isRestored)> creatingResult = await CreateUserAsync(createOperator, roles);
+            if (!creatingResult.TryGetResult(out var result))
             {
                 return creatingResult;
             }
-            CustomUser user = creatingResult.Result!;
 
-            Operator @operator = new()
+            if (!result.isRestored)
             {
-                Id = user.Id,
-                User = user,
-            };
-            await _operatorRepository.AddAsync(@operator);
+                Operator @operator = new()
+                {
+                    Id = result.user.Id,
+                    User = result.user,
+                };
+                await _operatorRepository.AddAsync(@operator);
+            }
 
             return ExecutionResult.SucceededResult;
         }
 
         public async Task<ExecutionResult> CreateRoadInspectorAsync(CreateUserDTO createRoadInspector)
         {
-            ExecutionResult<CustomUser> creatingResult = await CreateUserAsync(createRoadInspector, [Role.RoadInspector]);
-            if (creatingResult.IsNotSuccess)
+            ExecutionResult<(CustomUser user, bool isRestored)> creatingResult = await CreateUserAsync(createRoadInspector, [Role.RoadInspector]);
+            if (!creatingResult.TryGetResult(out var result))
             {
                 return creatingResult;
             }
-            CustomUser user = creatingResult.Result!;
 
-            RoadInspector roadInspector = new()
+            if (!result.isRestored)
             {
-                Id = user.Id,
-                User = user,
-            };
-            await _roadInspectorRepository.AddAsync(roadInspector);
+                RoadInspector roadInspector = new()
+                {
+                    Id = result.user.Id,
+                    User = result.user,
+                };
+                await _roadInspectorRepository.AddAsync(roadInspector);
+            }
 
             return ExecutionResult.SucceededResult;
         }
@@ -160,29 +168,43 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         /// <summary>
         /// Наивысшая роль указывается первой в roles
         /// </summary>
-        private async Task<ExecutionResult<CustomUser>> CreateUserAsync(CreateUserDTO user, List<string> roles)
+        private async Task<ExecutionResult<(CustomUser, bool isRestored)>> CreateUserAsync(CreateUserDTO createUser, List<string> roles)
         {
             CustomUser newUser = new()
             {
                 HighestRole = roles[0],
-                FullName = user.FullName,
-                Email = user.Email,
-                UserName = user.Email
+                FullName = createUser.FullName,
+                Email = createUser.Email,
+                UserName = createUser.Email
             };
 
-            IdentityResult creatingResult = await _userManager.CreateAsync(newUser, user.Password);
+            bool isRestored = false;
+            IdentityResult creatingResult = await _userManager.CreateAsync(newUser, createUser.Password);
             if (!creatingResult.Succeeded)
             {
-                return creatingResult.ToExecutionResultError<CustomUser>();
+                CustomUser? existUser = await _userManager.FindByEmailAsync(createUser.Email);
+                if (existUser is null || !existUser.IsDeleted)
+                {
+                    return creatingResult.ToExecutionResultError<(CustomUser, bool)>();
+                }
+
+                existUser.FullName = createUser.FullName;
+                existUser.HighestRole = roles[0];
+                existUser.IsDeleted = false;
+                
+                await _userManager.UpdateAsync(existUser);
+                
+                newUser = existUser;
+                isRestored = true;
             }
 
             IdentityResult addingRoleResult = await _userManager.AddToRolesAsync(newUser, roles);
             if (!addingRoleResult.Succeeded)
             {
-                return addingRoleResult.ToExecutionResultError<CustomUser>();
+                return addingRoleResult.ToExecutionResultError<(CustomUser, bool)>();
             }
 
-            return newUser;
+            return (newUser, isRestored);
         }
     }
 }

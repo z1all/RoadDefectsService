@@ -5,7 +5,7 @@ using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
 using iText.Kernel.Geom;
 
-namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
+namespace RoadDefectsService.Infrastructure.Itext7.Services
 {
     public class PdfReportService : IReportService
     {
@@ -62,7 +62,7 @@ namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
 
             if (generateWorkReport.FixationWork.WorkDone.HasValue)
             {
-                if (generateWorkReport.FixationWork.WorkDoneWithDefect.HasValue && generateWorkReport.FixationWork.WorkDoneWithDefect.Value)
+                if (generateWorkReport.FixationWork.WorkDoneWithDefect)
                 {
                     workVisualAssessment = "Работы выполнены с дефектом";
                     conclusion =

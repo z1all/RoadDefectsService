@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace RoadDefectsService.Infrastructure.DinkToPdf.Helper
+namespace RoadDefectsService.Infrastructure.Itext7.Helper
 {
     public static class PerformanceTester
     {

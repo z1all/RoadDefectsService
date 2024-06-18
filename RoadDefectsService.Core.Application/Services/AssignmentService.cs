@@ -5,7 +5,6 @@ using RoadDefectsService.Core.Application.DTOs.NotificationService;
 using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
-using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Models;
 using RoadDefectsService.Core.Domain.Models;
 
@@ -57,6 +56,11 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "FixationDefectNotFound", $"Fixation defect with id {createAssignment.FixationDefectId} not found!");
             }
 
+            if (userId is null && !fixationDefect.Task!.IsTransfer)
+            {
+                return new(StatusCodeExecutionResult.Forbid, "TaskIsNotTransfer", $"The task should be to transfer data from paper to electronic form!");
+            }
+
             ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndCompletedTaskStatus(fixationDefect.Task!, userId);
             if (checkResult.IsNotSuccess) return checkResult;
 
@@ -79,14 +83,16 @@ namespace RoadDefectsService.Core.Application.Services
                 FixationDefectId = createAssignment.FixationDefectId,
                 ContractorId = createAssignment.ContractorId,
             };
-
             await _assignmentRepository.AddAsync(assignment);
 
-            ExecutionResult sendResult = await SendCreatedAssignmentNotificationAsync(assignment, contractor, fixationDefect);
-            if (sendResult.IsNotSuccess)
+            if (userId is not null)
             {
-                await _assignmentRepository.DeleteAsync(assignment);
-                return sendResult;
+                ExecutionResult sendResult = await SendCreatedAssignmentNotificationAsync(assignment, contractor, fixationDefect);
+                if (sendResult.IsNotSuccess)
+                {
+                    await _assignmentRepository.DeleteAsync(assignment);
+                    return sendResult;
+                }
             }
 
             return ExecutionResult.SucceededResult;

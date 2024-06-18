@@ -57,7 +57,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         /// <summary>
         /// Создать задачу по фиксации выполненных работ
         /// </summary>
-        /// <remarks> Доступ: Оператор и админ </remarks>
+        /// <remarks> 
+        /// Доступ: Оператор и админ 
+        /// 
+        /// Если поставить флаг IsTransfer, то это будет означать, что она используется для переноса данных из бумажного в электронный вид
+        /// </remarks>
         [HttpPost]
         [CustomeAuthorize(Roles = Role.Operator)]
         [ProducesResponseType(typeof(CreateTaskResponseDTO), StatusCodes.Status200OK)]

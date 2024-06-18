@@ -48,7 +48,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work defect with id {fixationWorkId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(fixationWork.TaskFixationWork!, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndAllowedTaskStatusAndTaskTransfer(fixationWork.TaskFixationWork!, AllowedTaskStatus.OnlyProcessing, userId);
             if (checkResult.IsNotSuccess) return checkResult;
 
             await _fixationWorkRepository.DeleteAsync(fixationWork);
@@ -64,7 +64,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {createFixationWork.TaskFixationWorkId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(task, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndAllowedTaskStatusAndTaskTransfer(task, AllowedTaskStatus.OnlyProcessing, userId);
             if (checkResult.IsNotSuccess)
             {
                 return ExecutionResult<CreateFixationResponseDTO>.FromError(checkResult);
@@ -95,7 +95,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work defect with id {fixationWorkId} not found!");
             }
 
-            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndProcessingTaskStatus(fixationWork.TaskFixationWork!, userId);
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnTaskOwnerAndAllowedTaskStatusAndTaskTransfer(fixationWork.TaskFixationWork!, AllowedTaskStatus.OnlyProcessing, userId);
             if (checkResult.IsNotSuccess) return checkResult;
 
             fixationWork.RecordedDateTime = DateTime.UtcNow;
@@ -106,6 +106,25 @@ namespace RoadDefectsService.Core.Application.Services
                 fixationWork.TaskFixationWork.PrevTask.FixationDefect.IsEliminated = editFixationWork.WorkDone;
             }
 
+            await _fixationWorkRepository.UpdateAsync(fixationWork);
+
+            return ExecutionResult.SucceededResult;
+        }
+
+        public async Task<ExecutionResult> ChangeMetaInfoFixationWorkAsync(EditMetaInfoFixationWorkDTO editMetaInfoFixationWork, Guid fixationWorkId)
+        {
+            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationWorkId);
+            if (fixationWork is null)
+            {
+                return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work with id {fixationWorkId} not found!");
+            }
+
+            if (!fixationWork.TaskFixationWork!.IsTransfer)
+            {
+                return new(StatusCodeExecutionResult.BadRequest, "TaskIsNotTransfer", $"The task should be to transfer data from paper to electronic form!");
+            }
+
+            fixationWork.RecordedDateTime = editMetaInfoFixationWork.RecordedDateTime;
             await _fixationWorkRepository.UpdateAsync(fixationWork);
 
             return ExecutionResult.SucceededResult;

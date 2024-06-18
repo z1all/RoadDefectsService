@@ -17,27 +17,32 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<CustomUser>> GetAllByFilterAsync(UserFilterDTO userFilter, bool showOperators)
+        public async Task<List<CustomUser>> GetAllByFilterAsync(UserFilterDTO userFilter, bool showOperators, bool showDeleted)
         {
-            return await ApplyFilter(userFilter, showOperators)
+            return await ApplyFilter(userFilter, showOperators, showDeleted)
                 .Skip((userFilter.Page - 1) * userFilter.Size)
                 .Take(userFilter.Size)
                 .ToListAsync();
         }
 
-        public async Task<int> CountByFilterAsync(UserFilterDTO userFilter, bool showOperators)
+        public async Task<int> CountByFilterAsync(UserFilterDTO userFilter, bool showOperators, bool showDeleted)
         {
-            return await ApplyFilter(userFilter, showOperators)
+            return await ApplyFilter(userFilter, showOperators, showDeleted)
                 .CountAsync();
         }
 
-        private IQueryable<CustomUser> ApplyFilter(UserFilterDTO userFilter, bool showOperators)
+        private IQueryable<CustomUser> ApplyFilter(UserFilterDTO userFilter, bool showOperators, bool showDeleted)
         {
             var users = _dbContext.Users.AsQueryable();
 
             if (userFilter.UserFullName is not null)
             {
                 users = users.Where(user => user.FullName.ToLower().Contains(userFilter.UserFullName.ToLower()));
+            }
+
+            if (!showDeleted)
+            {
+                users = users.Where(user => !user.IsDeleted);
             }
 
             if (showOperators)

@@ -1,17 +1,17 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace RoadDefectsService.Infrastructure.DinkToPdf
+namespace RoadDefectsService.Infrastructure.Itext7
 {
 
     public class CustomAssemblyLoadContext : AssemblyLoadContext
     {
-        public IntPtr LoadUnmanagedLibrary(string absolutePath)
+        public nint LoadUnmanagedLibrary(string absolutePath)
         {
             return LoadUnmanagedDll(absolutePath);
         }
 
-        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+        protected override nint LoadUnmanagedDll(string unmanagedDllName)
         {
             return LoadUnmanagedDllFromPath(unmanagedDllName);
         }
