@@ -6,6 +6,7 @@ namespace RoadDefectsService.Core.Domain.Models
     public class TaskEntity : BaseEntity
     {
         public TaskType TaskType { get; set; }
+        public required string ApproximateAddress { get; set; }
         public required bool IsTransfer { get; set; }
         public required DateTime CreatedDateTime { get; set; }
         public required StatusTask TaskStatus { get; set; }
