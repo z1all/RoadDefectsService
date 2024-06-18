@@ -5,7 +5,7 @@ using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
 using iText.Kernel.Geom;
 
-namespace RoadDefectsService.Infrastructure.DinkToPdf.Services
+namespace RoadDefectsService.Infrastructure.Itext7.Services
 {
     public class PdfReportService : IReportService
     {
