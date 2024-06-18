@@ -5,7 +5,7 @@ using RoadDefectsService.Core.Domain.Models;
 namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
     public interface IContractorRepository : 
-        IBaseWithBaseEntityRepository<Contractor>, 
+        ISoftDeleteBaseRepository<Contractor>, 
         IFilterableRepository<ContractorFilterDTO, Contractor>
     {
         Task<bool> AnyByEmailAsync(string email);
