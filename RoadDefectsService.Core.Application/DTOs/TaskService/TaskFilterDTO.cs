@@ -9,5 +9,6 @@ namespace RoadDefectsService.Core.Application.DTOs.TaskService
         public TaskTypeFilter TaskType { get; set; } = TaskTypeFilter.None;
         public DefectStatusFilter DefectStatus { get; set; } = DefectStatusFilter.None;
         public TaskStatusFilter TaskStatus { get; set; } = TaskStatusFilter.None;
+        public string? Address { get; set; }
     }
 }

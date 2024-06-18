@@ -5,8 +5,8 @@ namespace RoadDefectsService.Core.Domain.Enums
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum StatusTask
     {
-        Created = 1,
-        Processing = 2,
+        Processing = 1,
+        Created = 2,
         Completed = 3,
     }
 }

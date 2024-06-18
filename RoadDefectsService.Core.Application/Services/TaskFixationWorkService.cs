@@ -62,6 +62,7 @@ namespace RoadDefectsService.Core.Application.Services
 
             TaskFixationWork task = new()
             {
+                ApproximateAddress = prevTask.ApproximateAddress,
                 CreatedDateTime = DateTime.UtcNow,
                 TaskStatus = createFixationWork.IsTransfer ? StatusTask.Completed : StatusTask.Created,
                 PrevTaskId = createFixationWork.PrevTaskId,
