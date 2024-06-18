@@ -29,7 +29,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         public async Task<ExecutionResult<TokenResponseDTO>> LoginAsync(LoginDTO login)
         {
             CustomUser? user = await _userManager.FindByEmailAsync(login.Email);
-            if (user is null)
+            if (user is null || user.IsDeleted)
             {
                 return new(StatusCodeExecutionResult.BadRequest, keyError: "LoginFail", error: "Invalid email or password");
             }

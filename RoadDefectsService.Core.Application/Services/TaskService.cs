@@ -59,6 +59,12 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
             }
 
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnAllowedTaskStatus(task, AllowedTaskStatus.OnlyCreated);
+            if (checkResult.IsNotSuccess)
+            {
+                return checkResult;
+            }
+
             await _taskRepository.DeleteAsync(task);
 
             return ExecutionResult.SucceededResult;
@@ -83,7 +89,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
             }
 
-            bool existRoadInspector = await _roadInspectorRepository.AnyByIdAsync(inspectorId);
+            bool existRoadInspector = await _roadInspectorRepository.AnyNotDeletedByIdAsync(inspectorId);
             if (!existRoadInspector)
             {
                 return new(StatusCodeExecutionResult.NotFound, "RoadInspectorNotFound", $"Road inspector with id {inspectorId} not found!");

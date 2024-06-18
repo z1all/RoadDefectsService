@@ -7,9 +7,14 @@ using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
-    public class ContractorRepository : BaseWithBaseEntityRepository<Contractor, AppDbContext>, IContractorRepository
+    public class ContractorRepository : SoftDeleteBaseRepository<Contractor, AppDbContext>, IContractorRepository
     {
         public ContractorRepository(AppDbContext dbContext) : base(dbContext) { }
+
+        public override Task<Contractor?> FindEntityBy(Contractor entity)
+        {
+            return _dbContext.Contractors.FirstOrDefaultAsync(e => e.Id == entity.Id || e.Email == entity.Email);
+        }
 
         public async Task<List<Contractor>> GetAllByFilterAsync(ContractorFilterDTO contractorFilter)
         {
@@ -41,13 +46,13 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                     .Where(contractor => contractor.OrganizationName.ToLower().Contains(contractorFilter.OrganizationName.ToLower()));
             }
 
-            return contractors;
+            return contractors.Where(contractor => !contractor.IsDeleted);
         }
 
         public Task<bool> AnyByEmailAsync(string email)
         {
             return _dbContext.Contractors
-                .AnyAsync(contractor => contractor.Email == email);
+                .AnyAsync(contractor => contractor.Email == email && !contractor.IsDeleted);
         }
     }
 }
