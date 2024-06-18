@@ -23,7 +23,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         public async Task<ExecutionResult<UserInfoDTO>> GetProfileInfoAsync(Guid userId)
         {
             CustomUser? user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
+            if (user is null || user.IsDeleted)
             {
                 return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
             }
@@ -34,7 +34,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         public async Task<ExecutionResult> EditProfileInfoAsync(EditProfileDTO editProfile, Guid userId)
         {
             CustomUser? user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
+            if (user is null || user.IsDeleted)
             {
                 return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
             }
@@ -54,7 +54,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
         public async Task<ExecutionResult> ChangePasswordAsync(ChangePasswordDTO changePassword, Guid userId)
         {
             CustomUser? user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
+            if (user is null || user.IsDeleted)
             {
                 return new(StatusCodeExecutionResult.NotFound, "UserNotFound", $"User with id {userId} not found!");
             }

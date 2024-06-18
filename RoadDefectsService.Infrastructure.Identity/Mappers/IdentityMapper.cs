@@ -23,7 +23,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Mappers
             return new(StatusCodeExecutionResult.BadRequest, errors: identityResult.Errors.ToErrorDictionary());
         }
 
-        public static ExecutionResult<T> ToExecutionResultError<T>(this IdentityResult identityResult) where T : class
+        public static ExecutionResult<T> ToExecutionResultError<T>(this IdentityResult identityResult)
         {
             return new(StatusCodeExecutionResult.BadRequest, errors: identityResult.Errors.ToErrorDictionary());
         }
