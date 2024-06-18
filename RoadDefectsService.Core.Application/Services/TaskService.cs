@@ -59,6 +59,12 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
             }
 
+            ExecutionResult checkResult = CheckTaskHelper.CheckOnAllowedTaskStatus(task, AllowedTaskStatus.OnlyCreated);
+            if (checkResult.IsNotSuccess)
+            {
+                return checkResult;
+            }
+
             await _taskRepository.DeleteAsync(task);
 
             return ExecutionResult.SucceededResult;

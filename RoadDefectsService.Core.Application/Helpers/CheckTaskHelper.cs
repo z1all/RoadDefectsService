@@ -4,12 +4,14 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Helpers
 {
+
     public class AllowedTaskStatus
     {
         public bool Completed { get; set; } = false;
         public bool Processing { get; set; } = false;
         public bool Created { get; set; } = false;
 
+        public static AllowedTaskStatus OnlyCreated { get => new() { Created = true }; }
         public static AllowedTaskStatus OnlyProcessing { get => new() { Processing = true }; }
     }
 
@@ -27,15 +29,15 @@ namespace RoadDefectsService.Core.Application.Helpers
         {
             if (!allowedTaskStatus.Completed && task.TaskStatus == StatusTask.Completed)
             {
-                return new(StatusCodeExecutionResult.BadRequest, "TaskIsCompleted", "It is forbidden to perform actions on a task with the status 'Completed'!");
+                return new(StatusCodeExecutionResult.Forbid, "TaskIsCompleted", "It is forbidden to perform actions on a task with the status 'Completed'!");
             }
             else if (!allowedTaskStatus.Created && task.TaskStatus == StatusTask.Created)
             {
-                return new(StatusCodeExecutionResult.BadRequest, "TaskIsCreated", "It is forbidden to perform actions on a task with the status 'Created'!");
+                return new(StatusCodeExecutionResult.Forbid, "TaskIsCreated", "It is forbidden to perform actions on a task with the status 'Created'!");
             }
             else if (!allowedTaskStatus.Processing && task.TaskStatus == StatusTask.Processing)
             {
-                return new(StatusCodeExecutionResult.BadRequest, "TaskIsProcessing", "It is forbidden to perform actions on a task with the status 'Processing'!");
+                return new(StatusCodeExecutionResult.Forbid, "TaskIsProcessing", "It is forbidden to perform actions on a task with the status 'Processing'!");
             }
             return ExecutionResult.SucceededResult;
         }
@@ -47,7 +49,7 @@ namespace RoadDefectsService.Core.Application.Helpers
 
             if (task.TaskStatus != StatusTask.Completed)
             {
-                return new(StatusCodeExecutionResult.BadRequest, "TaskUncompleted", "You cannot modify a uncompleted task.");
+                return new(StatusCodeExecutionResult.Forbid, "TaskUncompleted", "You cannot modify a uncompleted task.");
             }
             return ExecutionResult.SucceededResult;
         }
