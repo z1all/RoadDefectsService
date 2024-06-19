@@ -80,6 +80,7 @@ namespace RoadDefectsService.Core.Application.Services
             FixationDefect fixationDefect = new()
             {
                 RecordedDateTime = DateTime.UtcNow,
+                CacheAddress = task.Address,
             };
             await _fixationDefectRepository.AddAsync(fixationDefect);
 
@@ -107,9 +108,6 @@ namespace RoadDefectsService.Core.Application.Services
             }
 
             fixationDefect.RecordedDateTime = DateTime.UtcNow;
-            fixationDefect.ExactAddress = editFixationDefect.ExactAddress;
-            fixationDefect.CoordinatesX = editFixationDefect.CoordinatesX;
-            fixationDefect.CoordinatesY = editFixationDefect.CoordinatesY;
             fixationDefect.DamagedCanvasSquareMeter = editFixationDefect.DamagedCanvasSquareMeter;
             fixationDefect.DefectTypeId = editFixationDefect.DefectTypeId;
 

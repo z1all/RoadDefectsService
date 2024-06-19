@@ -154,9 +154,7 @@ namespace RoadDefectsService.Core.Application.Services
         private ExecutionResult CheckOnNullProperties(FixationDefect? fixationDefect)
         {
             if (fixationDefect is not null &&
-               (fixationDefect.ExactAddress is null || fixationDefect.CoordinatesX is null ||
-                fixationDefect.CoordinatesY is null || fixationDefect.DamagedCanvasSquareMeter is null ||
-                fixationDefect.DefectTypeId is null))
+               (fixationDefect.DamagedCanvasSquareMeter is null || fixationDefect.DefectTypeId is null))
             {
                 return new(StatusCodeExecutionResult.BadRequest, "FixationDefectNullProperties", "You cannot complete the task because one or more properties of the fixation defect have a null value!");
             }
