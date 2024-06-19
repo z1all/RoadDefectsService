@@ -30,8 +30,8 @@
   
   <ItemGroup>
     <ProjectReference Include="..\RoadDefectsService.Core.Application\RoadDefectsService.Core.Application.csproj" />
-    <ProjectReference Include="..\RoadDefectsService.Infrastructure.DinkToPdf\RoadDefectsService.Infrastructure.DinkToPdf.csproj" />
     <ProjectReference Include="..\RoadDefectsService.Infrastructure.Identity\RoadDefectsService.Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\RoadDefectsService.Infrastructure.Itext7\RoadDefectsService.Infrastructure.Itext7.csproj" />
     <ProjectReference Include="..\RoadDefectsService.Infrastructure.SMTP\RoadDefectsService.Infrastructure.SMTP.csproj" />
   </ItemGroup>
   

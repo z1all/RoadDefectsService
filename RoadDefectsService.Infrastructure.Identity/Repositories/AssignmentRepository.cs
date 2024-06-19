@@ -46,7 +46,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
 
             if (filter.FixationDefectAddress is not null)
             {
-                assignments = assignments.Where(assignment => assignment.FixationDefect!.ExactAddress!.ToLower().Contains(filter.FixationDefectAddress));
+                assignments = assignments.Where(assignment => assignment.FixationDefect!.CacheAddress!.ToLower().Contains(filter.FixationDefectAddress.ToLower()));
             }
 
             if (filter.ContractorId.HasValue)

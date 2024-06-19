@@ -12,8 +12,8 @@ WORKDIR /src
 COPY ["RoadDefectsService.Presentation.Web/RoadDefectsService.Presentation.Web.csproj", "RoadDefectsService.Presentation.Web/"]
 COPY ["RoadDefectsService.Core.Application/RoadDefectsService.Core.Application.csproj", "RoadDefectsService.Core.Application/"]
 COPY ["RoadDefectsService.Core.Domain/RoadDefectsService.Core.Domain.csproj", "RoadDefectsService.Core.Domain/"]
-COPY ["RoadDefectsService.Infrastructure.DinkToPdf/RoadDefectsService.Infrastructure.DinkToPdf.csproj", "RoadDefectsService.Infrastructure.DinkToPdf/"]
 COPY ["RoadDefectsService.Infrastructure.Identity/RoadDefectsService.Infrastructure.Identity.csproj", "RoadDefectsService.Infrastructure.Identity/"]
+COPY ["RoadDefectsService.Infrastructure.Itext7/RoadDefectsService.Infrastructure.Itext7.csproj", "RoadDefectsService.Infrastructure.Itext7/"]
 COPY ["RoadDefectsService.Infrastructure.SMTP/RoadDefectsService.Infrastructure.SMTP.csproj", "RoadDefectsService.Infrastructure.SMTP/"]
 RUN dotnet restore "./RoadDefectsService.Presentation.Web/RoadDefectsService.Presentation.Web.csproj"
 COPY . .

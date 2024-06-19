@@ -6,7 +6,7 @@ namespace RoadDefectsService.Core.Application.Mappers
 {
     public class TaskMappingProfile : Profile
     {
-        public TaskMappingProfile() 
+        public TaskMappingProfile()
         {
             CreateMap<TaskEntity, TaskDTO>()
                    .ForMember(

@@ -1,9 +1,9 @@
 using RoadDefectsService.Presentation.Web;
 using RoadDefectsService.Presentation.Web.Middlewares.Extensions;
-using RoadDefectsService.Infrastructure.Identity;
 using RoadDefectsService.Core.Application;
+using RoadDefectsService.Infrastructure.Identity;
 using RoadDefectsService.Infrastructure.SMTP;
-using RoadDefectsService.Infrastructure.DinkToPdf;
+using RoadDefectsService.Infrastructure.Itext7;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +14,7 @@ builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices();
 builder.Services.AddSmtpServices();
-builder.Services.AddDinkToPdfServices();
+builder.Services.AddItext7Services();
 builder.Services.AddDatabaseSeed();
 
 builder.Services.AddControllers();

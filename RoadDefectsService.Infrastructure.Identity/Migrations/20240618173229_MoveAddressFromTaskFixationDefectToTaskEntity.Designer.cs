@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -11,9 +12,11 @@ using RoadDefectsService.Infrastructure.Identity.Contexts;
 namespace RoadDefectsService.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240618173229_MoveAddressFromTaskFixationDefectToTaskEntity")]
+    partial class MoveAddressFromTaskFixationDefectToTaskEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,15 +306,20 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("CacheAddress")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double?>("CoordinatesX")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("CoordinatesY")
+                        .HasColumnType("double precision");
 
                     b.Property<double?>("DamagedCanvasSquareMeter")
                         .HasColumnType("double precision");
 
                     b.Property<Guid?>("DefectTypeId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ExactAddress")
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsEliminated")
                         .HasColumnType("boolean");
@@ -401,15 +409,9 @@ namespace RoadDefectsService.Infrastructure.Identity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("ApproximateAddress")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<double>("CoordinateX")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("CoordinateY")
-                        .HasColumnType("double precision");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp with time zone");
