@@ -1,9 +1,9 @@
 ﻿using iText.Html2pdf;
 using iText.Kernel.Pdf;
+using iText.Kernel.Geom; 
 using RoadDefectsService.Core.Application.DTOs.MetricsService;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
-using iText.Kernel.Geom;
 
 namespace RoadDefectsService.Infrastructure.Itext7.Services
 {
@@ -20,7 +20,7 @@ namespace RoadDefectsService.Infrastructure.Itext7.Services
             Dictionary<string, string> replacements = new()
             {
                 { "{createdDateOnly}", DateTime.Now.ToString("dd.MM.yyyy") },
-                { "{workPlace}",  generateWorkReport.FixationDefect.ExactAddress! },
+                { "{workPlace}",  generateWorkReport.FixationDefect.Address },
                 { "{contractorOrganizationName}",  generateWorkReport.Contractor.OrganizationName },
                 { "{creator}",  generateWorkReport.Creator.FullName },
 
@@ -66,14 +66,14 @@ namespace RoadDefectsService.Infrastructure.Itext7.Services
                 {
                     workVisualAssessment = "Работы выполнены с дефектом";
                     conclusion =
-                        $"Работы по устранению дефектов на {generateWorkReport.FixationDefect.ExactAddress!} выполнены. " +
+                        $"Работы по устранению дефектов на {generateWorkReport.FixationDefect.Address} выполнены. " +
                         "Однако в процессе технического осмотра были выявлены дефекты.";
                 }
                 else
                 {
                     workVisualAssessment = "Работы выполнены в полном объеме";
                     conclusion =
-                        $"Все работы по устранению дефектов на {generateWorkReport.FixationDefect.ExactAddress!} выполнены в полном объеме и в установленные сроки. " +
+                        $"Все работы по устранению дефектов на {generateWorkReport.FixationDefect.Address} выполнены в полном объеме и в установленные сроки. " +
                         "Качество выполненных работ соответствует нормативным требованиям и договорным обязательствам. " +
                         "Рекомендовано принять выполненные работы и произвести оплату в соответствии с условиями договора.";
                 }
@@ -82,7 +82,7 @@ namespace RoadDefectsService.Infrastructure.Itext7.Services
             {
                 workVisualAssessment = "Работы не выполнены";
                 conclusion =
-                    $"В процессе технического осмотра было выявлено, что работы по устранению дефектов на {generateWorkReport.FixationDefect.ExactAddress!} не выполнен.";
+                    $"В процессе технического осмотра было выявлено, что работы по устранению дефектов на {generateWorkReport.FixationDefect.Address} не выполнен.";
             }
 
             return (workVisualAssessment, conclusion);

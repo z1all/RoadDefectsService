@@ -46,7 +46,9 @@ namespace RoadDefectsService.Core.Application.Services
             }
 
             task.Description = editFixationDefect.Description;
-            task.ApproximateAddress = editFixationDefect.ApproximateAddress;
+            task.Address = editFixationDefect.Address;
+            task.CoordinateX = editFixationDefect.CoordinateX;
+            task.CoordinateY = editFixationDefect.CoordinateY;
 
             await _taskFixationDefectRepository.UpdateAsync(task);
 
@@ -59,7 +61,9 @@ namespace RoadDefectsService.Core.Application.Services
             {
                 CreatedDateTime = DateTime.UtcNow,
                 TaskStatus = createFixationDefect.IsTransfer ? StatusTask.Completed : StatusTask.Created,
-                ApproximateAddress = createFixationDefect.ApproximateAddress,
+                Address = createFixationDefect.Address,
+                CoordinateX = createFixationDefect.CoordinateX,
+                CoordinateY = createFixationDefect.CoordinateY,
                 Description = createFixationDefect.Description,
                 IsTransfer = createFixationDefect.IsTransfer,
             };

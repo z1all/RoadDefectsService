@@ -9,10 +9,6 @@ namespace RoadDefectsService.Core.Application.Mappers
         public TaskMappingProfile()
         {
             CreateMap<TaskEntity, TaskDTO>()
-                    .ForMember(
-                       taskDTO => taskDTO.Address,
-                       options => options.MapFrom(taskEntity => taskEntity.ApproximateAddress)
-                   )
                    .ForMember(
                        taskDTO => taskDTO.ExistRoadInspector,
                        options => options.MapFrom(taskEntity => taskEntity.RoadInspectorId != null)

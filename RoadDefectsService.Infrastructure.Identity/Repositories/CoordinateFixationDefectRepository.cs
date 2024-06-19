@@ -28,8 +28,8 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                     FixationDefectId = fixationDefect.Id,
                     FixationDateTime = fixationDefect.RecordedDateTime,
                     IsEliminated = fixationDefect.IsEliminated,
-                    X = fixationDefect.CoordinatesX,
-                    Y = fixationDefect.CoordinatesY
+                    X = fixationDefect.Task!.CoordinateX,
+                    Y = fixationDefect.Task!.CoordinateY
                 })
                 .ToListAsync();
         }

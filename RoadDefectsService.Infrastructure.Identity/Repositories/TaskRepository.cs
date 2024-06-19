@@ -80,7 +80,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
 
             if (filter.Address is not null)
             {
-                tasks = tasks.Where(task => task.ApproximateAddress.ToLower().Contains(filter.Address.ToLower()));
+                tasks = tasks.Where(task => task.Address.ToLower().Contains(filter.Address.ToLower()));
             }
 
             tasks = filter.DefectStatus switch
