@@ -62,6 +62,9 @@ namespace RoadDefectsService.Core.Application.Services
 
             TaskFixationWork task = new()
             {
+                Address = prevTask.Address,
+                CoordinateX = prevTask.CoordinateX,
+                CoordinateY = prevTask.CoordinateY,
                 CreatedDateTime = DateTime.UtcNow,
                 TaskStatus = createFixationWork.IsTransfer ? StatusTask.Completed : StatusTask.Created,
                 PrevTaskId = createFixationWork.PrevTaskId,

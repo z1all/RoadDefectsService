@@ -78,6 +78,11 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 tasks = tasks.Where(task => task.TaskStatus == (StatusTask)filter.TaskStatus);
             }
 
+            if (filter.Address is not null)
+            {
+                tasks = tasks.Where(task => task.Address.ToLower().Contains(filter.Address.ToLower()));
+            }
+
             tasks = filter.DefectStatus switch
             {
                 DefectStatusFilter.NotVerified => tasks.Where(task => task.TaskStatus != StatusTask.Completed),
@@ -92,7 +97,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
             {
                 TaskSortType.CreatedDateTimeAsc => tasks.OrderBy(task => task.CreatedDateTime),
                 TaskSortType.CreatedDateTimeDesc => tasks.OrderByDescending(task => task.CreatedDateTime),
-                _ => tasks
+                _ => tasks.OrderBy(task => task.TaskStatus).ThenBy(task => task.CreatedDateTime)
             };
 
             return tasks;

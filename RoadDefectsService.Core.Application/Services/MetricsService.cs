@@ -3,6 +3,7 @@ using RoadDefectsService.Core.Application.DTOs.Common;
 using RoadDefectsService.Core.Application.DTOs.ContractorService;
 using RoadDefectsService.Core.Application.DTOs.FixationService;
 using RoadDefectsService.Core.Application.DTOs.MetricsService;
+using RoadDefectsService.Core.Application.DTOs.TaskService;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Models;
