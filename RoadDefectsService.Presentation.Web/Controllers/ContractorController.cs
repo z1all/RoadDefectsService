@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RoadDefectsService.Core.Application.DTOs.ContractorService;
-using RoadDefectsService.Core.Application.Interfaces.Services;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using RoadDefectsService.Core.Application.CQRS.Contractor.Commands;
+using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
+using RoadDefectsService.Core.Application.CQRS.Contractor.Queries;
 using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
@@ -16,13 +18,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [SwaggerControllerOrder(Order = 3)]
     public class ContractorController : BaseController
     {
-        private readonly IContractorService _contractorService;
+        private readonly IMediator _mediator;
 
-        /// <summary></summary>
-        /// <param name="contractorService"></param>
-        public ContractorController(IContractorService contractorService)
+        public ContractorController(IMediator mediator)
         {
-            _contractorService = contractorService;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ContractorPagedDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<ContractorPagedDTO>> GetContractors([FromQuery] ContractorFilterDTO contractorFilter)
         {
-            return await ExecutionResultHandlerAsync(() => _contractorService.GetContractorsAsync(contractorFilter));
+            return await ExecutionResultHandlerAsync(() => _mediator.Send(new GetAllContractorsByFiltersQuery() { ContractorFilter = contractorFilter}));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ContractorDTO>> GetContractor([FromRoute] Guid contractorId)
         {
-            return await ExecutionResultHandlerAsync(() => _contractorService.GetContractorAsync(contractorId));
+            return await ExecutionResultHandlerAsync(() => _mediator.Send(new GetContractorByIdQuery() { ContractorId = contractorId }));
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> CreateContractor([FromBody] CreateContractorDTO contractor)
         {
-            return await ExecutionResultHandlerAsync(() => _contractorService.CreateContractorAsync(contractor));
+            return await ExecutionResultHandlerAsync(() => _mediator.Send(new CreateContractorCommand() { CreateContractor = contractor }));
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> ChangeContractor([FromRoute] Guid contractorId, [FromBody] EditContractorDTO contractor)
         {
-            return await ExecutionResultHandlerAsync(() => _contractorService.EditContractorAsync(contractor, contractorId));
+            return await ExecutionResultHandlerAsync(() => _mediator.Send(new EditContractorCommand() { ContractorId = contractorId, EditContractor = contractor }));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteContractor([FromRoute] Guid contractorId)
         {
-            return await ExecutionResultHandlerAsync(() => _contractorService.DeleteContractorAsync(contractorId));
+            return await ExecutionResultHandlerAsync(() => _mediator.Send(new DeleteContractorCommand() { ContractorId = contractorId }));
         }
     }
 }

@@ -6,11 +6,11 @@ using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
-    public class FixationWorkRepository : BaseWithBaseEntityRepository<FixationWork, AppDbContext>, IFixationWorkRepository
+    public class FixationWorkRepository : BaseWithBaseEntityRepository<FixationWorkEntity, AppDbContext>, IFixationWorkRepository
     {
         public FixationWorkRepository(AppDbContext dbContext) : base(dbContext) { }
 
-        public Task<FixationWork?> GetByIdWithPhotosAndTaskWithPrevTaskAsync(Guid id)
+        public Task<FixationWorkEntity?> GetByIdWithPhotosAndTaskWithPrevTaskAsync(Guid id)
         {
             return _dbContext.FixationWorks
                 .Include(fixation => fixation.Photos)
@@ -19,7 +19,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .FirstOrDefaultAsync(fixation => fixation.Id == id);
         }
 
-        public Task<FixationWork?> GetByIdWithTaskAndPhotosAsync(Guid id)
+        public Task<FixationWorkEntity?> GetByIdWithTaskAndPhotosAsync(Guid id)
         {
             return _dbContext.FixationWorks
                 .Include(fixation => fixation.TaskFixationWork)
@@ -27,14 +27,14 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .FirstOrDefaultAsync(fixation => fixation.Id == id);
         }
 
-        public Task<FixationWork?> GetByIdWithTaskAsync(Guid id)
+        public Task<FixationWorkEntity?> GetByIdWithTaskAsync(Guid id)
         {
             return _dbContext.FixationWorks
                 .Include(fixation => fixation.TaskFixationWork)
                 .FirstOrDefaultAsync(fixation => fixation.Id == id);
         }
 
-        public Task<FixationWork?> GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(Guid id)
+        public Task<FixationWorkEntity?> GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(Guid id)
         {
             return _dbContext.FixationWorks
                 .Include(fixation => fixation.TaskFixationWork)

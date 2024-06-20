@@ -25,11 +25,11 @@ namespace RoadDefectsService.Core.Domain.Models
         }
 
         public Guid? FixationDefectId { get; set; }
-        public FixationDefect? FixationDefect { get; set; }
+        public FixationDefectEntity? FixationDefect { get; set; }
 
         public Guid? RoadInspectorId { get; set; }
-        public RoadInspector? RoadInspector { get; set; }
+        public RoadInspectorEntity? RoadInspector { get; set; }
 
-        public TaskFixationWork? NextTask { get; set; }
+        public TaskFixationWorkEntity? NextTask { get; set; }
     }
 }

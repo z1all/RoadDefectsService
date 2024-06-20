@@ -5,7 +5,7 @@ using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
-    public class OperatorRepository : BaseWithBaseEntityRepository<Operator, AppDbContext>, IOperatorRepository
+    public class OperatorRepository : BaseWithBaseEntityRepository<OperatorEntity, AppDbContext>, IOperatorRepository
     {
         public OperatorRepository(AppDbContext dbContext) : base(dbContext) { }
     }

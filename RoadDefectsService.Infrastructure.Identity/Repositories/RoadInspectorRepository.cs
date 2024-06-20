@@ -6,7 +6,7 @@ using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
-    public class RoadInspectorRepository : BaseWithBaseEntityRepository<RoadInspector, AppDbContext>, IRoadInspectorRepository
+    public class RoadInspectorRepository : BaseWithBaseEntityRepository<RoadInspectorEntity, AppDbContext>, IRoadInspectorRepository
     {
         public RoadInspectorRepository(AppDbContext dbContext) : base(dbContext) { }
 

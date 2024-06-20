@@ -4,9 +4,9 @@ using RoadDefectsService.Infrastructure.Identity.Seeds.Models.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Seeds.Models
 {
-    public class CreateDefectTypesDTO : BaseCreateDTO<DefectType>
+    public class CreateDefectTypesDTO : BaseCreateDTO<DefectTypeEntity>
     {
         [JsonProperty(PropertyName = "CreateDefectTypes")]
-        public override required List<DefectType> Models { get; set; }
+        public override required List<DefectTypeEntity> Models { get; set; }
     }
 }

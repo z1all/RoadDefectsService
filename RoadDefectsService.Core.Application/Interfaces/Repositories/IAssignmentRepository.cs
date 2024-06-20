@@ -5,11 +5,11 @@ using RoadDefectsService.Core.Domain.Models;
 namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
     public interface IAssignmentRepository : 
-        IBaseWithBaseEntityRepository<Assignment>, 
-        IFilterableRepository<AssignmentFilterDTO, Assignment>
+        IBaseWithBaseEntityRepository<AssignmentEntity>, 
+        IFilterableRepository<AssignmentFilterDTO, AssignmentEntity>
     {
-        Task<Assignment?> GetByIdWithContractorAndFixationDefectWithDefectTypeAndPhotosAsync(Guid id);
+        Task<AssignmentEntity?> GetByIdWithContractorAndFixationDefectWithDefectTypeAndPhotosAsync(Guid id);
         Task<bool> AnyByFixationDefectIdAsync(Guid fixationDefectId);
-        Task<Assignment?> GetByFixationDefectIdWithAllNestingAsync(Guid fixationDefectId);
+        Task<AssignmentEntity?> GetByFixationDefectIdWithAllNestingAsync(Guid fixationDefectId);
     }
 }

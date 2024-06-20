@@ -8,7 +8,7 @@ namespace RoadDefectsService.Core.Application.Mappers
     {
         public DefectTypeMappingProfile() 
         {
-            CreateMap<DefectType, DefectTypeDTO>();
+            CreateMap<DefectTypeEntity, DefectTypeDTO>();
         }
     }
 }

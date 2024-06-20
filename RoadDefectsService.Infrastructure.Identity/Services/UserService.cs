@@ -133,7 +133,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
 
             if (!result.isRestored)
             {
-                Operator @operator = new()
+                OperatorEntity @operator = new()
                 {
                     Id = result.user.Id,
                     User = result.user,
@@ -154,7 +154,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Services
 
             if (!result.isRestored)
             {
-                RoadInspector roadInspector = new()
+                RoadInspectorEntity roadInspector = new()
                 {
                     Id = result.user.Id,
                     User = result.user,

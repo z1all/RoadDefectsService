@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
 using RoadDefectsService.Core.Application.DTOs.Common;
-using RoadDefectsService.Core.Application.DTOs.ContractorService;
 using RoadDefectsService.Core.Application.DTOs.FixationService;
 using RoadDefectsService.Core.Application.DTOs.MetricsService;
 using RoadDefectsService.Core.Application.DTOs.TaskService;
@@ -43,13 +43,13 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<ReportDTO>> GetWorkReportAsync(Guid fixationWorkId, Guid userId)
         {
-            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithPhotosAndTaskWithPrevTaskAsync(fixationWorkId);
+            FixationWorkEntity? fixationWork = await _fixationWorkRepository.GetByIdWithPhotosAndTaskWithPrevTaskAsync(fixationWorkId);
             if (fixationWork is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation defect with id {fixationWorkId} not found!");
             }
 
-            Assignment? assignment = await _assignmentRepository.GetByFixationDefectIdWithAllNestingAsync(fixationWork.TaskFixationWork!.PrevTask!.FixationDefectId!.Value);
+            AssignmentEntity? assignment = await _assignmentRepository.GetByFixationDefectIdWithAllNestingAsync(fixationWork.TaskFixationWork!.PrevTask!.FixationDefectId!.Value);
             if (assignment is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "AssignmentNotFound", $"Assignment defect with id {fixationWork.TaskFixationWork.FixationDefectId} not found!");

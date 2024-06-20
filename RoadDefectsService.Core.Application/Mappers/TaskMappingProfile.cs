@@ -18,7 +18,7 @@ namespace RoadDefectsService.Core.Application.Mappers
                        options => options.MapFrom(taskEntity => taskEntity.FixationDefectId != null)
                    );
 
-            CreateMap<TaskFixationDefect, FixationDefectTaskDTO>()
+            CreateMap<TaskFixationDefectEntity, FixationDefectTaskDTO>()
                 .ForMember(
                     fixationDefectTaskDTO => fixationDefectTaskDTO.DefectFixation,
                     options => options.MapFrom(taskFixationDefect => taskFixationDefect.FixationDefect)
@@ -28,7 +28,7 @@ namespace RoadDefectsService.Core.Application.Mappers
                     options => options.MapFrom(taskFixationDefect => taskFixationDefect.RoadInspector!.User)
                 );
 
-            CreateMap<TaskFixationWork, FixationWorkTaskDTO>()
+            CreateMap<TaskFixationWorkEntity, FixationWorkTaskDTO>()
                 .ForMember(
                     fixationDefectTaskDTO => fixationDefectTaskDTO.DefectFixation,
                     options => options.MapFrom(taskFixationDefect => taskFixationDefect.FixationDefect)

@@ -2,8 +2,8 @@
 
 namespace RoadDefectsService.Core.Domain.Models
 {
-    public class Fixation : BaseEntity
+    public class DefectTypeEntity : BaseEntity
     {
-        public IEnumerable<Photo> Photos { get; set; } = null!;
+        public required string Name { get; set; }
     }
 }

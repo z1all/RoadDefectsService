@@ -22,7 +22,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<FixationDefectTaskDTO>> GetFixationDefectTaskAsync(Guid taskId, Guid? inspectorId = null)
         {
-            TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAsync(taskId);
+            TaskFixationDefectEntity? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAsync(taskId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
@@ -39,7 +39,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> EditFixationDefectTaskAsync(EditFixationDefectTaskDTO editFixationDefect, Guid taskId)
         {
-            TaskFixationDefect? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(taskId);
+            TaskFixationDefectEntity? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(taskId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
@@ -57,7 +57,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<CreateTaskResponseDTO>> CreateFixationDefectTaskAsync(CreateFixationDefectTaskDTO createFixationDefect)
         {
-            TaskFixationDefect task = new()
+            TaskFixationDefectEntity task = new()
             {
                 CreatedDateTime = DateTime.UtcNow,
                 TaskStatus = createFixationDefect.IsTransfer ? StatusTask.Completed : StatusTask.Created,

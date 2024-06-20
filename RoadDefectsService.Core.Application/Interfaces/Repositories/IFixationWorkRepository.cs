@@ -3,11 +3,11 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
-    public interface IFixationWorkRepository : IBaseWithBaseEntityRepository<FixationWork>
+    public interface IFixationWorkRepository : IBaseWithBaseEntityRepository<FixationWorkEntity>
     {
-        Task<FixationWork?> GetByIdWithTaskAsync(Guid id);
-        Task<FixationWork?> GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(Guid id);
-        Task<FixationWork?> GetByIdWithTaskAndPhotosAsync(Guid id);
-        Task<FixationWork?> GetByIdWithPhotosAndTaskWithPrevTaskAsync(Guid id);
+        Task<FixationWorkEntity?> GetByIdWithTaskAsync(Guid id);
+        Task<FixationWorkEntity?> GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(Guid id);
+        Task<FixationWorkEntity?> GetByIdWithTaskAndPhotosAsync(Guid id);
+        Task<FixationWorkEntity?> GetByIdWithPhotosAndTaskWithPrevTaskAsync(Guid id);
     }
 }

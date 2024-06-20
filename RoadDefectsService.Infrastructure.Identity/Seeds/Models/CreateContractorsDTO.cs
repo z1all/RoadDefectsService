@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using RoadDefectsService.Core.Application.DTOs.ContractorService;
+using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
 using RoadDefectsService.Infrastructure.Identity.Seeds.Models.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Seeds.Models

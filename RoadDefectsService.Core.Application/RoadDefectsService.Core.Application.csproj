@@ -18,10 +18,4 @@
     <ProjectReference Include="..\RoadDefectsService.Core.Domain\RoadDefectsService.Core.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CQRS\Contractor\Queries\" />
-    <Folder Include="CQRS\Contractor\Utils\" />
-    <Folder Include="CQRS\Contractor\DTOs\" />
-  </ItemGroup>
-
 </Project>

@@ -9,8 +9,8 @@ namespace RoadDefectsService.Core.Application.Mappers
     {
         public PhotoMappingProfile() 
         {
-            CreateMap<Photo, PhotoInfoDTO>();
-            CreateMap<Photo, PhotoShortInfoDTO>();
+            CreateMap<PhotoEntity, PhotoInfoDTO>();
+            CreateMap<PhotoEntity, PhotoShortInfoDTO>();
         }
     }
 }

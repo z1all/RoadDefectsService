@@ -1,4 +1,4 @@
-﻿using RoadDefectsService.Core.Application.DTOs.ContractorService;
+﻿using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
 
 namespace RoadDefectsService.Core.Application.DTOs.NotificationService
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RoadDefectsService.Core.Application.DTOs.ContractorService;
+using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Infrastructure.Identity.Contexts;
@@ -7,16 +7,16 @@ using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
-    public class ContractorRepository : SoftDeleteBaseRepository<Contractor, AppDbContext>, IContractorRepository
+    public class ContractorRepository : SoftDeleteBaseRepository<ContractorEntity, AppDbContext>, IContractorRepository
     {
         public ContractorRepository(AppDbContext dbContext) : base(dbContext) { }
 
-        public override Task<Contractor?> FindEntityBy(Contractor entity)
+        public override Task<ContractorEntity?> FindEntityBy(ContractorEntity entity)
         {
             return _dbContext.Contractors.FirstOrDefaultAsync(e => e.Id == entity.Id || e.Email == entity.Email);
         }
 
-        public async Task<List<Contractor>> GetAllByFilterAsync(ContractorFilterDTO contractorFilter)
+        public async Task<List<ContractorEntity>> GetAllByFilterAsync(ContractorFilterDTO contractorFilter)
         {
             return await ApplyFilter(contractorFilter)
                 .Skip((contractorFilter.Page - 1) * contractorFilter.Size)
@@ -30,7 +30,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .CountAsync();
         }
 
-        private IQueryable<Contractor> ApplyFilter(ContractorFilterDTO contractorFilter)
+        private IQueryable<ContractorEntity> ApplyFilter(ContractorFilterDTO contractorFilter)
         {
             var contractors = _dbContext.Contractors.AsQueryable();
 

@@ -2,7 +2,7 @@
 
 namespace RoadDefectsService.Core.Domain.Models
 {
-    public class Contractor : SoftDeleteBaseEntity
+    public class ContractorEntity : SoftDeleteBaseEntity
     {
         public required string Email { get; set; }
         public required string ContractorFullName { get; set; }

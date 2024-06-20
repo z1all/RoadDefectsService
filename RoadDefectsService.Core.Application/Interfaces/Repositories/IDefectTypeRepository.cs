@@ -4,8 +4,8 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
-    public interface IDefectTypeRepository : IBaseWithBaseEntityRepository<DefectType>
+    public interface IDefectTypeRepository : IBaseWithBaseEntityRepository<DefectTypeEntity>
     {
-        Task<List<DefectType>> GetAllByFilterAsync(DefectTypeFilterDTO defectTypeFilter);
+        Task<List<DefectTypeEntity>> GetAllByFilterAsync(DefectTypeFilterDTO defectTypeFilter);
     }
 }

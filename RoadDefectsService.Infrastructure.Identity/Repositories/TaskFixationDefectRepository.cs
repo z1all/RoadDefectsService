@@ -6,11 +6,11 @@ using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
-    public class TaskFixationDefectRepository : BaseWithBaseEntityRepository<TaskFixationDefect, AppDbContext>, ITaskFixationDefectRepository
+    public class TaskFixationDefectRepository : BaseWithBaseEntityRepository<TaskFixationDefectEntity, AppDbContext>, ITaskFixationDefectRepository
     {
         public TaskFixationDefectRepository(AppDbContext dbContext) : base(dbContext) { }
 
-        public Task<TaskFixationDefect?> GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(Guid id)
+        public Task<TaskFixationDefectEntity?> GetByIdWithInspectorAndDefectWithPhotosAndDefectTypeAsync(Guid id)
         {
             return _dbContext.FixationDefectTasks
                 .Include(task => task.RoadInspector)
@@ -22,7 +22,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .FirstOrDefaultAsync(task => task.Id == id);
         }
 
-        public Task<TaskFixationDefect?> GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAsync(Guid id)
+        public Task<TaskFixationDefectEntity?> GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAsync(Guid id)
         {
             return _dbContext.FixationDefectTasks
                 .Include(task => task.RoadInspector)

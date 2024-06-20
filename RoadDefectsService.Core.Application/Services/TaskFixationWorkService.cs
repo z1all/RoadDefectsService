@@ -26,7 +26,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<FixationWorkTaskDTO>> GetFixationWorkTaskAsync(Guid taskId, Guid? inspectorId)
         {
-            TaskFixationWork? task = await _taskFixationWorkRepository.GetByIdWithInspectorAndPrevTaskAndNextTaskAndFixationsWithPhotosAndDefectTypeAsync(taskId);
+            TaskFixationWorkEntity? task = await _taskFixationWorkRepository.GetByIdWithInspectorAndPrevTaskAndNextTaskAndFixationsWithPhotosAndDefectTypeAsync(taskId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");
@@ -60,7 +60,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.BadRequest, "ExistWithSamePrevTask", $"This task is already a previous one for another task!");
             }
 
-            TaskFixationWork task = new()
+            TaskFixationWorkEntity task = new()
             {
                 Address = prevTask.Address,
                 CoordinateX = prevTask.CoordinateX,

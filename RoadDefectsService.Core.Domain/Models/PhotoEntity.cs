@@ -2,7 +2,7 @@
 
 namespace RoadDefectsService.Core.Domain.Models
 {
-    public class Photo : BaseEntity
+    public class PhotoEntity : BaseEntity
     {
         public string PathName { get => $"{Id}_{Name}{Type}"; }
         public required string Name { get; set; }

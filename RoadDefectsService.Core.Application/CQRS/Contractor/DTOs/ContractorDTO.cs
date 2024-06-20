@@ -1,4 +1,4 @@
-﻿namespace RoadDefectsService.Core.Application.DTOs.ContractorService
+﻿namespace RoadDefectsService.Core.Application.CQRS.Contractor.DTOs
 {
     public class ContractorDTO
     {

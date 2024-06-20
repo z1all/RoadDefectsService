@@ -3,7 +3,7 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
-    public interface IOperatorRepository : IBaseWithBaseEntityRepository<Operator>
+    public interface IOperatorRepository : IBaseWithBaseEntityRepository<OperatorEntity>
     {
     }
 }

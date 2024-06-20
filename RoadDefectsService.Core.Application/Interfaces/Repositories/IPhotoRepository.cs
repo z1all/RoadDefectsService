@@ -3,8 +3,8 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Interfaces.Repositories
 {
-    public interface IPhotoRepository : IBaseWithBaseEntityRepository<Photo>
+    public interface IPhotoRepository : IBaseWithBaseEntityRepository<PhotoEntity>
     {
-        Task<Photo?> GetByIdAndFixationIdAsync(Guid id, Guid fixationId);
+        Task<PhotoEntity?> GetByIdAndFixationIdAsync(Guid id, Guid fixationId);
     }
 }

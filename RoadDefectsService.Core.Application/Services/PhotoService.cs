@@ -33,7 +33,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return ExecutionResult<PhotoUploadResponseDTO>.FromError(checkResult);
             }
 
-            Photo photo = new()
+            PhotoEntity photo = new()
             {
                 Id = Guid.NewGuid(),
                 Name = addPhoto.Name,
@@ -55,7 +55,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> DeletePhotoAsync(Guid fixationId, Guid photoId, Guid? userId)
         {
-            Photo? photo = await _photoRepository.GetByIdAndFixationIdAsync(photoId, fixationId);
+            PhotoEntity? photo = await _photoRepository.GetByIdAndFixationIdAsync(photoId, fixationId);
             if (photo is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "PhotoNotFound", $"Photo with id {photoId} not found in fixation with id {fixationId}!");
@@ -80,7 +80,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<PhotoDTO>> GetPhotoAsync(Guid fixationId, Guid photoId, Guid? userId)
         {
-            Photo? photo = await _photoRepository.GetByIdAndFixationIdAsync(photoId, fixationId);
+            PhotoEntity? photo = await _photoRepository.GetByIdAndFixationIdAsync(photoId, fixationId);
             if (photo is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "PhotoNotFound", $"Photo with id {photoId} not found in fixation with id {fixationId}!");
@@ -106,12 +106,12 @@ namespace RoadDefectsService.Core.Application.Services
             };
         }
 
-        private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAsync(Photo photo, Guid? userId)
+        private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAsync(PhotoEntity photo, Guid? userId)
         {
             return CheckTaskAsync(userId, () => GetTaskAsync(photo), CheckTaskHelper.CheckOnTaskOwner);
         }
 
-        private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(Photo photo, Guid? userId)
+        private Task<ExecutionResult<FixationType>> CheckOnTaskOwnerAndTaskStatusAsync(PhotoEntity photo, Guid? userId)
         {
             return CheckTaskAsync(
                 userId, 
@@ -148,16 +148,16 @@ namespace RoadDefectsService.Core.Application.Services
             return task.fixationType;
         }
 
-        private async Task<ExecutionResult<(TaskEntity, FixationType)>> GetTaskAsync(Photo photo)
+        private async Task<ExecutionResult<(TaskEntity, FixationType)>> GetTaskAsync(PhotoEntity photo)
         {
             if (photo.FixationDefectId is not null)
             {
-                FixationDefect? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAsync(photo.FixationDefectId.Value);
+                FixationDefectEntity? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAsync(photo.FixationDefectId.Value);
                 if (fixationDefect is not null) return (fixationDefect.Task!, FixationType.FixationDefect);
             }
             else if (photo.FixationWorkId is not null)
             {
-                FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(photo.FixationWorkId.Value);
+                FixationWorkEntity? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(photo.FixationWorkId.Value);
                 if (fixationWork is not null) return (fixationWork.TaskFixationWork!, FixationType.FixationWork);
             }
 
@@ -166,10 +166,10 @@ namespace RoadDefectsService.Core.Application.Services
 
         private async Task<ExecutionResult<(TaskEntity, FixationType)>> GetTaskAsync(Guid fixationId)
         {
-            FixationDefect? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAsync(fixationId);
+            FixationDefectEntity? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAsync(fixationId);
             if (fixationDefect is not null) return (fixationDefect.Task!, FixationType.FixationDefect);
 
-            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationId);
+            FixationWorkEntity? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationId);
             if (fixationWork is not null) return (fixationWork.TaskFixationWork!, FixationType.FixationWork);
 
             return new(StatusCodeExecutionResult.NotFound, "FixationNotFound", $"Fixation with id {fixationId} not found!");

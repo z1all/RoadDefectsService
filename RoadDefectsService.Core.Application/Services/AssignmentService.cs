@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
 using RoadDefectsService.Core.Application.DTOs.AssignmentService;
-using RoadDefectsService.Core.Application.DTOs.ContractorService;
 using RoadDefectsService.Core.Application.DTOs.NotificationService;
 using RoadDefectsService.Core.Application.Helpers;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
@@ -33,13 +33,13 @@ namespace RoadDefectsService.Core.Application.Services
         public Task<ExecutionResult<AssignmentPagedDTO>> GetAssignmentsAsync(AssignmentFilterDTO assignmentFilterDTO)
         {
             return FiltrationHelper
-                .FilterAsync<AssignmentFilterDTO, Assignment, AssignmentShortInfoDTO, AssignmentPagedDTO>(
+                .FilterAsync<AssignmentFilterDTO, AssignmentEntity, AssignmentShortInfoDTO, AssignmentPagedDTO>(
                 assignmentFilterDTO, _assignmentRepository, (assignments) => _mapper.Map<List<AssignmentShortInfoDTO>>(assignments));
         }
 
         public async Task<ExecutionResult<AssignmentDTO>> GetAssignmentAsync(Guid assignmentId)
         {
-            Assignment? assignment = await _assignmentRepository.GetByIdWithContractorAndFixationDefectWithDefectTypeAndPhotosAsync(assignmentId);
+            AssignmentEntity? assignment = await _assignmentRepository.GetByIdWithContractorAndFixationDefectWithDefectTypeAndPhotosAsync(assignmentId);
             if (assignment is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "AssignmentNotFound", $"Assignment with id {assignmentId} not found!");
@@ -50,7 +50,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> CreateAssignmentAsync(CreateAssignmentDTO createAssignment, Guid? userId)
         {
-            FixationDefect? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAndPhotosAndDefectTypeAsync(createAssignment.FixationDefectId);
+            FixationDefectEntity? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAndPhotosAndDefectTypeAsync(createAssignment.FixationDefectId);
             if (fixationDefect is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "FixationDefectNotFound", $"Fixation defect with id {createAssignment.FixationDefectId} not found!");
@@ -70,13 +70,13 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.BadRequest, "AssignmentAlreadyExist", $"Fixation defect with id {createAssignment.FixationDefectId} already has a request for work!");
             }
 
-            Contractor? contractor = await _contractorRepository.GetByIdAsync(createAssignment.ContractorId);
+            ContractorEntity? contractor = await _contractorRepository.GetByIdAsync(createAssignment.ContractorId);
             if (contractor is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "ContractorNotFound", $"Contractor defect with id {createAssignment.ContractorId} not found!");
             }
 
-            Assignment assignment = new()
+            AssignmentEntity assignment = new()
             {
                 CreatedDateTime = DateTime.UtcNow,
                 DeadlineDateOnly = createAssignment.DeadlineDateOnly,
@@ -98,7 +98,7 @@ namespace RoadDefectsService.Core.Application.Services
             return ExecutionResult.SucceededResult;
         }
 
-        private async Task<ExecutionResult> SendCreatedAssignmentNotificationAsync(Assignment assignment, Contractor contractor, FixationDefect fixationDefect)
+        private async Task<ExecutionResult> SendCreatedAssignmentNotificationAsync(AssignmentEntity assignment, ContractorEntity contractor, FixationDefectEntity fixationDefect)
         {
             try
             {

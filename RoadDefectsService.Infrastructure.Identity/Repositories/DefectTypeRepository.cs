@@ -7,11 +7,11 @@ using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
-    public class DefectTypeRepository : BaseWithBaseEntityRepository<DefectType, AppDbContext>, IDefectTypeRepository
+    public class DefectTypeRepository : BaseWithBaseEntityRepository<DefectTypeEntity, AppDbContext>, IDefectTypeRepository
     {
         public DefectTypeRepository(AppDbContext dbContext) : base(dbContext) { }
 
-        public Task<List<DefectType>> GetAllByFilterAsync(DefectTypeFilterDTO defectTypeFilter)
+        public Task<List<DefectTypeEntity>> GetAllByFilterAsync(DefectTypeFilterDTO defectTypeFilter)
         {
             var defectTypes = _dbContext.DefectTypes.AsQueryable();
 

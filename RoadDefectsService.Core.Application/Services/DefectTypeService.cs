@@ -21,7 +21,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<List<DefectTypeDTO>>> GetDefectTypesAsync(DefectTypeFilterDTO defectTypeFilter)
         {
-            List<DefectType> defectTypes = await _defectTypeRepository.GetAllByFilterAsync(defectTypeFilter);
+            List<DefectTypeEntity> defectTypes = await _defectTypeRepository.GetAllByFilterAsync(defectTypeFilter);
 
             return _mapper.Map<List<DefectTypeDTO>>(defectTypes);
         }

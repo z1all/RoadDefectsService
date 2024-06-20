@@ -25,7 +25,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<FixationWorkDTO>> GetFixationWorkAsync(Guid fixationWorkId, Guid? userId)
         {
-            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAndPhotosAsync(fixationWorkId);
+            FixationWorkEntity? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAndPhotosAsync(fixationWorkId);
             if (fixationWork is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work defect with id {fixationWorkId} not found!");
@@ -42,7 +42,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> DeleteFixationWorkAsync(Guid fixationWorkId, Guid? userId)
         {
-            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationWorkId);
+            FixationWorkEntity? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationWorkId);
             if (fixationWork is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work defect with id {fixationWorkId} not found!");
@@ -58,7 +58,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<CreateFixationResponseDTO>> CreateFixationWorkAsync(CreateFixationWorkDTO createFixationWork, Guid? userId)
         {
-            TaskFixationWork? task = await _taskFixationWorkRepository.GetByIdAsync(createFixationWork.TaskFixationWorkId);
+            TaskFixationWorkEntity? task = await _taskFixationWorkRepository.GetByIdAsync(createFixationWork.TaskFixationWorkId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {createFixationWork.TaskFixationWorkId} not found!");
@@ -75,7 +75,7 @@ namespace RoadDefectsService.Core.Application.Services
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"The task with id {createFixationWork.TaskFixationWorkId} already has a defect fixation with id {task.FixationDefectId}!");
             }
 
-            FixationWork fixationWork = new()
+            FixationWorkEntity fixationWork = new()
             {
                 RecordedDateTime = DateTime.UtcNow,
             };
@@ -89,7 +89,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> ChangeFixationWorkAsync(EditFixationWorkDTO editFixationWork, Guid fixationWorkId, Guid? userId)
         {
-            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(fixationWorkId);
+            FixationWorkEntity? fixationWork = await _fixationWorkRepository.GetByIdWithTaskWithPrevTaskWithFixationDefectAsync(fixationWorkId);
             if (fixationWork is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work defect with id {fixationWorkId} not found!");
@@ -113,7 +113,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult> ChangeMetaInfoFixationWorkAsync(EditMetaInfoFixationWorkDTO editMetaInfoFixationWork, Guid fixationWorkId)
         {
-            FixationWork? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationWorkId);
+            FixationWorkEntity? fixationWork = await _fixationWorkRepository.GetByIdWithTaskAsync(fixationWorkId);
             if (fixationWork is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "FixationWorkNotFound", $"Fixation work with id {fixationWorkId} not found!");

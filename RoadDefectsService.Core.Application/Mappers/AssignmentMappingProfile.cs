@@ -8,8 +8,8 @@ namespace RoadDefectsService.Core.Application.Mappers
     {
         public AssignmentMappingProfile() 
         {
-            CreateMap<Assignment, AssignmentDTO>();
-            CreateMap<Assignment, AssignmentShortInfoDTO>();
+            CreateMap<AssignmentEntity, AssignmentDTO>();
+            CreateMap<AssignmentEntity, AssignmentShortInfoDTO>();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using RoadDefectsService.Core.Application.DTOs.Common;
 
-namespace RoadDefectsService.Core.Application.DTOs.ContractorService
+namespace RoadDefectsService.Core.Application.CQRS.Contractor.DTOs
 {
     public class ContractorPagedDTO : BasePagedDTO<ContractorDTO>
     {

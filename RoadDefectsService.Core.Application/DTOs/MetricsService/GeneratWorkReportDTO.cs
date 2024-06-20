@@ -1,5 +1,5 @@
-﻿using RoadDefectsService.Core.Application.DTOs.Common;
-using RoadDefectsService.Core.Application.DTOs.ContractorService;
+﻿using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
+using RoadDefectsService.Core.Application.DTOs.Common;
 using RoadDefectsService.Core.Application.DTOs.FixationService;
 
 namespace RoadDefectsService.Core.Application.DTOs.MetricsService

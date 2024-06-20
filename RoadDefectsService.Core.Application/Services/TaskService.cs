@@ -151,7 +151,7 @@ namespace RoadDefectsService.Core.Application.Services
             return ExecutionResult.SucceededResult;
         }
 
-        private ExecutionResult CheckOnNullProperties(FixationDefect? fixationDefect)
+        private ExecutionResult CheckOnNullProperties(FixationDefectEntity? fixationDefect)
         {
             if (fixationDefect is not null &&
                (fixationDefect.DamagedCanvasSquareMeter is null || fixationDefect.DefectTypeId is null))

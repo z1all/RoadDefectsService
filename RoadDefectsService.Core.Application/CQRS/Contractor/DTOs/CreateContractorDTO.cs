@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoadDefectsService.Core.Application.DTOs.ContractorService
+namespace RoadDefectsService.Core.Application.CQRS.Contractor.DTOs
 {
-    public class EditContractorDTO
+    public class CreateContractorDTO
     {
         [Required]
         [EmailAddress]

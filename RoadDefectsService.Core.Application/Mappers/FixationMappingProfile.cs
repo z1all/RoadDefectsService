@@ -10,17 +10,17 @@ namespace RoadDefectsService.Core.Application.Mappers
     {
         public FixationMappingProfile() 
         {
-            CreateMap<FixationDefect, FixationDefectDTO>()
+            CreateMap<FixationDefectEntity, FixationDefectDTO>()
                 .ForMember(
                     fixationDefectDTO => fixationDefectDTO.Address,
                     options => options.MapFrom(fixationDefect => fixationDefect.CacheAddress));
-            CreateMap<FixationDefect, FixationDefectWithPhotoShortInfoDTO>();
-            CreateMap<FixationDefect, FixationDefectShortInfoDTO>()
+            CreateMap<FixationDefectEntity, FixationDefectWithPhotoShortInfoDTO>();
+            CreateMap<FixationDefectEntity, FixationDefectShortInfoDTO>()
                 .ForMember(
                     fixationDefectDTO => fixationDefectDTO.Address,
                     options => options.MapFrom(fixationDefect => fixationDefect.CacheAddress));
 
-            CreateMap<FixationWork, FixationWorkDTO>()
+            CreateMap<FixationWorkEntity, FixationWorkDTO>()
                 .ForMember(
                     fixationWorkDTO => fixationWorkDTO.WorkDoneWithDefect,
                     options => options.MapFrom(fixationWork => fixationWork.TaskFixationWork == null ? false : fixationWork.TaskFixationWork.FixationDefectId.HasValue));

@@ -8,11 +8,11 @@ using RoadDefectsService.Infrastructure.Identity.Repositories.Base;
 
 namespace RoadDefectsService.Infrastructure.Identity.Repositories
 {
-    public class AssignmentRepository : BaseWithBaseEntityRepository<Assignment, AppDbContext>, IAssignmentRepository
+    public class AssignmentRepository : BaseWithBaseEntityRepository<AssignmentEntity, AppDbContext>, IAssignmentRepository
     {
         public AssignmentRepository(AppDbContext dbContext) : base(dbContext) { }
 
-        public Task<Assignment?> GetByIdWithContractorAndFixationDefectWithDefectTypeAndPhotosAsync(Guid id)
+        public Task<AssignmentEntity?> GetByIdWithContractorAndFixationDefectWithDefectTypeAndPhotosAsync(Guid id)
         {
             return _dbContext.Assignments
                 .Include(assignment => assignment.Contractor)
@@ -23,7 +23,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .FirstOrDefaultAsync(assignment => assignment.Id == id);
         }
 
-        public Task<List<Assignment>> GetAllByFilterAsync(AssignmentFilterDTO filter)
+        public Task<List<AssignmentEntity>> GetAllByFilterAsync(AssignmentFilterDTO filter)
         {
             return ApplyFilter(filter)
                 .Include(assignment => assignment.Contractor)
@@ -40,7 +40,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
               .CountAsync();
         }
 
-        private IQueryable<Assignment> ApplyFilter(AssignmentFilterDTO filter)
+        private IQueryable<AssignmentEntity> ApplyFilter(AssignmentFilterDTO filter)
         {
             var assignments = _dbContext.Assignments.AsQueryable();
 
@@ -72,7 +72,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .AnyAsync(assignment => assignment.FixationDefectId == fixationDefectId);
         }
 
-        public Task<Assignment?> GetByFixationDefectIdWithAllNestingAsync(Guid fixationDefectId)
+        public Task<AssignmentEntity?> GetByFixationDefectIdWithAllNestingAsync(Guid fixationDefectId)
         {
             return _dbContext.Assignments
                 .Include(assignment => assignment.Contractor)

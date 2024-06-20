@@ -2,10 +2,8 @@
 
 namespace RoadDefectsService.Core.Domain.Models
 {
-    public class RoadInspector : BaseEntity
+    public class OperatorEntity : BaseEntity
     {
         public required CustomUser User { get; set; }
-
-        public IEnumerable<TaskEntity> AppointedTasks { get; set; } = null!;
     }
 }
