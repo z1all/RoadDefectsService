@@ -33,7 +33,7 @@ namespace RoadDefectsService.Core.Application.Services
             {
                 return new(StatusCodeExecutionResult.NotFound, "ContractorNotFound", $"Contractor with id {contractorId} not found!");
             }
-
+            
             return _mapper.Map<ContractorDTO>(contractor);
         }
 

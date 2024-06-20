@@ -28,10 +28,27 @@ namespace RoadDefectsService.Core.Application
             services.ConfigureOptions<FileStorageOptionsConfigure>();
 
             // AutoMapper
+            services.AddAutoMapper();
+
+            // MediatR
+            services.AddMediator();
+
+            return services;
+        }
+
+        private static IServiceCollection AddAutoMapper(this IServiceCollection services)
+        {
             services.AddAutoMapper(
                 typeof(UserMappingProfile), typeof(PhotoMappingProfile), typeof(FixationMappingProfile),
                 typeof(ContractorMappingProfile), typeof(TaskMappingProfile), typeof(DefectTypeMappingProfile),
                 typeof(AssignmentMappingProfile), typeof(CoordinateFixationDefectMappingProfile));
+
+            return services;
+        }
+
+        private static IServiceCollection AddMediator(this IServiceCollection services)
+        {
+            services.AddMediatR(conf => conf.RegisterServicesFromAssemblies(typeof(ApplicationServiceExtensions).Assembly));
 
             return services;
         }
