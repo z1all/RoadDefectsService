@@ -27,7 +27,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<FixationDefectDTO>> GetFixationDefectAsync(Guid fixationDefectId, Guid? userId)
         {
-            FixationDefectEntity? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAndPhotosAndDefectTypeAsync(fixationDefectId);
+            FixationDefectEntity? fixationDefect = await _fixationDefectRepository.GetByIdWithTaskAndPhotosAndDefectTypeAndAssignmentAsync(fixationDefectId);
             if (fixationDefect is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "FixationDefectNotFound", $"Fixation defect with id {fixationDefectId} not found!");

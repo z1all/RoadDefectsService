@@ -84,7 +84,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Contexts
             // Assignment
             modelBuilder.Entity<AssignmentEntity>()
                 .HasOne(assignment => assignment.FixationDefect)
-                .WithOne()
+                .WithOne(fixationDefect => fixationDefect.Assignment)
                 .HasForeignKey<AssignmentEntity>(assignment => assignment.FixationDefectId);
 
             modelBuilder.Entity<AssignmentEntity>()

@@ -22,7 +22,7 @@ namespace RoadDefectsService.Core.Application.Services
 
         public async Task<ExecutionResult<FixationDefectTaskDTO>> GetFixationDefectTaskAsync(Guid taskId, Guid? inspectorId = null)
         {
-            TaskFixationDefectEntity? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAsync(taskId);
+            TaskFixationDefectEntity? task = await _taskFixationDefectRepository.GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAndAssignmentAsync(taskId);
             if (task is null)
             {
                 return new(StatusCodeExecutionResult.NotFound, "TaskNotFound", $"Task with id {taskId} not found!");

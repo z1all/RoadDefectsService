@@ -13,7 +13,10 @@ namespace RoadDefectsService.Core.Application.Mappers
             CreateMap<FixationDefectEntity, FixationDefectDTO>()
                 .ForMember(
                     fixationDefectDTO => fixationDefectDTO.Address,
-                    options => options.MapFrom(fixationDefect => fixationDefect.CacheAddress));
+                    options => options.MapFrom(fixationDefect => fixationDefect.CacheAddress))
+                .ForMember(
+                    fixationDefectDTO => fixationDefectDTO.Contractor,
+                    options => options.MapFrom(fixationDefect => fixationDefect.Assignment!.Contractor));
             CreateMap<FixationDefectEntity, FixationDefectWithPhotoShortInfoDTO>();
             CreateMap<FixationDefectEntity, FixationDefectShortInfoDTO>()
                 .ForMember(

@@ -1,4 +1,6 @@
-﻿namespace RoadDefectsService.Core.Application.DTOs.FixationService
+﻿using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
+
+namespace RoadDefectsService.Core.Application.DTOs.FixationService
 {
     public class FixationDefectDTO
     {
@@ -9,5 +11,6 @@
         public required double? DamagedCanvasSquareMeter { get; set; }
         public required DefectTypeDTO? DefectType { get; set; }
         public required List<PhotoInfoDTO> Photos { get; set; }
+        public required ContractorDTO? Contractor { get; set; }
     }
 }

@@ -25,5 +25,16 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .Include(fixation => fixation.DefectType)
                 .FirstOrDefaultAsync(fixation => fixation.Id == id);
         }
+
+        public Task<FixationDefectEntity?> GetByIdWithTaskAndPhotosAndDefectTypeAndAssignmentAsync(Guid id)
+        {
+            return _dbContext.FixationDefects
+                 .Include(fixation => fixation.Task)
+                 .Include(fixation => fixation.Photos)
+                 .Include(fixation => fixation.DefectType)
+                 .Include(fixation => fixation.Assignment)
+                    .ThenInclude(assignment => assignment!.Contractor)
+                 .FirstOrDefaultAsync(fixation => fixation.Id == id);
+        }
     }
 }

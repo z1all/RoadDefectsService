@@ -12,5 +12,7 @@
         public DefectTypeEntity? DefectType { get; set; }
 
         public TaskEntity? Task { get; set; }
+
+        public AssignmentEntity? Assignment { get; set; }
     }
 }

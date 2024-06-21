@@ -22,7 +22,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                 .FirstOrDefaultAsync(task => task.Id == id);
         }
 
-        public Task<TaskFixationDefectEntity?> GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAsync(Guid id)
+        public Task<TaskFixationDefectEntity?> GetByIdWithInspectorAndNextTaskAndDefectWithPhotosAndDefectTypeAndAssignmentAsync(Guid id)
         {
             return _dbContext.FixationDefectTasks
                 .Include(task => task.RoadInspector)
@@ -32,6 +32,9 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
                     .ThenInclude(fixationDefect => fixationDefect!.Photos)
                 .Include(task => task.FixationDefect)
                     .ThenInclude(fixationDefect => fixationDefect!.DefectType)
+                .Include(task => task.FixationDefect)
+                    .ThenInclude(fixationDefect => fixationDefect!.Assignment)
+                        .ThenInclude(assignment => assignment!.Contractor)
                 .FirstOrDefaultAsync(task => task.Id == id);
         }
     }
