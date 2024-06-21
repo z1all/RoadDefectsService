@@ -133,7 +133,7 @@
       "Id": "55a1b64f-86ba-455a-90a2-8cd4ce712b17",
       "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
       "CreatedDateTime": "2024-06-21T13:15:58.278Z",
-      "TaskStatus": 2,
+      "TaskStatus": 1,
       "Address": "Буяновский пер. 3а",
       "CoordinateX": 57836458.3213,
       "CoordinateY": 9012358.6541,
@@ -155,7 +155,7 @@
       "Id": "050a7166-ce39-4f01-b889-51f66a6da1cc",
       "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
       "CreatedDateTime": "2024-06-02T13:15:58.278Z",
-      "TaskStatus": 2,
+      "TaskStatus": 3,
       "Address": "ул. Лебедева 43",
       "CoordinateX": 57836458.3213,
       "CoordinateY": 9012358.6541,
@@ -166,7 +166,7 @@
       "Id": "469adac4-79b2-46a3-bb8d-ac1b2bdc72a1",
       "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
       "CreatedDateTime": "2024-06-17T13:15:58.278Z",
-      "TaskStatus": 2,
+      "TaskStatus": 1,
       "Address": "ул. Красноармейская 1б",
       "CoordinateX": 57836458.3213,
       "CoordinateY": 9012358.6541,
@@ -188,7 +188,7 @@
       "Id": "05f1080f-2baa-4e16-8830-4d141b212a49",
       "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
       "CreatedDateTime": "2024-06-20T13:15:58.278Z",
-      "TaskStatus": 2,
+      "TaskStatus": 3,
       "Address": "ул. Герцена 31",
       "CoordinateX": 57836458.3213,
       "CoordinateY": 9012358.6541,
@@ -201,7 +201,7 @@
       "Id": "6877c127-963b-4412-92e4-39aef5e57585",
       "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
       "CreatedDateTime": "2024-06-21T13:15:58.278Z",
-      "TaskStatus": 2,
+      "TaskStatus": 1,
       "Address": "Буяновский пер. 3а",
       "CoordinateX": 57836458.3213,
       "CoordinateY": 9012358.6541,
@@ -223,7 +223,7 @@
       "Id": "f5187021-fba3-495a-88dc-444423cc5391",
       "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
       "CreatedDateTime": "2024-06-21T13:15:58.278Z",
-      "TaskStatus": 2,
+      "TaskStatus": 3,
       "Address": "ул. Ленина 11б",
       "CoordinateX": 57836458.3213,
       "CoordinateY": 9012358.6541,
@@ -240,6 +240,44 @@
       "CoordinateY": 9012358.6541,
       "PrevTaskId": "05f1080f-2baa-4e16-8830-4d141b212a49",
       "IsTransfer": false
+    }
+  ],
+  "CreateFixationDefect": [
+    {
+      "Id": "639e3b05-5248-484d-9678-30c222e662de",
+      "TaskId": "55a1b64f-86ba-455a-90a2-8cd4ce712b17",
+      "DamagedCanvasSquareMeter": 312.43,
+      "DefectTypeId": "53b0a60b-924a-41d7-a5e0-763344d846d3"
+    },
+    {
+      "Id": "83b891b9-bb70-460d-a0fe-f9eca54ceeaf",
+      "TaskId": "6877c127-963b-4412-92e4-39aef5e57585",
+      "DamagedCanvasSquareMeter": 322.13,
+      "DefectTypeId": "1ffafcd5-557a-4365-995f-175ffb5f9cb9"
+    },
+    {
+      "Id": "222e648b-bad9-45cb-8270-43c53c2aac15",
+      "TaskId": "14c4a978-743d-4ee4-b9f1-fb864553d026",
+      "DamagedCanvasSquareMeter": 52.04,
+      "DefectTypeId": "c4f6a58c-61be-47e1-9a47-d04f0c0e3bb9"
+    },
+    {
+      "Id": "92592fa6-5570-4537-8ce0-ddb3a3b74508",
+      "TaskId": "8f1adab7-3b65-411f-9025-3a990b903e8c",
+      "DamagedCanvasSquareMeter": 876.3,
+      "DefectTypeId": "e5de55f7-bed2-4c12-b220-5e77c7d66900"
+    }
+  ],
+  "CreateFixationWork": [
+    {
+      "Id": "9e5eda44-0745-4652-9930-228be9b16d98",
+      "TaskFixationWorkId": "6877c127-963b-4412-92e4-39aef5e57585",
+      "WorkDone": true
+    },
+    {
+      "Id": "0b775410-12a5-47ac-bc13-21f46530569c",
+      "TaskFixationWorkId": "fcfc6f24-c26f-4a2e-89de-cf29f2e87529",
+      "WorkDone": false
     }
   ]
 }

@@ -96,6 +96,8 @@ namespace RoadDefectsService.Infrastructure.Identity
             services.AddScoped<RoadInspectorsCreator>();
             services.AddScoped<TaskFixationDefectCreator>();
             services.AddScoped<TaskFixationWorkCreator>();
+            services.AddScoped<FixationDefectCreator>();
+            services.AddScoped<FixationWorkCreator>();
         }
 
         public static void AddDatabaseSeed(this IServiceProvider services)
@@ -109,6 +111,8 @@ namespace RoadDefectsService.Infrastructure.Identity
                 scope.ServiceProvider.GetRequiredService<RoadInspectorsCreator>().AddModels();
                 scope.ServiceProvider.GetRequiredService<TaskFixationDefectCreator>().AddModels();
                 scope.ServiceProvider.GetRequiredService<TaskFixationWorkCreator>().AddModels();
+                scope.ServiceProvider.GetRequiredService<FixationDefectCreator>().AddModels();
+                scope.ServiceProvider.GetRequiredService<FixationWorkCreator>().AddModels();
             }
         }
     }
