@@ -7,13 +7,11 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.CQRS.Contractor.Queries
 {
-    public class GetContractorByIdQuery
-        : IRequest<ExecutionResult<ContractorDTO>>
+    public class GetContractorByIdQuery : IRequest<ExecutionResult<ContractorDTO>>
     {
         public required Guid ContractorId { get; set; }
 
-        public class GetContractorByIdQueryHandler
-            : IRequestHandler<GetContractorByIdQuery, ExecutionResult<ContractorDTO>>
+        public class GetContractorByIdQueryHandler : IRequestHandler<GetContractorByIdQuery, ExecutionResult<ContractorDTO>>
         {
             private readonly IContractorRepository _contractorRepository;
             private readonly IMapper _mapper;

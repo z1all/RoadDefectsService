@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RoadDefectsService.Core.Application.Configurations.FileStorage;
 using RoadDefectsService.Core.Application.CQRS.Contractor.Utils;
+using RoadDefectsService.Core.Application.CQRS.DefectType.Utils;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Services;
@@ -19,7 +20,6 @@ namespace RoadDefectsService.Core.Application
             services.AddScoped<ITaskFixationWorkService, TaskFixationWorkService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IFileService, FileService>();
-            services.AddScoped<IDefectTypeService, DefectTypeService>();
             services.AddScoped<IFixationDefectService, FixationDefectService>();
             services.AddScoped<IFixationWorkService, FixationWorkService>();
             services.AddScoped<IAssignmentService, AssignmentService>();

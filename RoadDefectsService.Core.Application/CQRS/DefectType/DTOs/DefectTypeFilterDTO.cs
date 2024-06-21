@@ -1,4 +1,4 @@
-﻿namespace RoadDefectsService.Core.Application.DTOs.DefectTypeService
+﻿namespace RoadDefectsService.Core.Application.CQRS.DefectType.DTOs
 {
     public class DefectTypeFilterDTO
     {

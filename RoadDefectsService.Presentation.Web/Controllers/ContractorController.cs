@@ -34,7 +34,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ContractorPagedDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<ContractorPagedDTO>> GetContractors([FromQuery] ContractorFilterDTO contractorFilter)
         {
-            return await ExecutionResultHandlerAsync(() => _mediator.Send(new GetAllContractorsByFiltersQuery() { ContractorFilter = contractorFilter}));
+            return await ExecutionResultHandlerAsync(() => _mediator.Send(new GetContractorsByFiltersQuery() { ContractorFilter = contractorFilter}));
         }
 
         /// <summary>

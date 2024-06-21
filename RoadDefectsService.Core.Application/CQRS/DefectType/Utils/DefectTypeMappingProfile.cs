@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using RoadDefectsService.Core.Application.DTOs.FixationService;
+using RoadDefectsService.Core.Application.CQRS.DefectType.DTOs;
 using RoadDefectsService.Core.Domain.Models;
 
-namespace RoadDefectsService.Core.Application.Mappers
+namespace RoadDefectsService.Core.Application.CQRS.DefectType.Utils
 {
     public class DefectTypeMappingProfile : Profile
     {
-        public DefectTypeMappingProfile() 
+        public DefectTypeMappingProfile()
         {
             CreateMap<DefectTypeEntity, DefectTypeDTO>();
         }

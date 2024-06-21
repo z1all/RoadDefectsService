@@ -1,29 +1,29 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RoadDefectsService.Core.Application.Interfaces.Repositories;
-using RoadDefectsService.Core.Domain.Models;
+using RoadDefectsService.Core.Application.CQRS.DefectType.Commands;
+using RoadDefectsService.Core.Application.CQRS.DefectType.DTOs;
 using RoadDefectsService.Infrastructure.Identity.Configurations.DbSeed;
 using RoadDefectsService.Infrastructure.Identity.Seeds.Creators.Base;
 using RoadDefectsService.Infrastructure.Identity.Seeds.Models;
 
 namespace RoadDefectsService.Infrastructure.Identity.Seeds.Creators
 {
-    public class DefectTypesCreator : DbModelCreator<DefectTypeEntity, CreateDefectTypesDTO>
+    public class DefectTypesCreator : DbModelCreator<CreateDefectTypeEntityDTO, CreateDefectTypesDTO>
     {
-        private readonly IDefectTypeRepository _defectTypeResponse;
+        private readonly IMediator _mediator;
 
         public DefectTypesCreator(
-            IDefectTypeRepository defectTypeResponse,
-            ILogger<DbModelCreator<DefectTypeEntity, CreateDefectTypesDTO>> logger, IOptions<DbSeedOptions> options) 
+            IMediator mediator,
+            ILogger<DbModelCreator<CreateDefectTypeEntityDTO, CreateDefectTypesDTO>> logger, IOptions<DbSeedOptions> options) 
             : base(logger, options)
         {
-            _defectTypeResponse = defectTypeResponse;
+            _mediator = mediator;
         }
 
-        protected override bool CheckExistModel(DefectTypeEntity model)
-            => _defectTypeResponse.AnyByIdAsync(model.Id).Result;
+        protected override bool CheckExistModel(CreateDefectTypeEntityDTO model) => false;
 
-        protected override void CreateModel(DefectTypeEntity model)
-            => _defectTypeResponse.AddAsync(model).Wait();
+        protected override void CreateModel(CreateDefectTypeEntityDTO model)
+            => _mediator.Send(new CreateDefectTypeEntityCommand() { CreateDefectTypeEntity = model}).Wait();
     }
 }

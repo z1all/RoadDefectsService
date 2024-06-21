@@ -1,4 +1,4 @@
-﻿using RoadDefectsService.Core.Application.DTOs.DefectTypeService;
+﻿using RoadDefectsService.Core.Application.CQRS.DefectType.DTOs;
 using RoadDefectsService.Core.Application.Interfaces.Repositories.Base;
 using RoadDefectsService.Core.Domain.Models;
 

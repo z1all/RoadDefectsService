@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RoadDefectsService.Core.Application.DTOs.DefectTypeService;
+using RoadDefectsService.Core.Application.CQRS.DefectType.DTOs;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Domain.Models;
 using RoadDefectsService.Infrastructure.Identity.Contexts;

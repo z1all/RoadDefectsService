@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RoadDefectsService.Core.Application.DTOs.DefectTypeService;
-using RoadDefectsService.Core.Application.DTOs.FixationService;
-using RoadDefectsService.Core.Application.Interfaces.Services;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using RoadDefectsService.Core.Application.CQRS.DefectType.DTOs;
+using RoadDefectsService.Core.Application.CQRS.DefectType.Queries;
 using RoadDefectsService.Presentation.Web.Attributes;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
 using RoadDefectsService.Presentation.Web.DTOs;
@@ -14,11 +14,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [SwaggerControllerOrder(Order = 5)]
     public class DefectTypeController : BaseController
     {
-        private readonly IDefectTypeService _defectTypeService;
+        private readonly IMediator _mediator;
 
-        public DefectTypeController(IDefectTypeService defectTypeService)
+        public DefectTypeController(IMediator mediator)
         {
-            _defectTypeService = defectTypeService;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -33,7 +33,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<DefectTypeDTO>>> GetDefectTypes([FromQuery] DefectTypeFilterDTO defectTypeFilter)
         {
-            return await ExecutionResultHandlerAsync(() => _defectTypeService.GetDefectTypesAsync(defectTypeFilter));
+            return await ExecutionResultHandlerAsync(()
+                => _mediator.Send(new GetDefectTypesByFilterQuery() { DefectTypeFilter = defectTypeFilter }));
         }
     }
 }

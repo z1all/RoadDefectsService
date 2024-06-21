@@ -1,4 +1,5 @@
 ﻿using RoadDefectsService.Core.Application.CQRS.Contractor.DTOs;
+using RoadDefectsService.Core.Application.CQRS.DefectType.DTOs;
 
 namespace RoadDefectsService.Core.Application.DTOs.FixationService
 {
