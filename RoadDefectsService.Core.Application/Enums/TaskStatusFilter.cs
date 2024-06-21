@@ -6,8 +6,8 @@ namespace RoadDefectsService.Core.Application.Enums
     public enum TaskStatusFilter
     {
         None = 0,
-        Created = 1,
-        Processing = 2,
+        Processing = 1,
+        Created = 2,
         Completed = 3,
     }
 }

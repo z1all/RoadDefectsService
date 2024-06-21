@@ -4,6 +4,6 @@ namespace RoadDefectsService.Core.Application.DTOs.TaskService
 {
     public class CommonTaskFilterDTO : TaskFilterDTO
     {
-        public TaskViewModeFilter TaskViewMode { get; set; } = TaskViewModeFilter.All;
+        public TaskViewModeFilter? TaskViewMode { get; set; } = TaskViewModeFilter.All;
     }
 }

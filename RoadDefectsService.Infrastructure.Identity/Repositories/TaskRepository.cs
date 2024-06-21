@@ -68,17 +68,17 @@ namespace RoadDefectsService.Infrastructure.Identity.Repositories
             var tasks = _dbContext.Tasks
                 .AsQueryable();
 
-            if (filter.TaskType != TaskTypeFilter.None)
+            if (filter.TaskType is not null && filter.TaskType != TaskTypeFilter.None)
             {
                 tasks = tasks.Where(task => task.TaskType == (TaskType)filter.TaskType);
             }
 
-            if (filter.TaskStatus != TaskStatusFilter.None)
+            if (filter.TaskStatus is not null && filter.TaskStatus != TaskStatusFilter.None)
             {
                 tasks = tasks.Where(task => task.TaskStatus == (StatusTask)filter.TaskStatus);
             }
 
-            if (filter.Address is not null)
+            if (filter.Address is not null && filter.Address is not null)
             {
                 tasks = tasks.Where(task => task.Address.ToLower().Contains(filter.Address.ToLower()));
             }

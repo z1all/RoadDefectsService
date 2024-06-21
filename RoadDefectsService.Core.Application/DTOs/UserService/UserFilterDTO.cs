@@ -6,6 +6,6 @@ namespace RoadDefectsService.Core.Application.DTOs.UserService
     public class UserFilterDTO : BaseFilterDTO
     {
         public string? UserFullName { get; set; }
-        public RoleFilter UserRole { get; set; } = RoleFilter.None;
+        public RoleFilter? UserRole { get; set; } = RoleFilter.None;
     }
 }
