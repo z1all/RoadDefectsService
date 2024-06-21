@@ -10,8 +10,7 @@ namespace RoadDefectsService.Core.Application.CQRS.Contractor.Commands
     {
         public required Guid ContractorId { get; set; }
 
-        public class DeleteContractorCommandHandler
-            : IRequestHandler<DeleteContractorCommand, ExecutionResult>
+        public class DeleteContractorCommandHandler : IRequestHandler<DeleteContractorCommand, ExecutionResult>
         {
             private readonly IContractorRepository _contractorRepository;
             private readonly IMapper _mapper;

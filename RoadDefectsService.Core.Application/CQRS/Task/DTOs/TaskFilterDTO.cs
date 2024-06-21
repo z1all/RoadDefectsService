@@ -1,7 +1,7 @@
 ﻿using RoadDefectsService.Core.Application.DTOs.Common;
 using RoadDefectsService.Core.Application.Enums;
 
-namespace RoadDefectsService.Core.Application.DTOs.TaskService
+namespace RoadDefectsService.Core.Application.CQRS.Task.DTOs
 {
     public class TaskFilterDTO : BaseFilterDTO
     {

@@ -2,6 +2,7 @@
 using RoadDefectsService.Core.Application.Configurations.FileStorage;
 using RoadDefectsService.Core.Application.CQRS.Contractor.Utils;
 using RoadDefectsService.Core.Application.CQRS.DefectType.Utils;
+using RoadDefectsService.Core.Application.CQRS.Task.Utils;
 using RoadDefectsService.Core.Application.Interfaces.Services;
 using RoadDefectsService.Core.Application.Mappers;
 using RoadDefectsService.Core.Application.Services;
@@ -14,8 +15,6 @@ namespace RoadDefectsService.Core.Application
         {
             // Services
             services.AddScoped<IAccessTokenService, JWTTokenService>();
-            //services.AddScoped<IContractorService, ContractorService>();
-            services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<ITaskFixationDefectService, TaskFixationDefectService>();
             services.AddScoped<ITaskFixationWorkService, TaskFixationWorkService>();
             services.AddScoped<IPhotoService, PhotoService>();
@@ -41,8 +40,8 @@ namespace RoadDefectsService.Core.Application
         {
             services.AddAutoMapper(
                 typeof(UserMappingProfile), typeof(PhotoMappingProfile), typeof(FixationMappingProfile),
-                typeof(ContractorMappingProfile), typeof(TaskMappingProfile), typeof(DefectTypeMappingProfile),
-                typeof(AssignmentMappingProfile), typeof(CoordinateFixationDefectMappingProfile));
+                typeof(ContractorMappingProfile), typeof(CommonTaskMappingProfile), typeof(DefectTypeMappingProfile),
+                typeof(AssignmentMappingProfile), typeof(CoordinateFixationDefectMappingProfile), typeof(TaskMappingProfile));
 
             return services;
         }

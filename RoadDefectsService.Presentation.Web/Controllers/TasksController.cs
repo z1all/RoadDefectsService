@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using RoadDefectsService.Presentation.Web.Controllers.Base;
-using RoadDefectsService.Core.Domain.Enums;
 using RoadDefectsService.Presentation.Web.DTOs;
 using RoadDefectsService.Presentation.Web.Attributes;
-using RoadDefectsService.Core.Application.DTOs.TaskService;
-using RoadDefectsService.Core.Application.Interfaces.Services;
+using RoadDefectsService.Core.Domain.Enums;
+using RoadDefectsService.Core.Application.CQRS.Task.DTOs;
+using RoadDefectsService.Core.Application.CQRS.Task.Queries;
+using RoadDefectsService.Core.Application.CQRS.Task.Commands;
 
 namespace RoadDefectsService.Presentation.Web.Controllers
 {
@@ -16,11 +18,11 @@ namespace RoadDefectsService.Presentation.Web.Controllers
     [SwaggerControllerOrder(Order = 10)]
     public class TasksController : BaseController
     {
-        private readonly ITaskService _taskService;
+        private readonly IMediator _mediator;
 
-        public TasksController(ITaskService taskService)
+        public TasksController(IMediator mediator)
         {
-            _taskService = taskService;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -32,7 +34,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [CustomeAuthorize(Roles = Role.Operator)]
         public async Task<ActionResult<TaskPagedDTO>> GetTasks([FromQuery] CommonTaskFilterDTO taskFilter)
         {
-            return await ExecutionResultHandlerAsync(() => _taskService.GetTasksAsync(taskFilter));
+            return await ExecutionResultHandlerAsync(() 
+                => _mediator.Send(new GetTasksByFiltersQuery() { TaskFilter = taskFilter }));
         }
 
         /// <summary>
@@ -43,9 +46,10 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [HttpPut("{taskId}")]
         [CustomeAuthorize(Roles = Role.Operator)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TaskPagedDTO>> ChangeTask([FromRoute] Guid taskId, [FromBody] EditTaskDTO editTask)
+        public async Task<ActionResult<TaskPagedDTO>> EditTaskMetaInfo([FromRoute] Guid taskId, [FromBody] EditTaskMetaInfoDTO editTask)
         {
-            return await ExecutionResultHandlerAsync(() => _taskService.ChangeTaskAsync(editTask, taskId));
+            return await ExecutionResultHandlerAsync(() 
+                => _mediator.Send(new EditTaskMetaInfoCommand() { TaskId = taskId, EditTaskMetaInfo = editTask}));
         }
 
         /// <summary>
@@ -58,7 +62,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteTask([FromRoute] Guid taskId)
         {
-            return await ExecutionResultHandlerAsync(() => _taskService.DeleteTaskAsync(taskId));
+            return await ExecutionResultHandlerAsync(() 
+                => _mediator.Send(new DeleteTaskCommand() { TaskId = taskId }));
         }
 
         /// <summary>
@@ -71,7 +76,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TaskPagedDTO>> GetInspectorTasks([FromRoute] Guid inspectorId, [FromQuery] TaskFilterDTO taskFilter)
         {
-            return await ExecutionResultHandlerAsync(() => _taskService.GetInspectorTasksAsync(taskFilter, inspectorId));
+            return await ExecutionResultHandlerAsync(() 
+                => _mediator.Send(new GetInspectorTasksByFiltersQuery() { RoadInspectorId = inspectorId, TaskFilter = taskFilter}));
         }
 
         /// <summary>
@@ -90,7 +96,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> AppointTask([FromRoute] Guid inspectorId, [FromBody] AppointTaskDTO appointTask)
         {
-            return await ExecutionResultHandlerAsync(() => _taskService.AppointTaskAsync(appointTask.TaskId, inspectorId));
+            return await ExecutionResultHandlerAsync(() 
+                => _mediator.Send(new AppointTaskToRoadInspectorCommand() { TaskId = appointTask.TaskId, RoadInspectorId = inspectorId}));
         }
 
         /// <summary>
@@ -102,7 +109,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(TaskPagedDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<TaskPagedDTO>> GetOwnTask([FromQuery] TaskFilterDTO taskFilter)
         {
-            return await ExecutionResultHandlerAsync((inspectorId) => _taskService.GetInspectorTasksAsync(taskFilter, inspectorId));
+            return await ExecutionResultHandlerAsync((inspectorId)
+                => _mediator.Send(new GetInspectorTasksByFiltersQuery() { RoadInspectorId = inspectorId, TaskFilter = taskFilter }));
         }
 
         /// <summary>
@@ -115,7 +123,8 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> ChangeStatusTask([FromRoute] Guid taskId, [FromQuery] ChangeTaskStatusDTO changeStatus)
         {
-            return await ExecutionResultHandlerAsync(() => _taskService.ChangeTaskStatusAsync(changeStatus, taskId));
+            return await ExecutionResultHandlerAsync(() 
+                => _mediator.Send(new ChangeTaskStatusCommand() { TaskId = taskId, ChangeTaskStatus = changeStatus.ChangeTaskStatus }));
         }
     }
 }

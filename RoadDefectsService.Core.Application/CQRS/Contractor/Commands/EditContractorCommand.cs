@@ -12,8 +12,7 @@ namespace RoadDefectsService.Core.Application.CQRS.Contractor.Commands
         public required Guid ContractorId { get; set; }
         public required EditContractorDTO EditContractor { get; set; }
 
-        public class EditContractorCommandHandler
-            : IRequestHandler<EditContractorCommand, ExecutionResult>
+        public class EditContractorCommandHandler : IRequestHandler<EditContractorCommand, ExecutionResult>
         {
             private readonly IContractorRepository _contractorRepository;
             private readonly IMapper _mapper;

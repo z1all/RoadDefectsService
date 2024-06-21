@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoadDefectsService.Core.Application.DTOs.TaskService
+namespace RoadDefectsService.Core.Application.CQRS.Task.DTOs
 {
     public class AppointTaskDTO
     {

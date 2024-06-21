@@ -7,22 +7,22 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.CQRS.DefectType.Queries
 {
-    public class GetDefectTypesByFilterQuery : IRequest<ExecutionResult<List<DefectTypeDTO>>>
+    public class GetDefectTypesByFiltersQuery : IRequest<ExecutionResult<List<DefectTypeDTO>>>
     {
         public required DefectTypeFilterDTO DefectTypeFilter { get; set; }
 
-        public class GetDefectTypesByFilterQueryHandler : IRequestHandler<GetDefectTypesByFilterQuery, ExecutionResult<List<DefectTypeDTO>>>
+        public class GetDefectTypesByFiltersQueryHandler : IRequestHandler<GetDefectTypesByFiltersQuery, ExecutionResult<List<DefectTypeDTO>>>
         {
             private readonly IDefectTypeRepository _defectTypeRepository;
             private readonly IMapper _mapper;
 
-            public GetDefectTypesByFilterQueryHandler(IDefectTypeRepository defectTypeRepository, IMapper mapper)
+            public GetDefectTypesByFiltersQueryHandler(IDefectTypeRepository defectTypeRepository, IMapper mapper)
             {
                 _defectTypeRepository = defectTypeRepository;
                 _mapper = mapper;
             }
 
-            public async Task<ExecutionResult<List<DefectTypeDTO>>> Handle(GetDefectTypesByFilterQuery request, CancellationToken cancellationToken)
+            public async Task<ExecutionResult<List<DefectTypeDTO>>> Handle(GetDefectTypesByFiltersQuery request, CancellationToken cancellationToken)
             {
                 List<DefectTypeEntity> defectTypes = await _defectTypeRepository.GetAllByFilterAsync(request.DefectTypeFilter);
 

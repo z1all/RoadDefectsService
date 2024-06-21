@@ -34,7 +34,7 @@ namespace RoadDefectsService.Presentation.Web.Controllers
         public async Task<ActionResult<List<DefectTypeDTO>>> GetDefectTypes([FromQuery] DefectTypeFilterDTO defectTypeFilter)
         {
             return await ExecutionResultHandlerAsync(()
-                => _mediator.Send(new GetDefectTypesByFilterQuery() { DefectTypeFilter = defectTypeFilter }));
+                => _mediator.Send(new GetDefectTypesByFiltersQuery() { DefectTypeFilter = defectTypeFilter }));
         }
     }
 }

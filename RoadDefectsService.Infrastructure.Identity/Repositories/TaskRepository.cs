@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RoadDefectsService.Core.Application.DTOs.TaskService;
+using RoadDefectsService.Core.Application.CQRS.Task.DTOs;
 using RoadDefectsService.Core.Application.Enums;
 using RoadDefectsService.Core.Application.Interfaces.Repositories;
 using RoadDefectsService.Core.Domain.Enums;

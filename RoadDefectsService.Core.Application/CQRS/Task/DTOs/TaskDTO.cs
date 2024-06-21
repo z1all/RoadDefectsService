@@ -1,6 +1,6 @@
 ﻿using RoadDefectsService.Core.Domain.Enums;
 
-namespace RoadDefectsService.Core.Application.DTOs.TaskService
+namespace RoadDefectsService.Core.Application.CQRS.Task.DTOs
 {
     public class TaskDTO
     {

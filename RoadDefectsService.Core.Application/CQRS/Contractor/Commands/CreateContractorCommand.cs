@@ -11,8 +11,7 @@ namespace RoadDefectsService.Core.Application.CQRS.Contractor.Commands
     {
         public required CreateContractorDTO CreateContractor { get; set; }
 
-        public class CreateContractorCommandHandler
-            : IRequestHandler<CreateContractorCommand, ExecutionResult>
+        public class CreateContractorCommandHandler : IRequestHandler<CreateContractorCommand, ExecutionResult>
         {
             private readonly IContractorRepository _contractorRepository;
             private readonly IMapper _mapper;

@@ -4,20 +4,10 @@ using RoadDefectsService.Core.Domain.Models;
 
 namespace RoadDefectsService.Core.Application.Mappers
 {
-    public class TaskMappingProfile : Profile
+    public class CommonTaskMappingProfile : Profile
     {
-        public TaskMappingProfile()
+        public CommonTaskMappingProfile()
         {
-            CreateMap<TaskEntity, TaskDTO>()
-                   .ForMember(
-                       taskDTO => taskDTO.ExistRoadInspector,
-                       options => options.MapFrom(taskEntity => taskEntity.RoadInspectorId != null)
-                   )
-                   .ForMember(
-                       taskDTO => taskDTO.ExistDefectInfo,
-                       options => options.MapFrom(taskEntity => taskEntity.FixationDefectId != null)
-                   );
-
             CreateMap<TaskFixationDefectEntity, FixationDefectTaskDTO>()
                 .ForMember(
                     fixationDefectTaskDTO => fixationDefectTaskDTO.DefectFixation,

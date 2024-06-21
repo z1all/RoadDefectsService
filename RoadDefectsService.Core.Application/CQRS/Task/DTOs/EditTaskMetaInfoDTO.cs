@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoadDefectsService.Core.Application.DTOs.TaskService
+namespace RoadDefectsService.Core.Application.CQRS.Task.DTOs
 {
-    public class EditTaskDTO
+    public class EditTaskMetaInfoDTO
     {
         [Required]
         public required DateTime CreatedDateTime { get; set; }
