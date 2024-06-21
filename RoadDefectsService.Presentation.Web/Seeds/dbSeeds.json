@@ -119,5 +119,127 @@
       "Id": "12a9e364-83b7-4365-83a1-163fb8111a8a",
       "Name": "Обвал"
     }
+  ],
+  "CreateInspectors": [
+    {
+      "Id": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "Email": "inspector_sead@gmail.com",
+      "FullName": "inspector_sead",
+      "Password": "stringA1"
+    }
+  ],
+  "CreateTasksFixationDefect": [
+    {
+      "Id": "55a1b64f-86ba-455a-90a2-8cd4ce712b17",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-21T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "Буяновский пер. 3а",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "Description": "Бабка сказала, там дырень огромная. Сгоняй туда и выясни, действительно ли",
+      "IsTransfer": false
+    },
+    {
+      "Id": "ca2d906d-b517-4ffa-8a2a-0d5b767a79c9",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-19T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "ул. Ленина 11б",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "Description": "Бабка сказала, там дырень огромная. Сгоняй туда и выясни, действительно ли",
+      "IsTransfer": false
+    },
+    {
+      "Id": "050a7166-ce39-4f01-b889-51f66a6da1cc",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-02T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "ул. Лебедева 43",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "Description": "Бабка сказала, там дырень огромная. Сгоняй туда и выясни, действительно ли",
+      "IsTransfer": false
+    },
+    {
+      "Id": "469adac4-79b2-46a3-bb8d-ac1b2bdc72a1",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-17T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "ул. Красноармейская 1б",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "Description": "Бабка сказала, там дырень огромная. Сгоняй туда и выясни, действительно ли",
+      "IsTransfer": false
+    },
+    {
+      "Id": "14c4a978-743d-4ee4-b9f1-fb864553d026",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-24T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "Нечевский пер. 12",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "Description": "Бабка сказала, там дырень огромная. Сгоняй туда и выясни, действительно ли",
+      "IsTransfer": false
+    },
+    {
+      "Id": "05f1080f-2baa-4e16-8830-4d141b212a49",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-20T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "ул. Герцена 31",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "Description": "Бабка сказала, там дырень огромная. Сгоняй туда и выясни, действительно ли",
+      "IsTransfer": false
+    }
+  ],
+  "CreateTasksFixationWork": [
+    {
+      "Id": "6877c127-963b-4412-92e4-39aef5e57585",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-21T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "Буяновский пер. 3а",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "PrevTaskId": "55a1b64f-86ba-455a-90a2-8cd4ce712b17",
+      "IsTransfer": false
+    },
+    {
+      "Id": "8f1adab7-3b65-411f-9025-3a990b903e8c",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-21T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "Буяновский пер. 3а",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "PrevTaskId": "6877c127-963b-4412-92e4-39aef5e57585",
+      "IsTransfer": false
+    },
+    {
+      "Id": "f5187021-fba3-495a-88dc-444423cc5391",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-21T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "ул. Ленина 11б",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "PrevTaskId": "ca2d906d-b517-4ffa-8a2a-0d5b767a79c9",
+      "IsTransfer": false
+    },
+    {
+      "Id": "fcfc6f24-c26f-4a2e-89de-cf29f2e87529",
+      "RoadInspectorId": "46bae461-f277-4043-83cf-ed8d0fae473d",
+      "CreatedDateTime": "2024-06-21T13:15:58.278Z",
+      "TaskStatus": 2,
+      "Address": "ул. Герцена 31",
+      "CoordinateX": 57836458.3213,
+      "CoordinateY": 9012358.6541,
+      "PrevTaskId": "05f1080f-2baa-4e16-8830-4d141b212a49",
+      "IsTransfer": false
+    }
   ]
 }

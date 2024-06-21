@@ -27,6 +27,7 @@ namespace RoadDefectsService.Infrastructure.Identity.Seeds.Creators.Base
 
         protected List<TModel> Models { get; set; }
         protected abstract void CreateModel(TModel model);
+        protected virtual void UpdateModel(TModel model) { }
         protected abstract bool CheckExistModel(TModel model);
 
         public void AddModels()
@@ -39,6 +40,10 @@ namespace RoadDefectsService.Infrastructure.Identity.Seeds.Creators.Base
                     if (!modelExist)
                     {
                         CreateModel(model);
+                    }
+                    else
+                    {
+                        UpdateModel(model);
                     }
                 }
             }
